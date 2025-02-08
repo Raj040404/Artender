@@ -1,6 +1,6 @@
 # Artender: Where Creativity Blooms and Art Shines Bright
 
-![Artender Homepage](gitimage\home.png)
+![Artender Homepage](gitimage/home.png)
 
 Artender is a platform designed to unleash creativity and celebrate talent. It provides a space where artists can showcase their work, participate in competitions, and connect with other creatives. Whether you're an artist, photographer, musician, or just someone who appreciates art, Artender is the place for you.
 
