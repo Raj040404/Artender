@@ -38,25 +38,6 @@
             font-size: 16px;
         }
 
-        header .logout {
-            display: flex;
-            gap: 10px;
-        }
-
-        header .logout-button {
-            padding: 8px 16px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        header .logout-button:hover {
-            background-color: #0056b3;
-        }
-
         main {
             padding: 20px;
         }
@@ -72,35 +53,30 @@
             margin-bottom: 10px;
         }
 
-        h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-
-        p {
-            font-size: 16px;
-            color: #ccc;
-        }
-
-        img {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: 10px;
-            margin: 10px 0;
-        }
-
-        video {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: 10px;
-            margin: 10px 0;
-        }
-
+        /* Profile Section */
         .profile-section {
             background-color: #222;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-image {
+            flex-shrink: 0;
+            margin-right: 20px;
+        }
+
+        .profile-image img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            flex: 1;
         }
 
         .profile-section button {
@@ -117,116 +93,16 @@
             background-color: #0056b3;
         }
 
-        .edit-profile-form {
-            display: none;
-            background-color: #333;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .edit-profile-form textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        .edit-profile-form input[type="text"],
-        .edit-profile-form input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        .edit-profile-form button[type="submit"] {
-            background-color: #28a745;
-        }
-
-        .edit-profile-form button[type="button"] {
-            background-color: #ccc;
-            color: #000;
-        }
-
-        .edit-profile-form button[type="button"]:hover {
-            background-color: #999;
-        }
-
-        .contest {
-            background-color: #222;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .contest h4 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-
-        .contest-details p {
-            margin: 5px 0;
-        }
-
-        .user-posts {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .user-posts article {
-            background-color: #222;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .user-posts article p {
-            margin: 10px 0;
-        }
-
-        .user-posts article small {
-            font-size: 14px;
-            color: #999;
-        }
-
-        /* Tablet View */
+        /* Responsive */
         @media (max-width: 768px) {
-            header nav {
+            .profile-section {
                 flex-direction: column;
-                gap: 10px;
+                text-align: center;
             }
 
-            h1 {
-                font-size: 30px;
-            }
-        }
-
-        /* Mobile View */
-        @media (max-width: 480px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            header .logo {
-                font-size: 20px;
-            }
-
-            header nav {
-                gap: 5px;
-            }
-
-            header nav a {
-                font-size: 14px;
-            }
-
-            h1 {
-                font-size: 24px;
+            .profile-image {
+                margin-right: 0;
+                margin-bottom: 15px;
             }
         }
     </style>
@@ -245,24 +121,27 @@
     <main>
         <!-- User Info Section -->
         <section id="userInfo" class="profile-section">
-            <h2>{{name}}'s Profile</h2>
-            <p>Email: {{email}}</p>
-            <p>Bio: {{bio}}</p>
-            <p>Followers: {{followers}}</p>
-            <p>Location: {{location}}</p>
+            <!-- Profile Picture on the Left -->
+            <div class="profile-image">
+                {{#if profilePicture}}
+                <img src="data:image/jpeg;base64,{{profilePicture}}" alt="Profile Picture" />
+                {{else}}
+                <p>No profile picture uploaded yet.</p>
+                {{/if}}
+            </div>
 
-            <!-- Display Profile Picture -->
-            {{#if profilePicture}}
-            <img src="data:image/jpeg;base64,{{profilePicture}}" alt="Profile Picture" />
-            {{else}}
-            <p>No profile picture uploaded yet.</p>
-            {{/if}}
-
-            <button id="editProfileBtn">Edit Profile</button>
+            <div class="profile-info">
+                <h2>{{name}}'s Profile</h2>
+                <p>Email: {{email}}</p>
+                <p>Bio: {{bio}}</p>
+                <p>Followers: {{followers}}</p>
+                <p>Location: {{location}}</p>
+                <button id="editProfileBtn">Edit Profile</button>
+            </div>
         </section>
 
         <!-- Edit Profile Form -->
-        <section id="editProfileForm" class="edit-profile-form">
+        <section id="editProfileForm" class="edit-profile-form" style="display: none;">
             <form action="/updateProfile" method="POST" enctype="multipart/form-data">
                 <label for="bio">Bio:</label>
                 <textarea id="bio" name="bio">{{bio}}</textarea>
