@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Competitions</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background-color: #111;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #f00;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: #e06565;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .logout-button {
+      padding: 10px 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .logout-button:hover {
+      background-color: #0056b3;
+    }
+
+    main {
+      text-align: center;
+      padding: 20px;
+    }
+
+    main h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .contest-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .contest-card {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .contest-card img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .contest-card h2 {
+      font-size: 22px;
+      margin: 10px 0;
+    }
+
+    .contest-card p {
+      font-size: 16px;
+      color: #ccc;
+    }
+
+    .contest-card button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .contest-card button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+
+      main h1 {
+        font-size: 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo {
+        font-size: 20px;
+      }
+
+      .nav-links a {
+        font-size: 14px;
+      }
+
+      main h1 {
+        font-size: 24px;
+      }
+
+      .contest-card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Artender</div>
+    <nav class="nav-links">
+      <a href="/home">home</a>
+      <a href="/explorecompetitions">Explore works</a>
+      <a href="/competitions">Participate in Competitions</a>
+      <a href="#">Contact</a>
+      <a href="/profile">Profile</a>
+    </nav>
+    <div>
+      <form action="/logout" method="get">
+        <button class="logout-button" type="submit">Logout</button>
+      </form>
+    </div>
+  </header>
+
+  <main>
+    <h1>Participate in Competitions</h1>
+    <div class="contest-container">
+      {{#each contests}}
+      <div class="contest-card">
+        <h2>{{this.name}}</h2>
+        <img src="{{this.poster}}" alt="{{this.name}}" />
+        <p>Deadline: {{this.deadline}}</p>
+        <p>Price: {{this.price}}</p>
+        <p>Type: {{this.type}}</p>
+        <p>Theme: {{this.theme}}</p>
+        <form action="/enroll/{{this.contestId}}" method="get">
+          <button type="submit">Enroll</button>
+        </form>
+      </div>
+      {{/each}}
+    </div>
+  </main>
+</body>
+</html>

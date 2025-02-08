@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Artworks</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #111;
+    }
+
+    header .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #f00;
+    }
+
+    header nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    header nav a {
+      color: #e06565;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    header .logout {
+      display: flex;
+      gap: 10px;
+    }
+
+    header .logout-button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    header .logout-button:hover {
+      background-color: #0056b3;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .gallery-item {
+      background-color: #222;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .gallery-item img,
+    .gallery-item video {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 10px;
+    }
+
+    .gallery-item h2 {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .gallery-item p {
+      font-size: 16px;
+      color: #ccc;
+    }
+
+    .search-form {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .search-form input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .search-form button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .search-form button:hover {
+      background-color: #0056b3;
+    }
+
+    .post-your-work {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .post-your-work button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .post-your-work button:hover {
+      background-color: #0056b3;
+    }
+
+    .post-form {
+      display: none;
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 0 auto;
+      max-width: 500px;
+    }
+
+    .post-form textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .post-form input[type="file"] {
+      margin-bottom: 10px;
+    }
+
+    .post-form button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .post-form button:hover {
+      background-color: #0056b3;
+    }
+
+    .post-form button[type="button"] {
+      background-color: #ccc;
+      color: #000;
+    }
+
+    .post-form button[type="button"]:hover {
+      background-color: #999;
+    }
+
+    /* Tablet View */
+    @media (max-width: 768px) {
+      header nav {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+    }
+
+    /* Mobile View */
+    @media (max-width: 480px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      header .logo {
+        font-size: 20px;
+      }
+
+      header nav {
+        gap: 5px;
+      }
+
+      header nav a {
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Artender</div>
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/explorecompetitions">Explore Works</a>
+      <a href="/competitions">Participate in Competitions</a>
+      <a href="#">Contact</a>
+      <a href="/profile">Profile</a>
+    </nav>
+    <div class="logout">
+      <form action="/logout" method="get">
+        <button class="logout-button" type="submit">Logout</button>
+      </form>
+    </div>
+  </header>
+
+  <main>
+    <h1>Explore Artworks</h1>
+
+    <!-- Search Form -->
+    <form class="search-form" id="searchForm" action="/search" method="GET">
+      <input type="text" name="query" placeholder="Search users by name..." required>
+      <button type="submit">Search</button>
+    </form>
+
+    <!-- Search Results -->
+    <section id="searchResults">
+      {{#if users}}
+      <h2>Search Results</h2>
+      {{#each users}}
+      <article class="gallery-item">
+        <h3><a href="/user/{{name}}">{{name}}</a></h3>
+        <p>{{bio}}</p>
+        <button class="followBtn" data-username="{{name}}" data-followed="{{isFollowed}}">
+          {{#if isFollowed}}Followed{{else}}Follow{{/if}}
+        </button>
+      </article>
+      {{/each}}
+      {{else}}
+      {{/if}}
+    </section>
+
+    <!-- Post Your Work Button -->
+    <div class="post-your-work">
+      <button id="postYourWorkBtn">Post Your Work</button>
+    </div>
+
+    <!-- Post Your Work Form -->
+    <div id="postYourWorkForm" class="post-form">
+      <form action="/publish" method="POST" enctype="multipart/form-data">
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" rows="4" cols="50" required></textarea><br>
+        <label for="file">Upload Image/Video:</label><br>
+        <input type="file" id="file" name="file" accept="image/*,video/*" required><br><br>
+        <button type="submit">Publish</button>
+        <button type="button" id="cancelFormBtn">Cancel</button>
+      </form>
+    </div>
+
+    <!-- Competition Posts -->
+    <section id="competitionPosts" class="gallery">
+      {{#each posts}}
+      <article class="gallery-item">
+        <h2><strong><a href="/user/{{username}}">{{username}}</a></strong></h2>
+        <p>{{description}}</p>
+        {{#if file}}
+        {{#if (startsWith fileType "image/")}}
+        <img src="data:{{fileType}};base64,{{file}}" alt="Uploaded Image">
+        {{else if (startsWith fileType "video/")}}
+        <video controls>
+          <source src="data:{{fileType}};base64,{{file}}" type="{{fileType}}">
+          Your browser does not support the video tag.
+        </video>
+        {{/if}}
+        {{/if}}
+      </article>
+      {{/each}}
+    </section>
+  </main>
+
+  <script>
+    // Toggle Post Your Work Form
+    document.getElementById('postYourWorkBtn').addEventListener('click', () => {
+      document.getElementById('postYourWorkForm').style.display = 'block';
+    });
+
+    document.getElementById('cancelFormBtn').addEventListener('click', () => {
+      document.getElementById('postYourWorkForm').style.display = 'none';
+    });
+  </script>
+</body>
+</html>

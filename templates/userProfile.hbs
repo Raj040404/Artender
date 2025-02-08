@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{name}}'s Profile</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #111;
+    }
+
+    header .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #f00;
+    }
+
+    header nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    header nav a {
+      color: #e06565;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    header .logout {
+      display: flex;
+      gap: 10px;
+    }
+
+    header .logout-button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    header .logout-button:hover {
+      background-color: #0056b3;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .profile-card {
+      background-color: #111;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);
+      max-width: 400px;
+      width: 100%;
+      text-align: left;
+    }
+
+    .profile-card img {
+      max-width: 100px;
+      max-height: 100px;
+      border-radius: 50%;
+    }
+
+    .post-card {
+      background-color: #222;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 10px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0px 0px 5px rgba(255, 0, 0, 0.3);
+    }
+
+    img, video {
+      max-width: 100%;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Artender</div>
+    <nav>
+      <a href="/home">home</a>
+      <a href="/explorecompetitions">Explore works</a>
+      <a href="/competitions">Participate in Competitions</a>
+      <a href="#">Contact</a>
+      <a href="/profile">Profile</a>
+    </nav>
+    <div class="logout">
+      <form action="/logout" method="get">
+        <button class="logout-button" type="submit">Logout</button>
+      </form>
+    </div>
+  </header>
+
+  <main>
+    <h1>{{name}}'s Profile</h1>
+    <div class="profile-card">
+      <p><strong>Email:</strong> {{email}}</p>
+      <p><strong>Bio:</strong> {{bio}}</p>
+      <p><strong>Followers:</strong> {{followers}}</p>
+      <p><strong>Location:</strong> {{location}}</p>
+      {{#if profilePicture}}
+        <img src="data:image/png;base64,{{profilePicture}}" alt="{{name}}'s Profile Picture" />
+      {{else}}
+        <p>No profile picture available.</p>
+      {{/if}}
+    </div>
+
+    <section id="userPosts">
+      <h3>Posts by {{name}}</h3>
+      {{#if posts.length}}
+        {{#each posts}}
+          <div class="post-card">
+            <p>{{this.description}}</p>
+            {{#if this.file}}
+              {{#if (startsWith this.fileType "image/")}}
+                <img src="data:{{this.fileType}};base64,{{this.file}}" alt="Post Image" />
+              {{else if (startsWith this.fileType "video/")}}
+                <video controls>
+                  <source src="data:{{this.fileType}};base64,{{this.file}}" type="{{this.fileType}}" />
+                  Your browser does not support the video tag.
+                </video>
+              {{/if}}
+            {{/if}}
+            <small>Posted on: {{this.createdAt}}</small>
+          </div>
+        {{/each}}
+      {{else}}
+        <p>No posts to show.</p>
+      {{/if}}
+    </section>
+  </main>
+</body>
+</html>

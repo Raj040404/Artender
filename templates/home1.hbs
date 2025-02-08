@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artender</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #111;
+    }
+
+    header .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #f00;
+    }
+
+    header nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    header nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    header .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    header .auth-buttons button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    header .auth-buttons button:hover {
+      background-color: #0056b3;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 80vh;
+      padding: 20px;
+    }
+
+    main h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    main p {
+      font-size: 18px;
+      color: #ccc;
+    }
+
+    /* Tablet View */
+    @media (max-width: 768px) {
+      header nav {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      main h1 {
+        font-size: 30px;
+      }
+
+      main p {
+        font-size: 16px;
+      }
+    }
+
+    /* Mobile View */
+    @media (max-width: 480px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      header .logo {
+        font-size: 20px;
+      }
+
+      header nav {
+        gap: 5px;
+      }
+
+      header nav a {
+        font-size: 14px;
+      }
+
+      main h1 {
+        font-size: 24px;
+      }
+
+      main p {
+        font-size: 14px;
+      }
+
+      header .auth-buttons button {
+        padding: 6px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Artender</div>
+    <nav>
+      <a href="#">View Exclusive Art Work</a>
+      <a href="#">Explore works</a>
+      <a href="#">Participate in Competitions</a>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="auth-buttons">
+      <form action="/login" method="get">
+        <button type="submit">Login</button>
+      </form>
+      <form action="/signup" method="get">
+        <button type="submit">Signup</button>
+      </form>
+    </div>
+  </header>
+
+  <main>
+    <h1>Artender: Where Creativity Blooms and Art Shines Bright</h1>
+    <p>Unleash Creativity, Celebrate Talent: A Platform Where Art Meets Competition and Creativity Finds Its Spotlight.</p>
+  </main>
+</body>
+</html>

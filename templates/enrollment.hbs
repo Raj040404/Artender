@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enroll in {{contest.name}}</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #111;
+    }
+
+    header .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #f00;
+    }
+
+    header nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    header nav a {
+      color: #e06565;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    header .logout {
+      display: flex;
+      gap: 10px;
+    }
+
+    header .logout-button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    header .logout-button:hover {
+      background-color: #0056b3;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    form {
+      background-color: #111;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    label, input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    input {
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #f00;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:disabled {
+      background-color: #444;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 20px;
+      background-color: #f44336;
+      color: white;
+      border-radius: 5px;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Artender</div>
+    <nav>
+      <a href="/explorecompetitions">Explore works</a>
+      <a href="/competitions">Participate in Competitions</a>
+      <a href="#">Contact</a>
+      <a href="/profile">Profile</a>
+    </nav>
+    <div class="logout">
+      <form action="/logout" method="get">
+        <button class="logout-button" type="submit">Logout</button>
+      </form>
+    </div>
+  </header>
+
+  <main>
+    <h1>Enroll in {{contest.name}}</h1>
+    <div class="popup" id="popupMessage">
+      <p>You are already enrolled in this contest!</p>
+    </div>
+
+    <form action="/enroll/{{contest.contestId}}" method="POST" enctype="multipart/form-data">
+      <label for="userName">Name:</label>
+      <input type="text" id="userName" name="userName" value="{{userName}}" readonly />
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" value="{{email}}" readonly />
+
+      <label for="file">Upload File (Image/Video):</label>
+      <input type="file" id="file" name="file" accept="image/*,video/*" required />
+
+      <label for="payment">Pay Now:</label>
+      <div id="razorpay-button-container">
+        <script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_OdY2Fd6IKKS4KY" async></script>
+      </div>
+
+      <button type="submit" id="completeEnrollment" disabled>Complete Enrollment</button>
+    </form>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const completeEnrollmentButton = document.getElementById("completeEnrollment");
+      completeEnrollmentButton.removeAttribute("disabled");
+
+      if ({{alreadyEnrolled}}) {
+        document.getElementById('popupMessage').style.display = 'block';
+        setTimeout(function () {
+          window.location.href = "/competitions";
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>

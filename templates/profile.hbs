@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #111;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f00;
+        }
+
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav a {
+            color: #e06565;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        header .logout {
+            display: flex;
+            gap: 10px;
+        }
+
+        header .logout-button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        header .logout-button:hover {
+            background-color: #0056b3;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        video {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .profile-section {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .profile-section button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .profile-section button:hover {
+            background-color: #0056b3;
+        }
+
+        .edit-profile-form {
+            display: none;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .edit-profile-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .edit-profile-form input[type="text"],
+        .edit-profile-form input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .edit-profile-form button[type="submit"] {
+            background-color: #28a745;
+        }
+
+        .edit-profile-form button[type="button"] {
+            background-color: #ccc;
+            color: #000;
+        }
+
+        .edit-profile-form button[type="button"]:hover {
+            background-color: #999;
+        }
+
+        .contest {
+            background-color: #222;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .contest h4 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .contest-details p {
+            margin: 5px 0;
+        }
+
+        .user-posts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .user-posts article {
+            background-color: #222;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .user-posts article p {
+            margin: 10px 0;
+        }
+
+        .user-posts article small {
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Tablet View */
+        @media (max-width: 768px) {
+            header nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+        }
+
+        /* Mobile View */
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            header .logo {
+                font-size: 20px;
+            }
+
+            header nav {
+                gap: 5px;
+            }
+
+            header nav a {
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Artender</div>
+        <nav>
+            <a href="/home">Home</a>
+            <a href="/explorecompetitions">Explore Competitions</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- User Info Section -->
+        <section id="userInfo" class="profile-section">
+            <h2>{{name}}'s Profile</h2>
+            <p>Email: {{email}}</p>
+            <p>Bio: {{bio}}</p>
+            <p>Followers: {{followers}}</p>
+            <p>Location: {{location}}</p>
+
+            <!-- Display Profile Picture -->
+            {{#if profilePicture}}
+            <img src="data:image/jpeg;base64,{{profilePicture}}" alt="Profile Picture" />
+            {{else}}
+            <p>No profile picture uploaded yet.</p>
+            {{/if}}
+
+            <button id="editProfileBtn">Edit Profile</button>
+        </section>
+
+        <!-- Edit Profile Form -->
+        <section id="editProfileForm" class="edit-profile-form">
+            <form action="/updateProfile" method="POST" enctype="multipart/form-data">
+                <label for="bio">Bio:</label>
+                <textarea id="bio" name="bio">{{bio}}</textarea>
+
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" value="{{location}}" />
+
+                <!-- Profile Picture Upload -->
+                <label for="profilePicture">Profile Picture:</label>
+                <input type="file" id="profilePicture" name="profilePicture" accept="image/*" />
+
+                <button type="submit">Update Profile</button>
+                <button type="button" id="cancelEditBtn">Cancel</button>
+            </form>
+        </section>
+
+        <!-- Enrolled Contests Section -->
+        <section id="enrolledContests" class="profile-section">
+            <h3>Enrolled Contests</h3>
+            {{#if enrolledContests.length}}
+            {{#each enrolledContests}}
+            <div class="contest">
+                <h4>{{name}}</h4>
+                {{#if poster}}
+                <img src="{{poster}}" alt="{{name}} Poster" />
+                {{/if}}
+                <div class="contest-details">
+                    <p><strong>Start Date:</strong> {{deadline}}</p>
+                    <p><strong>Price:</strong> ${{price}}</p>
+                    <p><strong>Type:</strong> {{type}}</p>
+                    <p><strong>Theme:</strong> {{theme}}</p>
+                    <p><strong>Enrolled on:</strong> {{createdAt}}</p>
+                </div>
+            </div>
+            {{/each}}
+            {{else}}
+            <p>No contests enrolled yet.</p>
+            {{/if}}
+        </section>
+
+        <!-- User's Posts Section -->
+        <section id="userPosts" class="profile-section">
+            <h3>Your Posts</h3>
+            <div class="user-posts">
+                {{#if posts.length}}
+                {{#each posts}}
+                <article>
+                    <p>{{description}}</p>
+                    {{#if file}}
+                    {{#if (startsWith fileType "image/")}}
+                    <img src="data:{{fileType}};base64,{{file}}" alt="Uploaded Image">
+                    {{else if (startsWith fileType "video/")}}
+                    <video controls>
+                        <source src="data:{{fileType}};base64,{{file}}" type="{{fileType}}">
+                        Your browser does not support the video tag.
+                    </video>
+                    {{/if}}
+                    {{/if}}
+                    <small>Posted on: {{createdAt}}</small>
+                </article>
+                {{/each}}
+                {{else}}
+                <p>No posts to show.</p>
+                {{/if}}
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Toggle Edit Profile Form
+        document.getElementById("editProfileBtn").addEventListener("click", () => {
+            document.getElementById("editProfileForm").style.display = "block";
+        });
+
+        document.getElementById("cancelEditBtn").addEventListener("click", () => {
+            document.getElementById("editProfileForm").style.display = "none";
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #111;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f00;
+        }
+
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav a {
+            color: #e06565;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        header .logout {
+            display: flex;
+            gap: 10px;
+        }
+
+        header .logout-button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        header .logout-button:hover {
+            background-color: #0056b3;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .results-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        .user-card {
+            background-color: #222;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px;
+            width: 300px;
+            box-shadow: 0px 0px 5px rgba(255, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        button {
+            padding: 8px 12px;
+            background-color: #f00;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+    </style>
+    <script>
+        async function handleFollow(username, button) {
+            try {
+                const response = await fetch(`/follow/${username}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                });
+
+                if (response.ok) {
+                    button.textContent = 'Followed';
+                    button.disabled = true;
+                } else {
+                    const error = await response.text();
+                    alert(`Error: ${error}`);
+                }
+            } catch (err) {
+                alert('An error occurred. Please try again.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="logo">Artender</div>
+        <nav>
+            <a href="/explorecompetitions">Explore works</a>
+            <a href="/competitions">Participate in Competitions</a>
+            <a href="#">Contact</a>
+            <a href="/profile">Profile</a>
+        </nav>
+        <div class="logout">
+            <form action="/logout" method="get">
+                <button class="logout-button" type="submit">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <main>
+        <h1>Search Results</h1>
+        {{#if users.length}}
+        <div class="results-container">
+            {{#each users}}
+            <div class="user-card">
+                <p><strong>Username:</strong> <a href="/user/{{username}}">{{username}}</a></p>
+                <p><strong>Bio:</strong> {{bio}}</p>
+                {{#if isFollowed}}
+                    <button disabled>Followed</button>
+                {{else}}
+                    <button onclick="handleFollow('{{username}}', this)">Follow</button>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <p>No users found.</p>
+        {{/if}}
+    </main>
+</body>
+</html>
