@@ -15,13 +15,13 @@ Artender is a platform designed to unleash creativity and celebrate talent. It p
 ## Screenshots
 
 ### Explore Artworks
-![Explore Artworks](gitimage\explore artworks.png)
+![Explore Artworks](gitimage/exploreartworks.png)
 
 ### Participate in Competitions
-![Participate in Competitions](Sgitimage\participate.png)
+![Participate in Competitions](gitimage/participate.png)
 
 ### Error in Enrollment
-![Error in Enrollment](gitimage\enrollment.png)
+![Error in Enrollment](gitimage/enrollment.png)
 
 ## How to Run the Project
 
