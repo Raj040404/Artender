@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="/css/search.css">
+    <script>
+        async function handleFollow(username, button) {
+            try {
+                const response = await fetch(`/follow/${username}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                });
+
+                if (response.ok) {
+                    button.textContent = 'Followed';
+                    button.disabled = true;
+                } else {
+                    const error = await response.text();
+                    alert(`Error: ${error}`);
+                }
+            } catch (err) {
+                alert('An error occurred. Please try again.');
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="/home" style="text-decoration: none; color: inherit;">Artender</a>
+        </div>
+        <nav>
+            <a href="/explorecompetitions">Explore works</a>
+            <a href="/competitions">Participate in Competitions</a>
+            <a href="#">Contact</a>
+            <a href="/profile">Profile</a>
+        </nav>
+        <div class="logout">
+            <form action="/logout" method="get">
+                <button class="logout-button" type="submit">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <main>
+        <h1>Search Results</h1>
+        {{#if users.length}}
+        <div class="results-container">
+            {{#each users}}
+            <div class="user-card">
+                <div class="user-info">
+                    <!-- Show profile picture with small size -->
+                    <img src="{{profilePicture}}" alt="Profile Picture" class="small-profile-pic" />
+
+                    <!-- Display username -->
+                    <p><strong>Username:</strong> <a href="/user/{{username}}">{{username}}</a></p>
+                </div>
+                <p><strong>Bio:</strong> {{bio}}</p>
+
+                {{#if isFollowed}}
+                <button disabled>Followed</button>
+                {{else}}
+                <button onclick="handleFollow('{{username}}', this)">Follow</button>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <p>No users found.</p>
+        {{/if}}
+    </main>
+
+</body>
+
+</html>

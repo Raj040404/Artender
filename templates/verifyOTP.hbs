@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP</title>
+    <link rel="stylesheet" href="/css/signup.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Verify OTP</h2>
+        <p>We have sent a 6-digit OTP to your email: <strong>{{email}}</strong></p>
+
+        {{#if error}}
+        <div class="error-message" style="color: red; text-align: center; margin-bottom: 10px;">
+            {{error}}
+        </div>
+        {{/if}}
+
+        <form action="/verify-otp" method="post">
+            <input type="hidden" name="email" value="{{email}}">
+            <label for="otp">Enter OTP:</label>
+            <input type="text" id="otp" name="otp" required minlength="6" maxlength="6">
+            <input type="submit" value="Verify">
+        </form>
+    </div>
+</body>
+</html>

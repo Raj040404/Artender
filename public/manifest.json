@@ -1,0 +1,11 @@
+{
+    "name": "Artender",
+    "short_name": "Artender",
+    "start_url": "/home",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#3399cc",
+    "serviceworker": {
+      "src": "/service-worker.js"
+    }
+  }

@@ -1,0 +1,263 @@
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #111;
+}
+
+header .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f00;
+}
+
+header nav {
+    display: flex;
+    gap: 20px;
+}
+
+header nav a {
+    color: #e06565;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+header .logout {
+    display: flex;
+    gap: 10px;
+}
+
+header .logout-button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+header .logout-button:hover {
+    background-color: #0056b3;
+}
+
+main {
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.gallery-item {
+    background-color: #222;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.gallery-item img,
+.gallery-item video {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 10px;
+}
+
+.gallery-item h2 {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+.gallery-item p {
+    font-size: 16px;
+    color: #ccc;
+}
+
+.search-form {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.search-form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.search-form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-form button:hover {
+    background-color: #0056b3;
+}
+
+.post-your-work {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.post-your-work button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    position: absolute;
+    right: 10px;
+    top: 70px;
+}
+
+.post-your-work button:hover {
+    background-color: #0056b3;
+}
+
+.post-form {
+    display: none;
+    background-color: #222;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 0 auto;
+    max-width: 500px;
+}
+
+.post-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.post-form input[type="file"] {
+    margin-bottom: 10px;
+}
+
+.post-form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.post-form button:hover {
+    background-color: #0056b3;
+}
+
+.post-form button[type="button"] {
+    background-color: #ccc;
+    color: #000;
+}
+
+.post-form button[type="button"]:hover {
+    background-color: #999;
+}
+
+/* User Info in Gallery Item */
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-info .small-profile-pic {
+    width: 40px;
+    /* Adjust size as needed */
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-info h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.like-button {
+    background-color: #007bff;
+    border: none;
+    color: black;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 2px 5px;
+}
+
+.like-button.liked {
+    color: red;
+    /* Change the color when liked */
+}
+
+
+/* Tablet View */
+@media (max-width: 768px) {
+    header nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+}
+
+/* Mobile View */
+@media (max-width: 480px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    header .logo {
+        font-size: 20px;
+    }
+
+    header nav {
+        gap: 5px;
+    }
+
+    header nav a {
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+}

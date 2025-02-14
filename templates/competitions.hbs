@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Competitions</title>
+  <link rel="stylesheet" href="/css/competetions.css">
+  
+</head>
+<body>
+  <header>
+     <div class="logo">
+        <a href="/home" style="text-decoration: none; color: inherit;">Artender</a>
+    </div>
+    <nav class="nav-links">
+      <a href="/home">home</a>
+      <a href="/explorecompetitions">Explore works</a>
+      <a href="/competitions">Participate in Competitions</a>
+      <a href="#">Contact</a>
+      <a href="/profile">Profile</a>
+    </nav>
+    <div>
+      <form action="/logout" method="get">
+        <button class="logout-button" type="submit">Logout</button>
+      </form>
+    </div>
+  </header>
+
+  <main>
+    <h1>Participate in Competitions</h1>
+    <div class="contest-container">
+      {{#each contests}}
+      <div class="contest-card">
+        <h2>{{this.name}}</h2>
+        <img src="{{this.poster}}" alt="{{this.name}}" />
+        <p>Deadline: {{this.deadline}}</p>
+        <p>Price: {{this.price}}</p>
+        <p>Type: {{this.type}}</p>
+        <p>Theme: {{this.theme}}</p>
+        <form action="/enroll/{{this.contestId}}" method="get">
+          <button type="submit">Enroll</button>
+        </form>
+      </div>
+      {{/each}}
+    </div>
+  </main>
+</body>
+</html>

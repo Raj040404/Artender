@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/css/signup.css">
+</head>
+
+<body>
+
+    <div class="form-container">
+        <h2>Sign Up</h2>
+        <form action="/signup" method="post">
+            {{#if error}}
+            <div class="error-message" style="color: red; text-align: center; margin-bottom: 10px;">
+                {{error}}
+            </div>
+            {{/if}}
+
+            <label for="name">Username (Max 30 Characters, Unique, No Spaces):</label>
+            <input type="text" id="name" name="name" required autocomplete="off" maxlength="30" />
+
+            <label for="loginEmail">Email (Must be unique):</label>
+            <input type="email" id="loginEmail" name="email" required>
+
+            <label for="password">Password (Strong required):</label>
+            <input type="password" id="password" name="password" required autocomplete="off" />
+
+            <input type="submit" value="Sign Up" />
+        </form>
+
+        <div class="form-group">
+            <p>Already have an Account? <a href="/login">Login</a></p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            const passwordInput = document.getElementById('password');
+
+            form.addEventListener('submit', function (event) {
+                const password = passwordInput.value;
+
+                // Strong password regex (Minimum 8 characters, at least one uppercase, one lowercase, one number, and one special character)
+                const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+                if (!strongPasswordRegex.test(password)) {
+                    event.preventDefault();
+                    alert('Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
