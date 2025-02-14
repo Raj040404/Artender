@@ -9,7 +9,7 @@ const handlebars = require("hbs");
 const MongoStore = require("connect-mongo");
 const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
-require("dotenv").config();
+
 
 
 // Register the "startsWith" helper
@@ -33,14 +33,16 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 
 // Set up session management
+require("dotenv").config();
+console.log("MONGO_URI:", process.env.MONGO_URI);
 
 app.use(
   session({
-    secret: "your-secret-key", // Replace with a strong, random secret key
+    secret: process.env.secret, // Replace with a strong, random secret key
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
-      mongoUrl: "mongodb://localhost:27017/LoginSignup", // Replace with your MongoDB connection string
+      mongoUrl: process.env.MONGO_URI, // Replace with your MongoDB connection string
     }),
     cookie: { maxAge: 24 * 60 * 60 * 1000 }, // Set to true only if using HTTPS
   })
