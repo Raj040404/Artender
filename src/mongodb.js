@@ -1,13 +1,19 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 // Connect to MongoDB
+const mongoURI = process.env.MONGO_URI || "mongodb://localhost:27017/LoginSignup";
+
 mongoose
-  .connect("mongodb://localhost:27017/LoginSignup")
+  .connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     console.log("MongoDB Connected Successfully!");
   })
-  .catch(() => {
-    console.log("Failed to Connect!");
+  .catch((err) => {
+    console.log("Failed to Connect!", err);
   });
 
 // Schema for User Login
