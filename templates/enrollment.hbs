@@ -1,51 +1,3 @@
-{{!--
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enroll in {{contest.name}}</title>
-  <link rel="stylesheet" href="/css/enrollment.css">
-</head>
-
-<body>
-  <header>
-    <div class="logo">
-      <a href="/home" style="text-decoration: none; color: inherit;">Artender</a>
-    </div>
-    <nav>
-      <a href="/explorecompetitions">Explore works</a>
-      <a href="/competitions">Participate in Competitions</a>
-      <a href="#">Contact</a>
-      <a href="/profile">Profile</a>
-    </nav>
-    <div class="logout">
-      <form action="/logout" method="get">
-        <button class="logout-button" type="submit">Logout</button>
-      </form>
-    </div>
-  </header>
-  <main>
-    <h1>Enroll in {{contest.name}}</h1>
-    <form id="enrollmentForm" action="/enroll/{{contest.contestId}}" method="POST" enctype="multipart/form-data">
-      <label for="userName">Name:</label>
-      <input type="text" id="userName" name="userName" value="{{userName}}" readonly />
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" value="{{email}}" readonly />
-      <label for="file">Upload File (Image/Video):</label>
-      <input type="file" id="file" name="file" accept="image/*,video/*" required />
-    </form>
-
-    <!-- Razorpay Payment Button -->
-    <form>
-      <script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_OdY2Fd6IKKS4KY" async>
-      </script>
-    </form>
-  </main>
-</body>
-
-</html> --}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -171,6 +123,7 @@
     <nav>
       <a href="/explorecompetitions">Explore works</a>
       <a href="/competitions">Participate in Competitions</a>
+      <a href="/completeenrollment">Complete Enrollment</a>
       <a href="#">Contact</a>
       <a href="/profile">Profile</a>
     </nav>
@@ -199,23 +152,20 @@
 
       <!-- Razorpay Payment Button -->
       <div id="razorpay-button-container">
-        <script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_PvXJmYRarXMT1B"
-          async>
-          </script>
+        <script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_PvXJmYRarXMT1B" async>
+        </script>
       </div>
-
     </form>
   </main>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      if ({{ alreadyEnrolled }
-    }) {
-      document.getElementById('popupMessage').style.display = 'block';
-      setTimeout(function () {
-        window.location.href = "/competitions";
-      }, 3000);
-    }
+      if ({{alreadyEnrolled}}) {
+        document.getElementById('popupMessage').style.display = 'block';
+        setTimeout(function () {
+          window.location.href = "/competitions";
+        }, 3000);
+      }
     });
   </script>
 </body>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Congratulations on Your Enrollment!</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #111;
+      width: 100%;
+    }
+
+    header .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #f00;
+    }
+
+    header nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    header nav a {
+      color: #e06565;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    header .logout {
+      display: flex;
+      gap: 10px;
+    }
+
+    header .logout-button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    header .logout-button:hover {
+      background-color: #0056b3;
+    }
+
+    main {
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #f00;
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.5;
+      margin-bottom: 30px;
+    }
+
+    .enrollment-card {
+      background-color: #111;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0px 0px 15px rgba(255, 0, 0, 0.5);
+      max-width: 600px;
+      margin: auto;
+    }
+
+    button {
+      padding: 12px 24px;
+      background-color: #f00;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 18px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #b30000;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Artender</div>
+    <nav>
+      <a href="/explorecompetitions">Explore works</a>
+      <a href="/competitions">Participate in Competitions</a>
+      <a href="#">Contact</a>
+      <a href="/profile">Profile</a>
+    </nav>
+    <div class="logout">
+      <form action="/logout" method="get">
+        <button class="logout-button" type="submit">Logout</button>
+      </form>
+    </div>
+  </header>
+
+  <main>
+    <div class="enrollment-card">
+      <h1>Congratulations!</h1>
+      <p>You have successfully enrolled in the contest. We are thrilled to have you as a participant and can't wait to see your creative work showcased in this competition.</p>
+      <p>Keep an eye on your email and our announcements page for important updates. We wish you the very best and hope your journey through this contest is inspiring and rewarding!</p>
+      
+      <form action="/completeEnrollment/{{contest.contestId}}" method="POST">
+        <button type="submit">Complete Enrollment</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

@@ -84,6 +84,11 @@ app.get("/login", (req, res) => {
   res.render("login");
 });
 
+app.get("/completeenrollment", (req, res) => {
+  res.render("completeenrollment");
+});
+
+
 // Nodemailer transporter for sending OTP (Replace with your actual credentials)
 const transporter = nodemailer.createTransport({
   service: "gmail",
