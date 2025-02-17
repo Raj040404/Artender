@@ -1,11 +1,14 @@
-{{!-- <!DOCTYPE html>
+{{!--
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enroll in {{contest.name}}</title>
   <link rel="stylesheet" href="/css/enrollment.css">
 </head>
+
 <body>
   <header>
     <div class="logo">
@@ -36,16 +39,16 @@
 
     <!-- Razorpay Payment Button -->
     <form>
-      <script src="https://checkout.razorpay.com/v1/payment-button.js"
-              data-payment_button_id="pl_OdY2Fd6IKKS4KY"
-              async>
+      <script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_OdY2Fd6IKKS4KY" async>
       </script>
     </form>
   </main>
 </body>
+
 </html> --}}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -120,7 +123,9 @@
       width: 100%;
     }
 
-    label, input, button {
+    label,
+    input,
+    button {
       display: block;
       width: 100%;
       margin-bottom: 10px;
@@ -159,6 +164,7 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <div class="logo">Artender</div>
@@ -193,44 +199,25 @@
 
       <!-- Razorpay Payment Button -->
       <div id="razorpay-button-container">
-        <script src="https://checkout.razorpay.com/v1/payment-button.js"
-                data-payment_button_id="pl_PvXJmYRarXMT1B"
-                async>
-        </script>
+        <script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_PvXJmYRarXMT1B"
+          async>
+          </script>
       </div>
 
-      <button type="submit" id="completeEnrollment" disabled>Complete Enrollment</button>
     </form>
   </main>
 
   <script>
-    // Polling-based approach to enable the button after payment
-    function enableEnrollmentButton() {
-      // Check if Razorpay sets the payment success flag in the browser
-      if (window.localStorage.getItem("paymentSuccess") === "true") {
-        document.getElementById("completeEnrollment").disabled = false;
-      } else {
-        setTimeout(enableEnrollmentButton, 1000); // Check again after 1 second
-      }
-    }
-
-    // Start polling
-    enableEnrollmentButton();
-
-    // Simulate setting payment success (Replace with Razorpay's success handler)
-    document.addEventListener("payment.success", function () {
-      window.localStorage.setItem("paymentSuccess", "true");
-    });
-
     document.addEventListener("DOMContentLoaded", function () {
-      if ({{alreadyEnrolled}}) {
-        document.getElementById('popupMessage').style.display = 'block';
-        setTimeout(function () {
-          window.location.href = "/competitions";
-        }, 3000);
-      }
+      if ({{ alreadyEnrolled }
+    }) {
+      document.getElementById('popupMessage').style.display = 'block';
+      setTimeout(function () {
+        window.location.href = "/competitions";
+      }, 3000);
+    }
     });
   </script>
 </body>
-</html>
 
+</html>
