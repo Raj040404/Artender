@@ -19,11 +19,13 @@ header .logo {
     font-size: 24px;
     font-weight: bold;
     color: #f00;
+    flex-shrink: 0; /* Prevents shrinking */
+    margin-right: auto; /* Keep it on the left */
 }
 
 header nav {
     display: flex;
-    justify-content: center; /* Centers the nav items */
+    justify-content: center; /* Center nav items */
     align-items: center;
     gap: 15px;
     flex-grow: 1;
@@ -33,7 +35,7 @@ header nav a {
     color: #fff;
     text-decoration: none;
     font-size: 16px;
-    padding: 8px 12px; /* Add padding for easier touch interaction */
+    padding: 8px 12px;
     border-radius: 5px;
 }
 
@@ -44,7 +46,7 @@ header nav a:hover {
 header .auth-buttons {
     display: flex;
     gap: 10px;
-    margin-left: auto; /* Keeps buttons to the far right */
+    margin-left: auto; /* Keep the buttons on the right */
 }
 
 header .auth-buttons button {
@@ -84,15 +86,15 @@ main p {
 /* Tablet View */
 @media (max-width: 768px) {
     header {
-        flex-wrap: wrap; /* Allow wrapping for better layout */
+        flex-wrap: wrap;
     }
 
     header nav {
-        gap: 10px; /* Reduce gap for better fit */
+        gap: 10px;
     }
 
     header .auth-buttons {
-        margin-top: 10px; /* Add space between buttons and nav */
+        margin-top: 10px;
     }
 
     main h1 {
@@ -107,20 +109,22 @@ main p {
 /* Mobile View */
 @media (max-width: 480px) {
     header {
-        flex-direction: column;
-        align-items: center; /* Center the entire header content */
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap; /* Allow wrapping */
     }
 
     header .logo {
         font-size: 20px;
-        margin-bottom: 10px; /* Add space below the logo */
+        margin-bottom: 0;
     }
 
     header nav {
-        flex-direction: column; /* Stack nav items vertically */
-        align-items: center; /* Center align nav items */
-        gap: 10px; /* Provide space between links */
-        width: 100%; /* Full width for better touch accessibility */
+        flex-grow: 1;
+        flex-direction: column; /* Stack nav items */
+        align-items: center; /* Center the nav items */
+        gap: 10px;
+        width: 100%;
     }
 
     header nav a {
@@ -129,7 +133,7 @@ main p {
     }
 
     header .auth-buttons {
-        align-self: center; /* Center the buttons below the nav */
+        align-self: flex-end; /* Keep buttons to the right */
     }
 
     header .auth-buttons button {
