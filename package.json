@@ -18,10 +18,11 @@
   },
   "name": "login-registrationform-mongodb-main",
   "version": "1.0.0",
-  "description": "",
+  "description": "I have created a Login and Registration Form with NodeJS, ExpressJS and MongoDB. This is a Basic Version of the Login and Signup Form which I have created using a bit of help from a few Youtube videos.",
   "main": "app.js",
   "scripts": {
     "start": "node src/app.js"
   },
-  "author": "Rajkamal"
+  "author": "Rajkamal",
+  "license": "ISC"
 }

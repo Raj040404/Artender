@@ -12,6 +12,7 @@ header {
     align-items: center;
     padding: 10px 20px;
     background-color: #111;
+    flex-wrap: wrap; /* Allows wrapping for better layout */
 }
 
 header .logo {
@@ -22,18 +23,28 @@ header .logo {
 
 header nav {
     display: flex;
-    gap: 20px;
+    justify-content: center; /* Centers the nav items */
+    align-items: center;
+    gap: 15px;
+    flex-grow: 1;
 }
 
 header nav a {
     color: #fff;
     text-decoration: none;
     font-size: 16px;
+    padding: 8px 12px; /* Add padding for easier touch interaction */
+    border-radius: 5px;
+}
+
+header nav a:hover {
+    background-color: #333;
 }
 
 header .auth-buttons {
     display: flex;
     gap: 10px;
+    margin-left: auto; /* Keeps buttons to the far right */
 }
 
 header .auth-buttons button {
@@ -72,9 +83,16 @@ main p {
 
 /* Tablet View */
 @media (max-width: 768px) {
+    header {
+        flex-wrap: wrap; /* Allow wrapping for better layout */
+    }
+
     header nav {
-        flex-direction: column;
-        gap: 10px;
+        gap: 10px; /* Reduce gap for better fit */
+    }
+
+    header .auth-buttons {
+        margin-top: 10px; /* Add space between buttons and nav */
     }
 
     main h1 {
@@ -90,18 +108,32 @@ main p {
 @media (max-width: 480px) {
     header {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center; /* Center the entire header content */
     }
 
     header .logo {
         font-size: 20px;
+        margin-bottom: 10px; /* Add space below the logo */
     }
 
     header nav {
-        gap: 5px;
+        flex-direction: column; /* Stack nav items vertically */
+        align-items: center; /* Center align nav items */
+        gap: 10px; /* Provide space between links */
+        width: 100%; /* Full width for better touch accessibility */
     }
 
     header nav a {
+        font-size: 14px;
+        padding: 10px 0;
+    }
+
+    header .auth-buttons {
+        align-self: center; /* Center the buttons below the nav */
+    }
+
+    header .auth-buttons button {
+        padding: 6px 12px;
         font-size: 14px;
     }
 
@@ -111,9 +143,5 @@ main p {
 
     main p {
         font-size: 14px;
-    }
-
-    header .auth-buttons button {
-        padding: 6px 12px;
     }
 }

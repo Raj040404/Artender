@@ -5,6 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Artender</title>
   <link rel="stylesheet" href="/css/home1.css">
+  <style>
+    /* Style for the login required message */
+    .login-required-message {
+      color: #ff0000;
+      font-size: 16px;
+      margin-top: 10px;
+      display: none; /* Hidden by default */
+    }
+  </style>
+  <script>
+    // Function to display the login required message
+    function showLoginRequiredMessage(event) {
+      event.preventDefault(); // Prevent default link behavior
+      const messageElement = document.querySelector(".login-required-message");
+      messageElement.style.display = "block"; // Show the message
+    }
+
+    // Attach the function to all links on the page
+    document.addEventListener("DOMContentLoaded", function() {
+      const links = document.querySelectorAll("nav a");
+      links.forEach(link => {
+        link.addEventListener("click", showLoginRequiredMessage);
+      });
+    });
+  </script>
 </head>
 <body>
   <header>
@@ -24,6 +49,9 @@
       </form>
     </div>
   </header>
+
+  <!-- Message to display when login is required -->
+  <div class="login-required-message">Login required to access this feature.</div>
 
   <main>
     <h1>Artender: Where Creativity Blooms and Art Shines Bright</h1>

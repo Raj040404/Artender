@@ -1,121 +1,134 @@
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #000;
+  color: #fff;
+}
 
-    /* Global Styles */
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #000;
-      color: #fff;
-    }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #111;
+  flex-wrap: wrap;
+}
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      background-color: #111;
-    }
+header .logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #f00;
+}
 
-    header .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #f00;
-    }
+header nav {
+  display: flex;
+  justify-content: center; /* Center the navigation */
+  align-items: center;
+  gap: 15px; /* Slightly reduced space between items */
+  flex-grow: 1; /* Allows nav to take up available space for centering */
+}
 
-    header nav {
-      display: flex;
-      gap: 20px;
-    }
+header nav a {
+  color: #e06565;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 8px 12px; /* Clickable area */
+  border-radius: 5px;
+}
 
-    header nav a {
-      color: #e06565;
-      text-decoration: none;
-      font-size: 16px;
-    }
+header nav a:hover {
+  background-color: #333; /* Hover effect */
+}
 
-    header .logout {
-      display: flex;
-      gap: 10px;
-    }
+header .logout {
+  margin-left: auto; /* Keeps logout button on the far right */
+}
 
-    header .logout-button {
-      padding: 8px 16px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
+header .logout-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
 
-    header .logout-button:hover {
-      background-color: #0056b3;
-    }
+header .logout-button:hover {
+  background-color: #0056b3;
+}
 
-    main {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      height: 80vh;
-      padding: 20px;
-    }
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 80vh;
+  padding: 20px;
+}
 
-    main h1 {
-      font-size: 36px;
-      margin-bottom: 10px;
-    }
+main h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
 
-    main p {
-      font-size: 18px;
-      color: #ccc;
-    }
+main p {
+  font-size: 18px;
+  color: #ccc;
+}
 
-    /* Tablet View */
-    @media (max-width: 768px) {
-      header nav {
-        flex-direction: column;
-        gap: 10px;
-      }
+/* Tablet View */
+@media (max-width: 768px) {
+  header nav {
+    gap: 10px; /* Further reduce space for tablets */
+  }
 
-      main h1 {
-        font-size: 30px;
-      }
+  main h1 {
+    font-size: 30px;
+  }
 
-      main p {
-        font-size: 16px;
-      }
-    }
+  main p {
+    font-size: 16px;
+  }
+}
 
-    /* Mobile View */
-    @media (max-width: 480px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+/* Mobile View */
+@media (max-width: 480px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-      header .logo {
-        font-size: 20px;
-      }
+  header nav {
+    flex-direction: column; /* Stack the nav links */
+    align-items: center; /* Keep them centered */
+    gap: 10px;
+    width: 100%;
+  }
 
-      header nav {
-        gap: 5px;
-      }
+  header nav a {
+    font-size: 14px;
+    padding: 10px;
+    width: auto; /* Links don't take full width */
+    text-align: center;
+  }
 
-      header nav a {
-        font-size: 14px;
-      }
+  header .logout {
+    align-self: flex-end;
+  }
 
-      main h1 {
-        font-size: 24px;
-      }
+  header .logout-button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
 
-      main p {
-        font-size: 14px;
-      }
+  main h1 {
+    font-size: 24px;
+  }
 
-      header .logout-button {
-        padding: 6px 12px;
-      }
-    }
-  
+  main p {
+    font-size: 14px;
+  }
+}
