@@ -83,18 +83,6 @@
 
   <!-- JavaScript for PWA & Open Graph Fix -->
   <script>
-    // Register the service worker for PWA
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(function(reg) {
-            console.log('Service Worker registered!', reg);
-          })
-          .catch(function(err) {
-            console.error('Service Worker registration failed:', err);
-          });
-      });
-    }
 
     // Fallback for Open Graph image
     document.addEventListener("DOMContentLoaded", function() {
