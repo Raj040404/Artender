@@ -3,17 +3,35 @@
 
 <head>
   <title>{{name}}'s Profile</title>
-  <meta property="og:title" content="👱 profile" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Character Set & Viewport -->
   <meta charset="utf-8" />
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Web App Capabilities -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="icon" type="image/jpeg" href="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg">
-  <link rel="stylesheet" href="/css/userprofile.css">
 
+  <!-- Web App Manifest -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Favicon (Browser Tabs) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/logo/logo.png">
+
+  <!-- Apple Touch Icons (iOS Home Screen) -->
+  <link rel="apple-touch-icon" sizes="192x192" href="/logo/logo.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/logo/logo.png">
+
+  <!-- Social Media & SEO Meta Tags -->
+  <meta name="theme-color" content="#3399cc">
+  <meta property="og:title" content="Artender">
+  <meta property="og:description" content="Explore profiles of different users.">
+  <meta property="og:image" content="/logo/WhatsApp%20Image%202025-02-23%20at%2000.10.41_0364758d.jpg">
+  <meta property="og:url" content="http://www.artender.in">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card for Social Sharing -->
+  <meta property="twitter:card" content="summary_large_image">
 
   <style data-tag="reset-style-sheet">
     html {
@@ -235,10 +253,10 @@
   <!-- ✅ User Info Section -->
   <div class="user-info">
     {{#if profilePicture}}
-                <img src="data:image/jpeg;base64,{{profilePicture}}" alt="Profile Picture" />
-                {{else}}
-                <div class="no-image">No profile picture</div>
-                {{/if}}
+    <img src="data:image/jpeg;base64,{{profilePicture}}" alt="Profile Picture" />
+    {{else}}
+    <div class="no-image">No profile picture</div>
+    {{/if}}
     <div class="details">
       <p><strong>Bio:</strong> {{bio}}</p>
       <p><strong>Followers:</strong> {{followers}}</p>
