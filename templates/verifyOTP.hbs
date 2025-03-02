@@ -4,25 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify OTP</title>
-    <link rel="stylesheet" href="/css/signup.css">
+    <link rel="stylesheet" href="/css/verify.css">
 </head>
 <body>
-    <div class="form-container">
-        <h2>Verify OTP</h2>
-        <p>We have sent a 6-digit OTP to your email: <strong>{{email}}</strong></p>
 
+    <div class="form-container">
+        <h2>Verify Your OTP</h2>
+
+        <!-- ✅ Error Message Box -->
         {{#if error}}
-        <div class="error-message" style="color: red; text-align: center; margin-bottom: 10px;">
+        <div id="errorBox" class="error-box">
             {{error}}
         </div>
         {{/if}}
 
-        <form action="/verify-otp" method="post">
-            <input type="hidden" name="email" value="{{email}}">
-            <label for="otp">Enter OTP:</label>
-            <input type="text" id="otp" name="otp" required minlength="6" maxlength="6">
-            <input type="submit" value="Verify">
+        <p>We have sent an OTP to <strong>{{email}}</strong>. Please enter it below to complete your signup.</p>
+
+        <form id="otpForm" action="/verify-otp" method="post">
+            <input type="hidden" name="email" value="{{email}}" />
+
+            <div class="form-group">
+                <label for="otp">Enter OTP:</label>
+                <input type="text" id="otp" name="otp" required maxlength="6" />
+            </div>
+
+            <input type="submit" value="Verify OTP">
         </form>
+
+        <!-- ✅ Resend OTP Button -->
+        <button id="resendOtpBtn">Resend OTP</button>
+        <p id="resendMsg" style="display: none; color: green;">OTP Resent Successfully!</p>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const errorBox = document.getElementById('errorBox');
+            const resendOtpBtn = document.getElementById('resendOtpBtn');
+            const resendMsg = document.getElementById('resendMsg');
+
+            // ✅ Hide Error Message After 3 Seconds
+            if (errorBox) {
+                setTimeout(() => {
+                    errorBox.style.opacity = "0";
+                    setTimeout(() => errorBox.style.display = "none", 500);
+                }, 3000);
+            }
+
+            // ✅ Resend OTP Function
+            resendOtpBtn.addEventListener("click", async function () {
+                const email = "{{email}}";
+                try {
+                    const response = await fetch("/resend-otp", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email }),
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        resendMsg.style.display = "block";
+                        setTimeout(() => { resendMsg.style.display = "none"; }, 3000);
+                    } else {
+                        alert("Failed to resend OTP. Please try again.");
+                    }
+                } catch (error) {
+                    console.error("Error resending OTP:", error);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

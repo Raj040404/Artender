@@ -10,6 +10,10 @@ const MongoStore = require("connect-mongo");
 const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 
+// ✅ Register the "json" helper in hbs
+hbs.registerHelper("json", function (context) {
+  return JSON.stringify(context);
+});
 
 
 // Register the "startsWith" helper
@@ -34,7 +38,6 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // Set up session management
 require("dotenv").config();
-console.log("MONGO_URI:", process.env.MONGO_URI);
 
 app.use(
   session({
@@ -83,7 +86,6 @@ app.get("/signup", (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login");
 });
-
 app.get("/completeenrollment", (req, res) => {
   res.render("completeenrollment");
 });
@@ -105,47 +107,47 @@ app.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
   if (password.length < 8) {
-    return res.render("signup", {
-      error: "Password must be at least 8 characters long.",
-    });
+      return res.render("signup", {
+          error: "Password must be at least 8 characters long.",
+      });
   }
 
   try {
-    // Check if email or username already exists
-    const existingUser = await LogInCollection.findOne({
-      $or: [{ email }, { name }],
-    });
+      const existingUser = await LogInCollection.findOne({
+          $or: [{ email }, { name }],
+      });
 
-    if (existingUser) {
-      if (existingUser.email === email) {
-        return res.render("signup", { error: "Email is already registered." });
+      if (existingUser) {
+          if (existingUser.email === email) {
+              return res.render("signup", { error: "Email is already registered." });
+          }
+          if (existingUser.name === name) {
+              return res.render("signup", { error: "Username is already taken." });
+          }
       }
-      if (existingUser.name === name) {
-        return res.render("signup", { error: "Username is already taken." });
-      }
-    }
 
-    // Generate a 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    otpStorage[email] = otp;
+      // Generate OTP
+      const otp = Math.floor(100000 + Math.random() * 900000);
+      otpStorage[email] = otp;
 
-    // Send OTP via email
-    await transporter.sendMail({
-      from: "rajkamalg9589@gmail.com",
-      to: email,
-      subject: "Your OTP for Signup",
-      text: `Your OTP for signing up is ${otp}. This OTP is valid for 5 minutes.`,
-    });
+      // Send OTP via email
+      await transporter.sendMail({
+          from: "your-email@example.com",
+          to: email,
+          subject: "Your OTP for Signup",
+          text: `Your OTP for signing up is ${otp}. This OTP is valid for 5 minutes.`,
+      });
 
-    // Store user data in session temporarily until OTP is verified
-    req.session.tempUser = { name, email, password };
+      // Store user data in session
+      req.session.tempUser = { name, email, password };
 
-    return res.render("verifyOTP", { email });
+      return res.render("verifyOTP", { email });
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error signing up. Please try again later.");
+      console.error(err);
+      res.status(500).render("signup", { error: "Error signing up. Please try again later." });
   }
 });
+
 
 // Verify OTP Route
 app.post("/verify-otp", async (req, res) => {
@@ -171,35 +173,65 @@ app.post("/verify-otp", async (req, res) => {
   }
 });
 
+app.post("/resend-otp", async (req, res) => {
+  const { email } = req.body;
 
-app.post("/login", async (req, res) => {
-  const { email, name, password } = req.body;  // Accept `name` input along with `email`
+  if (!email) {
+      return res.status(400).json({ success: false, message: "Invalid email." });
+  }
 
   try {
-    // Find the user by both name and email
-    const user = await LogInCollection.findOne({
-      email,
-      name,
-    });
+      // Generate a new OTP
+      const otp = Math.floor(100000 + Math.random() * 900000);
+      otpStorage[email] = otp;
 
-    if (!user) {
-      return res.render("login", { error: "User not found. Please sign up." });
-    }
+      // Send OTP via email
+      await transporter.sendMail({
+          from: "your-email@example.com",
+          to: email,
+          subject: "Your New OTP for Signup",
+          text: `Your new OTP is ${otp}. This OTP is valid for 5 minutes.`,
+      });
 
-    // Validate password
-    if (user.password === password) {
-      req.session.userId = user._id;  // Store the userId in session
-      req.session.username = user.name;  // Store the username in session
-
-      res.render("home", { name: user.name });
-    } else {
-      res.render("login", { error: "Incorrect password." });
-    }
+      return res.json({ success: true, message: "OTP resent successfully." });
   } catch (err) {
-    console.error("Error logging in:", err);
-    res.status(500).send("Error logging in. Please try again later.");
+      console.error("Error resending OTP:", err);
+      return res.status(500).json({ success: false, message: "Failed to resend OTP." });
   }
 });
+
+
+app.post("/login", async (req, res) => {
+  const { loginType, loginInput, password } = req.body; // Accept email or username
+
+  try {
+      // Find the user by either email or username
+      let user;
+      if (loginType === "email") {
+          user = await LogInCollection.findOne({ email: loginInput });
+      } else {
+          user = await LogInCollection.findOne({ name: loginInput });
+      }
+
+      if (!user) {
+          return res.render("login", { error: "User not found. Please sign up." });
+      }
+
+      // Validate password
+      if (user.password === password) {
+          req.session.userId = user._id;
+          req.session.username = user.name;
+
+          res.render("home", { name: user.name });
+      } else {
+          res.render("login", { error: "Incorrect password." });
+      }
+  } catch (err) {
+      console.error("Error logging in:", err);
+      res.status(500).send("Error logging in. Please try again later.");
+  }
+});
+
 
 
 app.get("/logout", (req, res) => {
@@ -207,24 +239,25 @@ app.get("/logout", (req, res) => {
     if (err) {
       return res.status(500).send("Error logging out.");
     }
-    res.redirect("/login");
+    res.redirect("/home1");
   });
 });
 
 // Explore Competitions Route
 app.get("/explorecompetitions", async (req, res) => {
   try {
+    const userId = req.session.userId; // ✅ Get logged-in user ID
 
-    // Fetch competition posts
+    // Fetch all competition posts
     const posts = await CompetitionPostCollection.find().sort({ createdAt: -1 });
 
     // Extract unique usernames
     const usernames = [...new Set(posts.map((post) => post.username))];
 
-    // Fetch profiles
+    // Fetch profiles of post authors
     const profiles = await ProfileCollection.find({ username: { $in: usernames } });
 
-    // Map profiles to usernames
+    // Map profile pictures to usernames
     const profileMap = profiles.reduce((map, profile) => {
       map[profile.username] = profile.profilePicture
         ? `data:image/jpeg;base64,${profile.profilePicture.toString("base64")}`
@@ -232,21 +265,21 @@ app.get("/explorecompetitions", async (req, res) => {
       return map;
     }, {});
 
-    // Format posts with profile pictures
+    // Format posts with like information
     const formattedPosts = posts.map((post) => {
       return {
-        username: post.username,
+        username: post.username, // Post owner's username
         description: post.description,
         file: post.file ? post.file.toString("base64") : null,
         fileType: post.fileType || "image/png",
         profilePicture: profileMap[post.username] || "/default-profile.png", // Use default if no profile picture
         postNo: post.postNo, // Ensure postNo is included
-        likes: post.likes || [], // Include likes for rendering
+        likeCount: post.likes.length, // Send only the count for display
+        isLiked: post.likes.includes(userId), // ✅ Check if logged-in user has liked the post
       };
     });
-    
 
-    // Render the page
+    // Render the explore competitions page
     res.render("explorecompetitions", { posts: formattedPosts });
   } catch (err) {
     console.error("Error fetching competition posts:", err);
@@ -291,7 +324,6 @@ app.post("/publish", upload.single("file"), async (req, res) => {
     });
 
     await newPost.save();
-    console.log(`Post created: username=${user.name}, postNo=${nextPostNo}, description=${description}`);
     res.redirect("/explorecompetitions");
   } catch (err) {
     console.error("Error posting work:", err);
@@ -333,21 +365,17 @@ app.get("/profile", async (req, res) => {
         description: post.description,
         file: post.file ? post.file.toString("base64") : null,
         fileType: post.fileType || "image/png",
-        postNo: post.postNo, // Include post number
-        likes: post.likes || [], // Include likes
+        postNo: post.postNo,
+        likes: post.likes, // Send the full likes array
+        likeCount: post.likes.length, // Send only the count for display
+        isLiked: post.likes.includes(userId), // Check if the logged-in user liked it
       };
     });
 
     // Fetch enrolled contests for the user
     const enrolledContests = await EnrollmentCollection.find({ userName: user.name }).exec();
-
-    // **Fix:** Keep contestIds as **strings**
     const contestIds = enrolledContests.map((enrollment) => enrollment.contestId);
-
-    // **Fix:** Query ContestCollection with string-based `contestId`
-    const populatedContests = await ContestCollection.find({
-      contestId: { $in: contestIds }
-    });
+    const populatedContests = await ContestCollection.find({ contestId: { $in: contestIds } });
 
     // Pass the results to the view
     res.render("profile", {
@@ -357,7 +385,7 @@ app.get("/profile", async (req, res) => {
       followers: profileData.followers,
       location: profileData.location,
       posts: formattedPosts,
-      enrolledContests: populatedContests, // Use the populated contests
+      enrolledContests: populatedContests,
       profilePicture: profileData.profilePicture ? profileData.profilePicture.toString("base64") : null,
     });
   } catch (err) {
@@ -365,6 +393,8 @@ app.get("/profile", async (req, res) => {
     res.status(500).send("Error loading profile. Please try again later.");
   }
 });
+
+
 
 
 
@@ -421,58 +451,60 @@ app.post("/updateProfile", upload.single('profilePicture'), async (req, res) => 
 });
 
 app.get("/user/:username", async (req, res) => {
-  const { username } = req.params;
-
   try {
-    // Fetch the user from LogInCollection
-    const user = await LogInCollection.findOne({ name: username });
-    if (!user) {
-      return res.status(404).send("User not found.");
-    }
+      const { username } = req.params;
+      const userId = req.session.userId; // ✅ Get logged-in user ID
 
-    // Fetch profile from ProfileCollection
-    const profile = await ProfileCollection.findOne({ username: user.name });
+      // Fetch user from LogInCollection
+      const user = await LogInCollection.findOne({ name: username });
+      if (!user) {
+          return res.status(404).send("User not found.");
+      }
 
-    // Use existing profile or provide default values
-    const profileData = {
-      username: user.name,
-      email: user.email,
-      bio: profile?.bio || "This user has not updated their profile yet.",
-      followers: profile?.followers || 0,
-      location: profile?.location || "No location set",
-      profilePicture: profile?.profilePicture ? profile.profilePicture.toString("base64") : null,
-    };
+      // Fetch profile from ProfileCollection
+      const profile = await ProfileCollection.findOne({ username: user.name });
 
-    // Fetch user's posts from CompetitionPostCollection
-    const posts = await CompetitionPostCollection.find({ username: user.name }).sort({ createdAt: -1 });
-
-    // Format posts to include Base64 conversion for file
-    const formattedPosts = posts.map((post) => {
-      return {
-        username: post.username,
-        description: post.description,
-        file: post.file ? post.file.toString("base64") : null,
-        fileType: post.fileType || "image/png",
-        postNo: post.postNo, // Include post number
-        likes: post.likes || [], // Include likes
+      // Use existing profile or provide default values
+      const profileData = {
+          username: user.name,
+          email: user.email,
+          bio: profile?.bio || "This user has not updated their profile yet.",
+          followers: profile?.followers || 0,
+          location: profile?.location || "No location set",
+          profilePicture: profile?.profilePicture || null,
       };
-    });
 
-    // Render user profile page
-    res.render("userProfile", {
-      name: profileData.username,
-      email: profileData.email,
-      bio: profileData.bio,
-      followers: profileData.followers,
-      location: profileData.location,
-      profilePicture: profileData.profilePicture, // Send the profile picture data
-      posts: formattedPosts,
-    });
+      // Fetch user's posts from CompetitionPostCollection
+      const posts = await CompetitionPostCollection.find({ username: user.name }).sort({ createdAt: -1 });
+
+      // Format posts to include Base64 conversion for file & like status
+      const formattedPosts = posts.map((post) => ({
+          username: post.username,
+          description: post.description,
+          file: post.file ? post.file.toString("base64") : null,
+          fileType: post.fileType || "image/png",
+          postNo: post.postNo, // Include post number
+          likeCount: post.likes.length, // ✅ Send only the count for display
+          isLiked: post.likes.includes(userId), // ✅ Check if logged-in user has liked the post
+      }));
+
+      // Render user profile page
+      res.render("userProfile", {
+          name: profileData.username,
+          email: profileData.email,
+          bio: profileData.bio,
+          followers: profileData.followers,
+          location: profileData.location,
+          profilePicture: profileData.profilePicture ? profileData.profilePicture.toString("base64") : null,
+          posts: formattedPosts,
+      });
   } catch (err) {
-    console.error("Error loading user profile:", err.message);
-    res.status(500).send("Error loading profile. Please try again later.");
+      console.error("Error loading user profile:", err.message);
+      res.status(500).send("Error loading profile. Please try again later.");
   }
 });
+
+
 
 
 
@@ -658,8 +690,8 @@ app.get("/competitions", async (req, res) => {
 //     res.status(500).send("Error fetching contest details.");
 //   }
 // });
-  
-  
+
+
 // app.post("/enroll/:contestId", upload.single("file"), async (req, res) => {
 //   const { userName, email } = req.body;
 //   const { contestId } = req.params;
@@ -725,13 +757,11 @@ app.get("/enroll/:contestId", async (req, res) => {
 
   try {
     // Fetch contest details
-    console.log(`Fetching contest with contestId: ${contestId}`);
     const contest = await ContestCollection.findOne({ contestId });
     if (!contest) {
       console.error("Error: Contest not found");
       return res.status(404).send("Contest not found.");
     }
-    console.log("Contest found:", contest);
 
     // Fetch the logged-in user's details
     const user = await LogInCollection.findById(req.session.userId);
@@ -739,7 +769,6 @@ app.get("/enroll/:contestId", async (req, res) => {
       console.error("Error: User not found in the database");
       return res.status(404).send("User not found.");
     }
-    console.log("User found:", user);
 
     // Convert contestId to ObjectId if needed
     const contestObjectId = mongoose.Types.ObjectId.isValid(contestId)
@@ -753,7 +782,6 @@ app.get("/enroll/:contestId", async (req, res) => {
     });
 
     if (existingEnrollment) {
-      console.log(`User ${user.name} is already enrolled in ${contest.name}.`);
       return res.render("enrollment", {
         contest,
         userName: user.name,
@@ -822,7 +850,7 @@ app.post("/enroll/:contestId", upload.single("file"), async (req, res) => {
     await newEnrollment.save();
 
     // Send a success response
-    res.send("Enrollment successful!");
+    res.redirect('/completeenrollment');
   } catch (err) {
     // Handle errors that occur during the save operation
     console.error("Error enrolling user:", err.message);
@@ -835,32 +863,55 @@ app.post("/enroll/:contestId", upload.single("file"), async (req, res) => {
 
 app.post("/like", async (req, res) => {
   const { username, postNo } = req.body;
-  const sessionUsername = req.session.username;
-  
-  
-  
-  if (!sessionUsername) {
-    return res.status(401).send("Unauthorized: Please log in.");
+  const userId = req.session.userId; // ✅ Get logged-in user ID
+
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized. Please log in." });
   }
-  
+
   try {
+    console.log(`🔍 Searching Post - Username: ${username}, Post No: ${postNo}`);
+
+    // ✅ Find the post by `postNo` & `username`
     const post = await CompetitionPostCollection.findOne({ username, postNo });
+
     if (!post) {
-      return res.status(404).send("Post not found.");
+      console.error("❌ Post not found.");
+      return res.status(404).json({ error: "Post not found." });
     }
 
-    if (post.likes.includes(sessionUsername)) {
-      return res.status(400).send("You have already liked this post.");
+    console.log(`✅ Post Found - ID: ${post._id}, Likes: ${post.likes.length}`);
+
+    // ✅ Check if the user already liked the post
+    const userIndex = post.likes.indexOf(userId);
+    let updatedLikes;
+
+    if (userIndex === -1) {
+      updatedLikes = [...post.likes, userId]; // ✅ Add like
+    } else {
+      updatedLikes = post.likes.filter((id) => id !== userId); // ✅ Remove like
     }
-    
-    post.likes.push(sessionUsername);
-    await post.save();
-    res.status(200).json({ likes: post.likes.length });
+
+    // ✅ Use `findOneAndUpdate()` to prevent `VersionError`
+    const updatedPost = await CompetitionPostCollection.findOneAndUpdate(
+      { _id: post._id },
+      { $set: { likes: updatedLikes } },
+      { new: true, runValidators: true }
+    );
+
+    res.json({
+      likes: updatedPost.likes.length,
+      isLiked: updatedPost.likes.includes(userId),
+    });
   } catch (err) {
-    console.error("Error liking post:", err.message);
-    res.status(500).send("An error occurred while liking the post.");
+    console.error("❌ Error liking post:", err);
+    res.status(500).json({ error: "Server error while liking post." });
   }
 });
+
+
+
+
 
 
 // Start the server

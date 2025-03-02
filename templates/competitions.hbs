@@ -1,31 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Competitions</title>
-  <link rel="stylesheet" href="/css/competetions.css">
-  
-</head>
-<body>
-  <header>
-     <div class="logo">
-        <a href="/home" style="text-decoration: none; color: inherit;">Artender</a>
-    </div>
-    <nav class="nav-links">
-      <a href="/home">home</a>
-      <a href="/explorecompetitions">Explore works</a>
-      <a href="/competitions">Participate in Competitions</a>
-      <a href="#">Contact</a>
-      <a href="/profile">Profile</a>
-    </nav>
-    <div>
-      <form action="/logout" method="get">
-        <button class="logout-button" type="submit">Logout</button>
-      </form>
-    </div>
-  </header>
 
+<head>
+  <title>Participate in Competitions</title>
+  <meta property="og:title" content="Participate in Competitions" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+
+  <style data-tag="reset-style-sheet">
+    html {
+      line-height: 1.15;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+      border-width: 0;
+      border-style: solid;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    p,
+    li,
+    ul,
+    pre,
+    div,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    figure,
+    blockquote,
+    figcaption {
+      margin: 0;
+      padding: 0;
+    }
+
+    button {
+      background-color: transparent;
+    }
+
+    button,
+    input,
+    optgroup,
+    select,
+    textarea {
+      font-family: inherit;
+      font-size: 100%;
+      line-height: 1.15;
+      margin: 0;
+    }
+
+    button,
+    select {
+      text-transform: none;
+    }
+
+    button,
+    [type="button"],
+    [type="reset"],
+    [type="submit"] {
+      -webkit-appearance: button;
+      color: inherit;
+    }
+
+    button::-moz-focus-inner,
+    [type="button"]::-moz-focus-inner,
+    [type="reset"]::-moz-focus-inner,
+    [type="submit"]::-moz-focus-inner {
+      border-style: none;
+      padding: 0;
+    }
+
+    button:-moz-focus,
+    [type="button"]:-moz-focus,
+    [type="reset"]:-moz-focus,
+    [type="submit"]:-moz-focus {
+      outline: 1px dotted ButtonText;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: inherit;
+    }
+
+    input {
+      padding: 2px 4px;
+    }
+
+    img {
+      display: block;
+    }
+
+    details {
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    [data-thq="accordion"] [data-thq="accordion-content"] {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-in-out;
+      padding: 0;
+    }
+
+    [data-thq="accordion"] details[data-thq="accordion-trigger"][open]+[data-thq="accordion-content"] {
+      max-height: 1000vh;
+    }
+
+    details[data-thq="accordion-trigger"][open] summary [data-thq="accordion-icon"] {
+      transform: rotate(180deg);
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+  </style>
+  <style data-tag="default-style-sheet">
+    html {
+      font-family: Inter;
+      font-size: 16px;
+    }
+
+    body {
+      font-weight: 400;
+      font-style: normal;
+      text-decoration: none;
+      text-transform: none;
+      letter-spacing: normal;
+      line-height: 1.15;
+      color: var(--dl-color-theme-neutral-dark);
+      background: var(--dl-color-theme-neutral-light);
+
+      fill: var(--dl-color-theme-neutral-dark);
+    }
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+    data-tag="font" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap"
+    data-tag="font" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+    data-tag="font" />
+  <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css" />
+  <!-- <link href="/public/css/home1.css" rel="stylesheet" /> -->
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/explore.css" />
+  <link rel="stylesheet" href="/css/competetions.css" />
+</head>
+
+<body>
+  <div>
+    <div class="landing-container">
+      <navbar8-wrapper class="navbar8-wrapper">
+        <!--Navbar8 component-->
+        <header class="navbar8-container1">
+          <header data-thq="thq-navbar" class="navbar8-navbar-interactive">
+            <img alt="logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg" class="navbar8-image1" />
+            <div data-thq="thq-navbar-nav" class="navbar8-desktop-menu">
+              <nav class="navbar8-links1">
+                <a href="/home" class="navbar8-link11 thq-link thq-body-small">
+                  <fragment class="landing-fragment104">
+                    <span class="landing-text104">Home</span>
+                  </fragment>
+                </a>
+                <a href="/explorecompetitions" class="thq-link thq-body-small">
+                  <fragment class="landing-fragment102">
+                    <span class="landing-text102">Explore Artworks</span>
+                  </fragment>
+                </a>
+                <a href="/profile" target="_blank" rel="noreferrer noopener"
+                  class="navbar8-link31 thq-link thq-body-small">
+                  <fragment class="landing-fragment110">
+                    <span class="landing-text110">Profile</span>
+                  </fragment>
+                </a>
+                <a href="#" target="_blank" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
+                  <fragment class="landing-fragment110">
+                    <span class="landing-text110">Contact</span>
+                  </fragment>
+                </a>
+              </nav>
+              <div class="navbar8-buttons1">
+                <a href="/logout">
+                  <button class="navbar8-action11 thq-button-animated thq-button-filled">
+                    <span>
+                      <fragment class="landing-fragment101">
+                        <span class="landing-text101">Logout</span>
+                      </fragment>
+                    </span>
+                  </button>
+                </a>
+
+              </div>
+              <div class="navbar8-container7 thq-box-shadow">
+          </header>
+          <div class="navbar8-container8"></div>
+        </header>
+      </navbar8-wrapper>
+      <div class="navbar-toggle" onclick="toggleNavbar()">
+        <img src="/navigation-aligned-dots-more-horizontal-three-dots-option-icon-svgrepo-com.svg" alt="Menu"
+          class="navbar-toggle-icon">
+      </div>
+
+      <div id="navbarMenu" class="navbar-menu">
+        <nav class="navbar-menu-links">
+          <a href="/home" class="navbar-menu-link">Home</a>
+          <a href="/explorecompetitions" class="navbar-menu-link">Explore Artworks</a>
+          <a href="/profile" class="navbar-menu-link">Profile</a>
+          <a href="#" class="navbar-menu-link">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </div>
   <main>
     <h1>Participate in Competitions</h1>
     <div class="contest-container">
@@ -44,5 +250,59 @@
       {{/each}}
     </div>
   </main>
+  <footer4-wrapper class="footer4-wrapper">
+    <!--Footer4 component-->
+    <footer class="footer4-footer7 thq-section-padding">
+      <div class="footer4-max-width thq-section-max-width">
+        <div class="footer4-content">
+          <div class="footer4-logo1">
+            <img alt="Logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg" class="footer4-logo2" />
+          </div>
+        </div>
+        <div id="Logout-buttons1" class="navbar8-buttons1">
+          <a href="/logout">
+            <button class="navbar8-action11 thq-button-animated thq-button-filled">
+              <span>
+                <fragment class="landing-fragment101">
+                  <span class="landing-text101">Logout</span>
+                </fragment>
+              </span>
+            </button>
+          </a>
+        </div>
+      </div>
+
+    </footer>
+  </footer4-wrapper>
+
+  <script>
+    function toggleNavbar() {
+      const navbarMenu = document.getElementById("navbarMenu");
+      navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
+    }
+
+    document.addEventListener("keydown", function (e) {
+      if (e.ctrlKey && e.shiftKey && (e.key === "s")) {
+        e.preventDefault();
+        alert("Screenshots are disabled!");
+      }
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "PrintScreen") {
+        e.preventDefault();
+        alert("Screenshots are disabled!");
+      }
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.ctrlKey && (e.key === "u" || e.key === "U" || e.key === "i" || e.key === "I")) {
+        e.preventDefault();
+        alert("View Source and Inspect Element are disabled!");
+      }
+    });
+
+
+
+  </script>
 </body>
+
 </html>

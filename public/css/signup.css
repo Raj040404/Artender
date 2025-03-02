@@ -1,9 +1,9 @@
-
+/* Artistic Background */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     overflow: hidden;
-    background-color: #0e1532;
+    background: linear-gradient(135deg, #0f3460, #1a1a2e, #16213e);
     color: #fff;
     display: flex;
     align-items: center;
@@ -11,75 +11,108 @@ body {
     height: 100vh;
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 10px;
-}
-
+/* Form Container */
 .form-container {
     width: 400px;
     max-width: 100%;
     padding: 30px;
-    border-radius: 8px;
-    box-sizing: border-box;
-    background-color: #fff;
-    color: #000;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
 }
 
-.form-container h2 {
-    margin-bottom: 20px;
+/* Form Group (Aligning Form Elements) */
+.form-group {
+    position: relative;
+    margin-bottom: 15px;
+    text-align: left;
 }
 
+/* Labels */
 label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    font-size: 14px;
 }
 
+/* Input Fields */
 input {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    outline: none;
+    transition: all 0.3s ease-in-out;
 }
 
+/* Input Focus */
+input:focus {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Submit Button */
 input[type="submit"] {
-    background-color: #187bff;
-    color: #fff;
-    border: none;
-    padding: 14px;
-    border-radius: 4px;
+    background-color: #ff4b5c;
+    color: white;
+    padding: 12px;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 input[type="submit"]:hover {
-    background-color: #145b9c;
+    background-color: #d43f4b;
 }
 
-.form-group {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.form-group p {
-    margin-bottom: 0;
-}
-
-.form-group a {
-    color: #007BFF;
-    text-decoration: none;
-}
-
-.form-group a:hover {
-    text-decoration: underline;
-}
-
+/* ✅ Inline Error Messages */
 .error-message {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    font-size: 12px;
     color: red;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Password Strength Indicator */
+.password-strength {
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: left;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ✅ Floating Error Box */
+.error-box {
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
     text-align: center;
-    margin-bottom: 10px;
+    width: auto;
+    max-width: 80%;
+    transition: opacity 0.5s ease-in-out;
 }

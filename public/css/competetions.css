@@ -1,137 +1,107 @@
-/* Global Styles */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    color: #fff;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: #111;
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #f00;
-}
-
-.nav-links {
-    display: flex;
-    gap: 20px;
-}
-
-.nav-links a {
-    color: #e06565;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-.logout-button {
-    padding: 10px 16px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.logout-button:hover {
-    background-color: #0056b3;
-}
-
-main {
-    text-align: center;
-    padding: 20px;
-}
-
-main h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
-}
-
+/* Main Contest Container */
 .contest-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
     gap: 20px;
+    padding: 40px 5%;
     justify-content: center;
-    padding: 20px;
+    align-items: center;
 }
 
+/* Contest Card */
 .contest-card {
-    background-color: #222;
-    padding: 20px;
-    border-radius: 10px;
+    position: relative;
+    background: #FDF7E6;
+    border-radius: 12px;
+    overflow: hidden;
     text-align: center;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding-bottom: 15px;
+    z-index: 1;
 }
 
+/* Hover Effect - Slight Lift */
+.contest-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 6px 6px 18px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensures hover effect is visible */
+}
+
+/* Contest Image */
 .contest-card img {
     width: 100%;
-    border-radius: 10px;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.3s ease, z-index 0.3s ease;
+    border-radius: 12px 12px 0 0;
 }
 
+/* Hover Effect - Image Zoom */
+.contest-card:hover img {
+    transform: scale(1.05);
+    z-index: 1000;
+}
+
+/* Contest Title */
 .contest-card h2 {
-    font-size: 22px;
-    margin: 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 12px 10px;
+    color: #333;
+    font-family: "Playfair Display", serif;
 }
 
+/* Contest Details */
 .contest-card p {
-    font-size: 16px;
-    color: #ccc;
+    font-size: 14px;
+    color: #555;
+    margin: 4px 0;
+    font-family: "Poppins", sans-serif;
 }
 
+/* Enroll Button */
 .contest-card button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
+    margin-top: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background: #8b5e3b;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
+/* Button Hover */
 .contest-card button:hover {
-    background-color: #0056b3;
+    background: #744b2a;
+    transform: scale(1.05);
 }
 
-/* Responsive Styles */
+/* Responsive Design */
 @media (max-width: 768px) {
-    header {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
+    .contest-container {
+        grid-template-columns: 1fr 1fr; /* 2 Columns */
+        padding: 20px;
+    }
+    
+    .contest-card img {
+        height: 160px;
     }
 
-    .nav-links {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
+    .contest-card h2 {
+        font-size: 16px;
     }
 
-    main h1 {
-        font-size: 30px;
+    .contest-card p {
+        font-size: 13px;
     }
 }
 
 @media (max-width: 480px) {
-    .logo {
-        font-size: 20px;
-    }
-
-    .nav-links a {
-        font-size: 14px;
-    }
-
-    main h1 {
-        font-size: 24px;
-    }
-
-    .contest-card {
-        width: 100%;
+    .contest-container {
+        grid-template-columns: 1fr; /* 1 Column for Small Screens */
     }
 }

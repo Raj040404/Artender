@@ -1,106 +1,125 @@
-
-/* Global Styles */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    color: #fff;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #111;
-}
-
-header .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #f00;
-}
-
-header nav {
-    display: flex;
-    gap: 20px;
-}
-
-header nav a {
-    color: #e06565;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-header .logout {
-    display: flex;
-    gap: 10px;
-}
-
-header .logout-button {
-    padding: 8px 16px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-header .logout-button:hover {
-    background-color: #0056b3;
-}
-
+/* ✅ Main Section Styling */
 main {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: linear-gradient(to right, #FDF7E6, #E8D8C4); /* Artistic gradient */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+}
+
+/* ✅ Heading */
+main h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #8B4513; /* Warm artistic brown */
+    margin-bottom: 15px;
+}
+
+/* ✅ Search Results Container */
+.results-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 20px;
+    justify-content: center;
+}
+
+/* ✅ User Card Styling */
+.user-card {
+    background: #FFF7E6;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
-    padding: 20px;
 }
 
-.results-container {
+/* ✅ Hover Effect (Smooth Zoom) */
+.user-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ✅ Profile Picture */
+.small-profile-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-bottom: 8px;
+}
+
+/* ✅ User Info */
+.user-info {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 90%;
-    margin: 0 auto;
+    flex-direction: column;
+    align-items: center;
 }
 
-.user-card {
-    background-color: #222;
-    padding: 15px;
-    border-radius: 10px;
-    margin: 10px;
-    width: 300px;
-    box-shadow: 0px 0px 5px rgba(255, 0, 0, 0.3);
-    text-align: center;
+/* ✅ Username Link */
+.user-info a {
+    font-size: 16px;
+    font-weight: bold;
+    color: #8B4513;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
 }
 
-button {
+.user-info a:hover {
+    color: #D2691E;
+}
+
+/* ✅ Bio */
+.user-card p {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* ✅ Follow Button */
+.user-card button {
+    margin-top: 10px;
     padding: 8px 12px;
-    background-color: #f00;
-    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #D2691E;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
 }
 
-button:disabled {
-    background-color: #555;
+/* ✅ Button Hover Effect */
+.user-card button:hover {
+    background-color: #8B4513;
+    transform: scale(1.05);
+}
+
+/* ✅ Disabled Button */
+.user-card button:disabled {
+    background-color: #999;
     cursor: not-allowed;
 }
 
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* ✅ No Users Found Message */
+main p {
+    font-size: 16px;
+    color: #555;
+    font-style: italic;
 }
 
-.user-info .small-profile-pic {
-    width: 40px;
-    /* Adjust size as needed */
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
+/* ✅ Responsive Design */
+@media (max-width: 768px) {
+    main {
+        width: 90%;
+    }
+
+    .results-container {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
 }

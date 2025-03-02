@@ -1,0 +1,112 @@
+/* ✅ Background Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #0f3460, #1a1a2e, #16213e);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+/* ✅ Form Container - Glassmorphism Effect */
+.form-container {
+    width: 400px;
+    padding: 30px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.2);
+    text-align: center;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* ✅ Heading */
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+/* ✅ OTP Message */
+p {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* ✅ Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ✅ Labels */
+label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+/* ✅ Input Fields */
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+/* ✅ Input Focus Effect */
+input:focus {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0px 0px 8px rgba(255, 255, 255, 0.3);
+}
+
+/* ✅ Submit Button */
+input[type="submit"], button {
+    background: #ff4b5c;
+    color: white;
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 15px;
+    border: none;
+}
+
+input[type="submit"]:hover, button:hover {
+    background: #d43f4b;
+}
+
+/* ✅ Resend OTP Button */
+#resendOtpBtn {
+    background: #ff4b5c;
+}
+
+#resendOtpBtn:hover {
+    background: #d43f4b;
+}
+
+/* ✅ Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

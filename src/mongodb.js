@@ -101,10 +101,10 @@ const EnrollmentSchema = new mongoose.Schema({
 //  // Ensure the order ID is unique for each enrollment
 //     unique: true 
 //   },
-  paymentId: { 
-    type: String, 
-    // required: true, // Ensure that each enrollment has a valid payment ID
-  },
+  // paymentId: { 
+  //   type: String, 
+  //   // required: true, // Ensure that each enrollment has a valid payment ID
+  // },
   file: { 
     type: Buffer, // Optional field for uploaded file (image/video) 
   },
