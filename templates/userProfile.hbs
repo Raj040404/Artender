@@ -3,7 +3,7 @@
 
 <head>
   <title>{{name}}'s Profile</title>
-  <meta property="og:title" content="{{name}}'s profile" />
+  <meta property="og:title" content="👱 profile" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta charset="utf-8" />
   <meta property="twitter:card" content="summary_large_image" />
@@ -234,10 +234,10 @@
   <!-- ✅ User Info Section -->
   <div class="user-info">
     {{#if profilePicture}}
-    <img src="data:image/jpeg;base64,{{profilePicture}}" alt="Profile Picture" />
-    {{else}}
-    <div class="no-image">No profile picture</div>
-    {{/if}}
+                <img src="data:image/jpeg;base64,{{profilePicture}}" alt="Profile Picture" />
+                {{else}}
+                <div class="no-image">No profile picture</div>
+                {{/if}}
     <div class="details">
       <p><strong>Bio:</strong> {{bio}}</p>
       <p><strong>Followers:</strong> {{followers}}</p>
