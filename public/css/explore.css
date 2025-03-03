@@ -867,9 +867,8 @@ main {
     #postYourWorkBtn {
         height: 53px;
         width: 127px;
-        top: 319px;
-        right: 7px;
-
+        top: 97%;
+        right: 33%;
     }
 }
 
