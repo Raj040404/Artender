@@ -185,8 +185,8 @@
     <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css" />
     <!-- <link href="/public/css/home1.css" rel="stylesheet" /> -->
     <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/explore.css" />
     <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/explore.css" />
 </head>
 
 <body>
@@ -285,7 +285,6 @@
                 <label for="location">Location:</label>
                 <input type="text" id="location" name="location" value="{{location}}" />
 
-                <!-- Profile Picture Upload -->
                 <label for="profilePicture">Profile Picture:</label>
                 <input type="file" id="profilePicture" name="profilePicture" accept="image/*" />
 
@@ -324,6 +323,26 @@
                 {{#if posts.length}}
                 {{#each posts}}
                 <article class="post-item">
+                    <div class="post-header">
+                        <h4>Post #{{postNo}}</h4>
+
+                        <!-- SVG Options Menu at Rightmost Corner -->
+                        <div class="options-menu">
+                            <svg onclick="toggleMenu('{{postNo}}')" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="5" r="2" fill="#FFF" />
+                                <circle cx="12" cy="12" r="2" fill="#FFF" />
+                                <circle cx="12" cy="19" r="2" fill="#FFF" />
+                            </svg>
+                            <div class="menu-dropdown" id="menu-{{postNo}}">
+                                <button onclick="editPost('{{postNo}}', '{{description}}')">✏️ Edit</button>
+                                <form action="/delete-post/{{postNo}}" method="POST">
+                                    <button type="submit">🗑 Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="post-media">
                         {{#if file}}
                         {{#if (startsWith fileType "image/")}}
@@ -331,13 +350,12 @@
                         {{else if (startsWith fileType "video/")}}
                         <video controls class="post-video">
                             <source src="data:{{fileType}};base64,{{file}}" type="{{fileType}}">
-                            Your browser does not support the video tag.
                         </video>
                         {{/if}}
                         {{/if}}
                     </div>
                     <div class="post-content">
-                        <p>{{description}}</p>
+                        <p id="desc-{{postNo}}">{{description}}</p>
                         <div class="like-container">
                             <button class="like-button {{#if isLiked}}liked{{/if}}" data-username="{{username}}"
                                 data-post-no="{{postNo}}">
@@ -353,9 +371,7 @@
                 {{/if}}
             </div>
         </section>
-
     </main>
-
     <footer4-wrapper class="footer4-wrapper">
         <!--Footer4 component-->
         <footer class="footer4-footer7 thq-section-padding">
@@ -454,7 +470,34 @@
             });
         });
 
+        function toggleMenu(postNo) {
+            let menu = document.getElementById(`menu-${postNo}`);
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
 
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!event.target.closest(".options-menu")) {
+                document.querySelectorAll(".menu-dropdown").forEach(menu => menu.style.display = "none");
+            }
+        });
+
+        function editPost(postNo, oldDesc) {
+            let newDesc = prompt("Edit your description:", oldDesc);
+            if (newDesc !== null && newDesc.trim() !== "") {
+                fetch(`/edit-post/${postNo}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `description=${encodeURIComponent(newDesc)}`
+                }).then(response => {
+                    if (response.ok) {
+                        document.getElementById(`desc-${postNo}`).innerText = newDesc;
+                    } else {
+                        alert("Error updating description. Try again.");
+                    }
+                });
+            }
+        }
     </script>
 </body>
 

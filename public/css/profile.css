@@ -312,16 +312,20 @@ video {
 
 /* ✅ Standardized Post Item */
 .post-item {
-    background-color: #e0ded9;
+    position: relative;
+    width: 90%;
+    height: 90%;
+    background: #2C2F3F; /* Dark Background for Contrast */
+    color: #FFF;
     padding: 15px;
     border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 /* ✅ Zoom-out effect on hover */
@@ -332,9 +336,9 @@ video {
 
 /* ✅ Post Media: Fixed Size */
 .post-media {
-    width: 100%;
-    height: 250px;
-    display: flex;
+    width: 90% !important;
+    height: 90% !important;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     overflow: hidden;
@@ -342,9 +346,9 @@ video {
 
 /* ✅ Ensure Images and Videos Fit Consistently */
 .post-image, .post-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Ensures uniform size without stretching */
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important; /* Ensures full image is visible without cutting */
     border-radius: 8px;
 }
 
@@ -352,16 +356,16 @@ video {
 .post-content {
     padding: 10px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    text-align: center;
 }
 
 /* ✅ Post Description */
 .post-content p {
     font-size: 14px;
-    color: #333;
+    color: #FFF;
     margin-bottom: 5px;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 /* ✅ Posted Date */
@@ -417,6 +421,56 @@ video {
         width: 50%; /* Hide or collapse navbar on smaller screens */
     }
 }
+
+
+
+/* Post Header with SVG at Rightmost Corner */
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* SVG Menu Icon (Rightmost Corner) */
+.options-menu {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+/* Dropdown Menu */
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: #444; /* Darker Background */
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    padding: 5px;
+    min-width: 100px;
+    z-index: 1000;
+}
+
+/* Dropdown Buttons */
+.menu-dropdown button {
+    display: block;
+    width: 100%;
+    border: none;
+    background: none;
+    padding: 8px;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    color: #FFF; /* White Text */
+}
+
+.menu-dropdown button:hover {
+    background: #666;
+}
+
+
 
 
 

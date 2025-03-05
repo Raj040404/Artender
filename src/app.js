@@ -61,7 +61,11 @@ const fileFilter = (req, file, cb) => {
     cb(new Error("Invalid file type! Only images and videos are allowed."), false);
   }
 };
-const upload = multer({ storage, fileFilter });
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB limit
+});
 
 // Set up view engine
 app.set("view engine", "hbs");
@@ -330,6 +334,66 @@ app.post("/publish", upload.single("file"), async (req, res) => {
     res.status(500).send("Error posting work. Please try again later.");
   }
 });
+
+app.post("/delete-post/:postNo", async (req, res) => {
+  const userId = req.session.userId;
+  if (!userId) {
+    return res.status(401).send("Unauthorized. Please log in.");
+  }
+
+  try {
+    const user = await LogInCollection.findById(userId);
+    if (!user) {
+      return res.status(400).send("User not found.");
+    }
+
+    const post = await CompetitionPostCollection.findOneAndDelete({ 
+      username: user.name, 
+      postNo: req.params.postNo 
+    });
+
+    if (!post) {
+      return res.status(404).send("Post not found or you are not authorized to delete it.");
+    }
+
+    res.redirect("/explorecompetitions");
+  } catch (err) {
+    console.error("Error deleting post:", err);
+    res.status(500).send("Error deleting post. Please try again later.");
+  }
+});
+
+app.post("/edit-post/:postNo", async (req, res) => {
+  const userId = req.session.userId;
+  const { description } = req.body;
+
+  if (!userId) {
+    return res.status(401).send("Unauthorized. Please log in.");
+  }
+
+  try {
+    const user = await LogInCollection.findById(userId);
+    if (!user) {
+      return res.status(400).send("User not found.");
+    }
+
+    const post = await CompetitionPostCollection.findOneAndUpdate(
+      { username: user.name, postNo: req.params.postNo },
+      { description },
+      { new: true }
+    );
+
+    if (!post) {
+      return res.status(404).send("Post not found or you are not authorized to edit it.");
+    }
+
+    res.redirect("/explorecompetitions");
+  } catch (err) {
+    console.error("Error updating post:", err);
+    res.status(500).send("Error updating post. Please try again later.");
+  }
+});
+
 
 
 app.get("/profile", async (req, res) => {
