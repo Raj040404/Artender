@@ -868,10 +868,9 @@ app.get("/enroll/:contestId", async (req, res) => {
   }
 });
 
-
 // Enrollment Submission Route
 app.post("/enroll/:contestId", upload.single("file"), async (req, res) => {
-  const { userName, email } = req.body;
+  const { userName, email, paymentId } = req.body;
   const { contestId } = req.params;
   const file = req.file;
 
@@ -891,39 +890,35 @@ app.post("/enroll/:contestId", upload.single("file"), async (req, res) => {
   }
 
   try {
-    // Check if the user is already enrolled in the contest by checking contestId and userName
+    // Check if the user is already enrolled in the contest
     const existingEnrollment = await EnrollmentCollection.findOne({ contestId, userName });
 
     if (existingEnrollment) {
-      // If already enrolled, send a response message
       return res.status(400).send("You are already enrolled in this contest.");
     }
 
     // Convert the file buffer to a Base64 string
-    const fileBase64 = file.buffer.toString('base64');
+    const fileBase64 = file.buffer.toString("base64");
 
     // Create a new enrollment document
     const newEnrollment = new EnrollmentCollection({
       userName,
       email,
       contestId,
-      file: fileBase64, // Store the Base64 string of the file
+      paymentId: paymentId || null, // Ensure paymentId is handled properly
+      file: fileBase64, 
     });
 
     // Save the new enrollment to the database
     await newEnrollment.save();
 
     // Send a success response
-    res.redirect('/completeenrollment');
+    res.redirect("/completeenrollment");
   } catch (err) {
-    // Handle errors that occur during the save operation
     console.error("Error enrolling user:", err.message);
     res.status(500).send("Error enrolling user. Please try again.");
   }
 });
-
-
-
 
 app.post("/like", async (req, res) => {
   const { username, postNo } = req.body;

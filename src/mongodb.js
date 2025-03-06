@@ -91,26 +91,25 @@ const EnrollmentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  contestId: {
+  email: {
     type: String,
-    ref: "Contest", // Reference to the Contest collection
     required: true,
   },
-  orderId: { 
-    type: String, 
- // Ensure the order ID is unique for each enrollment
-    unique: true 
+  contestId: {
+    type: String,
+    ref: "Contest",
+    required: true,
   },
   paymentId: { 
-    type: String, 
-    // required: true, // Ensure that each enrollment has a valid payment ID
+    type: String,
+    default: null, // Optional paymentId
   },
   file: { 
-    type: Buffer, // Optional field for uploaded file (image/video) 
+    type: String, // Store Base64 string instead of Buffer for easier handling
   },
   createdAt: { 
     type: Date, 
-    default: Date.now // Automatically capture the enrollment date
+    default: Date.now 
   }
 });
 
