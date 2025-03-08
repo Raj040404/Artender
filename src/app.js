@@ -24,6 +24,22 @@ handlebars.registerHelper("startsWith", (str, prefix) => {
   return str.startsWith(prefix);
 });
 
+handlebars.registerHelper("formatPrice", (price, currency = "INR") => {
+  if (typeof price !== "number") {
+    return "Invalid Price";
+  }
+
+  // Ensure currency is a string
+  const validCurrency = typeof currency === "string" ? currency : "INR";
+
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: validCurrency,
+  }).format(price);
+});
+
+
+
 // Set up paths
 const templatePath = path.join(__dirname, "../templates");
 
