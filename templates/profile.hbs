@@ -183,6 +183,9 @@
         href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
         data-tag="font" />
     <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css" />
+    <!-- ... Existing meta tags and styles ... -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <!-- <link href="/public/css/home1.css" rel="stylesheet" /> -->
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/profile.css">
@@ -205,15 +208,14 @@
                                         <span class="landing-text104">Home</span>
                                     </fragment>
                                 </a>
+                                <a href="/explorecompetitions" class="navbar8-link11 thq-link thq-body-small">
+                                    <fragment class="landing-fragment104">
+                                        <span class="landing-text104">Explore Artworks</span>
+                                    </fragment>
+                                </a>
                                 <a href="/competitions" class="thq-link thq-body-small">
                                     <fragment class="landing-fragment102">
                                         <span class="landing-text102">Participate in Competitions</span>
-                                    </fragment>
-                                </a>
-                                <a href="/explorecompetitions" target="_blank" rel="noreferrer noopener"
-                                    class="navbar8-link31 thq-link thq-body-small">
-                                    <fragment class="landing-fragment110">
-                                        <span class="landing-text110">Explore Arts</span>
                                     </fragment>
                                 </a>
                                 <a href="#" target="_blank" rel="noreferrer noopener"
@@ -233,7 +235,6 @@
                                         </span>
                                     </button>
                                 </a>
-
                             </div>
                             <div class="navbar8-container7 thq-box-shadow">
                     </header>
@@ -277,6 +278,7 @@
         </section>
 
         <!-- Edit Profile Form -->
+        <!-- Edit Profile Form -->
         <section id="editProfileForm" class="edit-profile-form">
             <form action="/updateProfile" method="POST" enctype="multipart/form-data">
                 <label for="bio">Bio:</label>
@@ -287,6 +289,17 @@
 
                 <label for="profilePicture">Profile Picture:</label>
                 <input type="file" id="profilePicture" name="profilePicture" accept="image/*" />
+
+                <!-- Image Preview and Cropping Area -->
+                <div id="imagePreview" style="display: none; margin-top: 10px;">
+                    <img id="imageToCrop" style="max-width: 100%; max-height: 400px;" />
+                    <div style="margin-top: 10px;">
+                        <button type="button" id="cropImageBtn">Crop Image</button>
+                        <button type="button" id="resetCropBtn">Reset</button>
+                    </div>
+                </div>
+                <!-- Hidden input to store cropped image data -->
+                <input type="hidden" id="croppedImageData" name="croppedImageData" />
 
                 <button type="submit">Update Profile</button>
                 <button type="button" id="cancelEditBtn">Cancel</button>
@@ -498,6 +511,86 @@
                 });
             }
         }
+        let cropper;
+
+        // Toggle Edit Profile Form
+        document.getElementById("editProfileBtn").addEventListener("click", () => {
+            document.getElementById("editProfileForm").style.display = "block";
+        });
+
+        document.getElementById("cancelEditBtn").addEventListener("click", () => {
+            document.getElementById("editProfileForm").style.display = "none";
+            if (cropper) {
+                cropper.destroy(); // Clean up cropper instance
+            }
+            document.getElementById("imagePreview").style.display = "none";
+        });
+
+        // Handle Image Upload and Cropping
+        document.getElementById("profilePicture").addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith("image/")) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const img = document.getElementById("imageToCrop");
+                    img.src = event.target.result;
+                    document.getElementById("imagePreview").style.display = "block";
+
+                    // Destroy previous cropper instance if it exists
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+
+                    // Initialize Cropper.js with aspect ratio matching user-info img (250x200)
+                    cropper = new Cropper(img, {
+                        aspectRatio: 250 / 200, // Match the user-info img dimensions
+                        viewMode: 1, // Restrict crop box to image bounds
+                        autoCropArea: 0.8, // Default crop area size
+                        responsive: true,
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Crop Image Button
+        document.getElementById("cropImageBtn").addEventListener("click", function () {
+            if (cropper) {
+                const canvas = cropper.getCroppedCanvas({
+                    width: 250, // Match front-end display size
+                    height: 200,
+                });
+                const croppedImageData = canvas.toDataURL("image/jpeg"); // Convert to base64
+                document.getElementById("croppedImageData").value = croppedImageData; // Store in hidden input
+                document.getElementById("imageToCrop").src = croppedImageData; // Update preview
+                cropper.destroy(); // Destroy cropper after cropping
+                cropper = null;
+            }
+        });
+
+        // Reset Crop Button
+        document.getElementById("resetCropBtn").addEventListener("click", function () {
+            if (cropper) {
+                cropper.reset();
+            }
+        });
+
+        // Form Submission
+        document.querySelector("#editProfileForm form").addEventListener("submit", function (e) {
+            if (cropper) {
+                e.preventDefault();
+                alert("Please crop the image before submitting.");
+            }
+        });
+
+        // Existing toggleNavbar, like button, and menu functions remain unchanged
+        function toggleNavbar() {
+            const navbarMenu = document.getElementById("navbarMenu");
+            navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
+        }
+
+        // ... Rest of your existing JavaScript (like buttons, menu toggle, etc.) ...
+
     </script>
 </body>
 

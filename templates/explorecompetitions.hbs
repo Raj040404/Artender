@@ -185,6 +185,9 @@
     href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
     data-tag="font" />
   <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css" />
+  <!-- Existing meta tags and styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
   <!-- <link href="/public/css/home1.css" rel="stylesheet" /> -->
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/explore.css" />
@@ -288,7 +291,19 @@
         <label for="description">Description:</label><br>
         <textarea id="description" name="description" rows="4" cols="50" required></textarea><br>
         <label for="file">Upload Image/Video:</label><br>
-        <input type="file" id="file" name="file" accept="image/*,video/*" required><br><br>
+        <input type="file" id="file" name="file" accept="image/*" required><br><br>
+
+        <!-- Image Preview and Cropping Area -->
+        <div id="imagePreview" style="display: none; margin-top: 10px;">
+          <img id="imageToCrop" style="max-width: 100%; max-height: 400px;" />
+          <div style="margin-top: 10px;">
+            <button type="button" id="cropImageBtn">Crop Image</button>
+            <button type="button" id="resetCropBtn">Reset</button>
+          </div>
+        </div>
+        <!-- Hidden input to store cropped image data -->
+        <input type="hidden" id="croppedImageData" name="croppedImageData" />
+
         <button type="submit">Publish</button>
         <button type="button" id="cancelFormBtn">Cancel</button>
       </form>
@@ -363,20 +378,87 @@
   </footer4-wrapper>
 
   <script>
+    let cropper;
 
-    // Toggle Post Your Work Form
-    document.getElementById('postYourWorkBtn').addEventListener('click', () => {
-      const form = document.getElementById('postYourWorkForm');
-      form.style.display = form.style.display === 'block' ? 'none' : 'block';
-    });
-
-    document.getElementById('cancelFormBtn').addEventListener('click', () => {
-      document.getElementById('postYourWorkForm').style.display = 'none';
-    });
-
+    // Initialize page functionality
     document.addEventListener("DOMContentLoaded", () => {
-      const likeButtons = document.querySelectorAll(".like-button");
+      // Toggle Post Your Work Form
+      const postYourWorkBtn = document.getElementById("postYourWorkBtn");
+      const postForm = document.getElementById("postYourWorkForm");
+      const cancelFormBtn = document.getElementById("cancelFormBtn");
 
+      postYourWorkBtn.addEventListener("click", () => {
+        postForm.style.display = postForm.style.display === "block" ? "none" : "block";
+      });
+
+      cancelFormBtn.addEventListener("click", () => {
+        postForm.style.display = "none";
+        if (cropper) {
+          cropper.destroy();
+          cropper = null;
+        }
+        document.getElementById("imagePreview").style.display = "none";
+      });
+
+      // Handle Image Upload and Cropping
+      const fileInput = document.getElementById("file");
+      fileInput.addEventListener("change", function (e) {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            const img = document.getElementById("imageToCrop");
+            img.src = event.target.result;
+            document.getElementById("imagePreview").style.display = "block";
+
+            if (cropper) {
+              cropper.destroy();
+            }
+
+            // Initialize Cropper.js with Instagram's 4:5 aspect ratio
+            cropper = new Cropper(img, {
+              aspectRatio: 4 / 5, // Instagram vertical portrait ratio
+              viewMode: 1,
+              autoCropArea: 0.8,
+              responsive: true,
+            });
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Crop Image Button
+      document.getElementById("cropImageBtn").addEventListener("click", function () {
+        if (cropper) {
+          const canvas = cropper.getCroppedCanvas({
+            width: 400, // Updated width to match Instagram-style output
+            height: 500, // Updated height (4:5 ratio)
+          });
+          const croppedImageData = canvas.toDataURL("image/jpeg");
+          document.getElementById("croppedImageData").value = croppedImageData;
+          document.getElementById("imageToCrop").src = croppedImageData;
+          cropper.destroy();
+          cropper = null;
+        }
+      });
+
+      // Reset Crop Button
+      document.getElementById("resetCropBtn").addEventListener("click", function () {
+        if (cropper) {
+          cropper.reset();
+        }
+      });
+
+      // Form Submission - Prevent if cropper is active
+      document.querySelector("#postYourWorkForm form").addEventListener("submit", function (e) {
+        if (cropper) {
+          e.preventDefault();
+          alert("Please crop the image before submitting.");
+        }
+      });
+
+      // Like Button Functionality
+      const likeButtons = document.querySelectorAll(".like-button");
       likeButtons.forEach((button) => {
         const username = button.getAttribute("data-username");
         const postNo = button.getAttribute("data-post-no");
@@ -391,16 +473,17 @@
 
             if (response.ok) {
               const data = await response.json();
+              const buttonText = button.querySelector(".button-text");
+              const likeCount = button.querySelector(".like-count");
 
               if (data.isLiked) {
                 button.classList.add("liked");
-                button.textContent = `Liked (${data.likes})`;
+                buttonText.textContent = "Liked";
               } else {
                 button.classList.remove("liked");
-                button.textContent = `Like (${data.likes})`;
+                buttonText.textContent = "Like";
               }
-
-              button.querySelector(".like-count").textContent = data.likes;
+              likeCount.textContent = data.likes;
             } else {
               console.error("Failed to like the post.");
             }
@@ -411,34 +494,25 @@
       });
     });
 
-
-
-
+    // Toggle Navbar
     function toggleNavbar() {
       const navbarMenu = document.getElementById("navbarMenu");
       navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
     }
 
+    // Disable Screenshots and Developer Tools
     document.addEventListener("keydown", function (e) {
-      if (e.ctrlKey && e.shiftKey && (e.key === "s")) {
+      if (e.ctrlKey && e.shiftKey && e.key === "s") {
         e.preventDefault();
         alert("Screenshots are disabled!");
-      }
-    });
-
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "PrintScreen") {
+      } else if (e.key === "PrintScreen") {
         e.preventDefault();
         alert("Screenshots are disabled!");
-      }
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.ctrlKey && (e.key === "u" || e.key === "U" || e.key === "i" || e.key === "I")) {
+      } else if (e.ctrlKey && ["u", "U", "i", "I"].includes(e.key)) {
         e.preventDefault();
         alert("View Source and Inspect Element are disabled!");
       }
     });
-
   </script>
 </body>
 

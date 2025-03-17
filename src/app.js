@@ -307,10 +307,9 @@ app.get("/explorecompetitions", async (req, res) => {
   }
 });
 
-
-// Post Your Work Route
+// Publish Post Route
 app.post("/publish", upload.single("file"), async (req, res) => {
-  const { description } = req.body;
+  const { description, croppedImageData } = req.body;
   const file = req.file; // Uploaded file from Multer
   const userId = req.session.userId;
 
@@ -318,35 +317,52 @@ app.post("/publish", upload.single("file"), async (req, res) => {
     return res.redirect("/login");
   }
 
-  if (!file || !description) {
-    return res.status(400).send("All fields are required.");
+  if (!description || (!file && !croppedImageData)) {
+    return res.status(400).send("Description and an image are required.");
   }
 
   try {
     const user = await LogInCollection.findById(userId);
     if (!user) {
-      return res.status(400).send("User not found.");
+      return res.status(404).send("User not found.");
     }
 
     // Calculate the next post number for the user
-    const lastPost = await CompetitionPostCollection.findOne({ username: user.name })
-      .sort({ postNo: -1 }); // Sort by `postNo` in descending order
-
+    const lastPost = await CompetitionPostCollection.findOne({ username: user.name }).sort({
+      postNo: -1,
+    });
     const nextPostNo = lastPost ? lastPost.postNo + 1 : 1;
+
+    let fileBuffer = null;
+    let fileType = null;
+
+    // Handle cropped image (base64)
+    if (croppedImageData) {
+      const base64Data = croppedImageData.replace(/^data:image\/\w+;base64,/, "");
+      fileBuffer = Buffer.from(base64Data, "base64");
+      fileType = "image/jpeg"; // Default to JPEG from Cropper.js
+    }
+    // Fallback to multer-uploaded file
+    else if (file) {
+      fileBuffer = file.buffer;
+      fileType = file.mimetype;
+    }
 
     // Create a new post with `postNo`
     const newPost = new CompetitionPostCollection({
       username: user.name,
       description,
-      file: file.buffer, // Store the binary content of the file
-      fileType: file.mimetype,
-      postNo: nextPostNo, // Add post number
+      file: fileBuffer,
+      fileType,
+      postNo: nextPostNo,
+      likes: [],
+      createdAt: new Date(),
     });
 
     await newPost.save();
     res.redirect("/explorecompetitions");
   } catch (err) {
-    console.error("Error posting work:", err);
+    console.error("Error posting work:", err.message);
     res.status(500).send("Error posting work. Please try again later.");
   }
 });
@@ -372,7 +388,7 @@ app.post("/delete-post/:postNo", async (req, res) => {
       return res.status(404).send("Post not found or you are not authorized to delete it.");
     }
 
-    res.redirect("/explorecompetitions");
+    res.redirect("/profile");
   } catch (err) {
     console.error("Error deleting post:", err);
     res.status(500).send("Error deleting post. Please try again later.");
@@ -403,7 +419,7 @@ app.post("/edit-post/:postNo", async (req, res) => {
       return res.status(404).send("Post not found or you are not authorized to edit it.");
     }
 
-    res.redirect("/explorecompetitions");
+    res.redirect("/profile");
   } catch (err) {
     console.error("Error updating post:", err);
     res.status(500).send("Error updating post. Please try again later.");
@@ -476,18 +492,14 @@ app.get("/profile", async (req, res) => {
 
 
 
-
-
-
-// Update Profile Route
-app.post("/updateProfile", upload.single('profilePicture'), async (req, res) => {
+app.post("/updateProfile", upload.single("profilePicture"), async (req, res) => {
   const userId = req.session.userId;
 
   if (!userId) {
     return res.redirect("/login");
   }
 
-  const { bio, location } = req.body;
+  const { bio, location, croppedImageData } = req.body;
 
   try {
     const user = await LogInCollection.findById(userId);
@@ -498,15 +510,33 @@ app.post("/updateProfile", upload.single('profilePicture'), async (req, res) => 
 
     const existingProfile = await ProfileCollection.findOne({ email: user.email });
 
+    // Prepare profile picture data
+    let profilePictureBuffer = null;
+
+    // Check if a cropped image was provided (base64 string from Cropper.js)
+    if (croppedImageData) {
+      // Remove the "data:image/jpeg;base64," prefix if present and convert to Buffer
+      const base64Data = croppedImageData.replace(/^data:image\/\w+;base64,/, "");
+      profilePictureBuffer = Buffer.from(base64Data, "base64");
+    } 
+    // Fallback to multer-uploaded file if no cropped image is provided
+    else if (req.file) {
+      profilePictureBuffer = req.file.buffer;
+    }
+    // If neither is provided, retain the existing profile picture (if any)
+    else if (existingProfile && existingProfile.profilePicture) {
+      profilePictureBuffer = existingProfile.profilePicture;
+    }
+
     if (existingProfile) {
       // If a profile exists, update it
       await ProfileCollection.updateOne(
         { email: user.email },
         {
           $set: {
-            bio,
-            location,
-            profilePicture: req.file ? req.file.buffer : existingProfile.profilePicture, // Store the new profile picture
+            bio: bio || existingProfile.bio, // Retain existing bio if not provided
+            location: location || existingProfile.location, // Retain existing location if not provided
+            profilePicture: profilePictureBuffer, // Update with new buffer or retain existing
           },
         }
       );
@@ -519,7 +549,7 @@ app.post("/updateProfile", upload.single('profilePicture'), async (req, res) => 
         followers: 0,
         following: [],
         location: location || "No location added.",
-        profilePicture: req.file ? req.file.buffer : null, // Store profile picture if uploaded
+        profilePicture: profilePictureBuffer, // Store profile picture if available
       });
     }
 
