@@ -2,6 +2,51 @@
   display: contents;
 }
 
+/* Styles for the mobile menu buttons */
+.navbar-menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Matches .navbar-menu-links gap */
+  padding: 15px; /* Matches .navbar-menu padding */
+}
+
+.svg-button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between SVG and text */
+  font-size: 20px; /* Matches .navbar-menu-link */
+  color: var(--dl-color-theme-neutral-dark);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.svg-button svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--dl-color-theme-neutral-dark); /* Matches link color */
+}
+
+.svg-button:hover {
+  color: var(--dl-color-theme-primary); /* Matches .navbar-menu-link:hover */
+}
+
+.svg-button:hover svg {
+  fill: var(--dl-color-theme-primary); /* Matches hover color */
+}
+
+/* Ensure SVGs are only styled in mobile menu */
+@media (max-width: 768px) {
+  .navbar-menu {
+    display: none; /* Hidden by default, toggled by JS */
+  }
+
+  .navbar-menu.active { /* Optional: Add this class via JS if needed */
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 #Logout-buttons1 {
   display: flex;
   z-index: 1000;
@@ -4435,3 +4480,4 @@
 .landing-text219 {
   display: inline-block;
 }
+

@@ -108,6 +108,10 @@ video {
     transition: all 0.5s ease;
     color: #333;
     font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -204,8 +208,8 @@ video {
 .post-item {
     width: 100%;
     max-width: 300px;
-    background: #3A3F5A; /* Updated: Softer dark blue-gray for better contrast */
-    color: #FFF;
+    background: #EADADA; /* Updated: Softer dark blue-gray for better contrast */
+    color: black;
     padding: 15px;
     border-radius: 10px;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);

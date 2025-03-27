@@ -415,12 +415,13 @@
               cropper.destroy();
             }
 
-            // Initialize Cropper.js with Instagram's 4:5 aspect ratio
+            // Initialize Cropper.js with original image size and freeform cropping
             cropper = new Cropper(img, {
-              aspectRatio: 4 / 5, // Instagram vertical portrait ratio
-              viewMode: 1,
-              autoCropArea: 0.8,
+              viewMode: 1, // Restrict crop box to image bounds
+              autoCropArea: 0.8, // Start with 80% of image area selected
               responsive: true,
+              // No aspectRatio: allows freeform cropping
+              // No fixed width/height: uses original image dimensions
             });
           };
           reader.readAsDataURL(file);
@@ -430,10 +431,8 @@
       // Crop Image Button
       document.getElementById("cropImageBtn").addEventListener("click", function () {
         if (cropper) {
-          const canvas = cropper.getCroppedCanvas({
-            width: 400, // Updated width to match Instagram-style output
-            height: 500, // Updated height (4:5 ratio)
-          });
+          // Get cropped canvas without fixed dimensions
+          const canvas = cropper.getCroppedCanvas(); // Uses user-defined crop area
           const croppedImageData = canvas.toDataURL("image/jpeg");
           document.getElementById("croppedImageData").value = croppedImageData;
           document.getElementById("imageToCrop").src = croppedImageData;

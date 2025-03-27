@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <title>Artender</title>
   
@@ -34,40 +33,13 @@
 
   <!-- CSS Reset -->
   <style data-tag="reset-style-sheet">
-    html {
-      line-height: 1.15;
-      scroll-behavior: smooth;
-    }
-    body {
-      margin: 0;
-      font-family: Inter, sans-serif;
-      font-weight: 400;
-      color: var(--dl-color-theme-neutral-dark);
-      background: var(--dl-color-theme-neutral-light);
-    }
-    * {
-      box-sizing: border-box;
-      border-width: 0;
-      border-style: solid;
-      -webkit-font-smoothing: antialiased;
-    }
-    p, li, ul, pre, div, h1, h2, h3, h4, h5, h6, figure, blockquote, figcaption {
-      margin: 0;
-      padding: 0;
-    }
-    button {
-      background-color: transparent;
-      text-transform: none;
-      -webkit-appearance: button;
-      color: inherit;
-    }
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-    img {
-      display: block;
-    }
+    html { line-height: 1.15; scroll-behavior: smooth; }
+    body { margin: 0; font-family: Inter, sans-serif; font-weight: 400; color: var(--dl-color-theme-neutral-dark); background: var(--dl-color-theme-neutral-light); }
+    * { box-sizing: border-box; border-width: 0; border-style: solid; -webkit-font-smoothing: antialiased; }
+    p, li, ul, pre, div, h1, h2, h3, h4, h5, h6, figure, blockquote, figcaption { margin: 0; padding: 0; }
+    button { background-color: transparent; text-transform: none; -webkit-appearance: button; color: inherit; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; }
   </style>
 
   <!-- Animation Library -->
@@ -80,11 +52,11 @@
 
   <!-- Custom Styles -->
   <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css">
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/home1.css" />
 
   <!-- JavaScript for PWA & Open Graph Fix -->
   <script>
-
-    // Fallback for Open Graph image
     document.addEventListener("DOMContentLoaded", function() {
       const ogImage = document.querySelector('meta[property="og:image"]');
       if (ogImage && ogImage.getAttribute("content") === "") {
@@ -92,7 +64,6 @@
       }
     });
 
-    // Deferred font loading for performance optimization
     window.onload = function() {
       let link = document.createElement('link');
       link.rel = 'stylesheet';
@@ -102,15 +73,10 @@
   </script>
 </head>
 
-
 <body>
-  <link rel="stylesheet" href="/css/style.css" />
   <div>
-    <link href="/css/home1.css" rel="stylesheet" />
-
     <div class="landing-container">
       <navbar8-wrapper class="navbar8-wrapper">
-        <!--Navbar8 component-->
         <header class="navbar8-container1">
           <header data-thq="thq-navbar" class="navbar8-navbar-interactive">
             <img alt="logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg" class="navbar8-image1" />
@@ -157,15 +123,13 @@
                   </button>
                 </a>
               </div>
-
             </div>
-            <div class="navbar8-container7 thq-box-shadow">
+            <div class="navbar8-container7 thq-box-shadow"></div>
           </header>
         </header>
       </navbar8-wrapper>
       <div class="navbar-toggle" onclick="toggleNavbar()">
-        <img src="/navigation-aligned-dots-more-horizontal-three-dots-option-icon-svgrepo-com.svg" alt="Menu"
-          class="navbar-toggle-icon">
+        <img src="/navigation-aligned-dots-more-horizontal-three-dots-option-icon-svgrepo-com.svg" alt="Menu" class="navbar-toggle-icon">
       </div>
 
       <div id="navbarMenu" class="navbar-menu">
@@ -175,18 +139,29 @@
           <a href="/profile" class="navbar-menu-link">Profile</a>
           <a href="#" class="navbar-menu-link">Contact</a>
         </nav>
+        <div class="navbar-menu-buttons">
+          <div class="svg-button" onclick="scrollToFooter('login')">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span>Login</span>
+          </div>
+          <div class="svg-button" onclick="scrollToFooter('signup')">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+            </svg>
+            <span>Signup</span>
+          </div>
+        </div>
       </div>
 
       <hero171-wrapper class="hero171-wrapper">
-        <!--Hero171 component-->
         <div class="hero171-header78">
           <div class="hero171-column thq-section-padding thq-section-max-width">
             <div class="hero171-content1">
               <h1 class="hero171-text1 thq-heading-1">
                 <fragment class="landing-fragment116">
-                  <span class="landing-text116">
-                    Artender
-                  </span>
+                  <span class="landing-text116">Artender</span>
                 </fragment>
               </h1>
               <p class="hero171-text2 thq-body-large">
@@ -201,62 +176,38 @@
             <div class="hero171-content2">
               <div class="hero171-row-container1 thq-animated-group-container-horizontal thq-mask-image-horizontal">
                 <div class="thq-animated-group-horizontal">
-                  <img alt="Hero Image" src="/homeimages/image1.jpg"
-                    class="hero171-placeholder-image10 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image2.jpg"
-                    class="hero171-placeholder-image11 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image3.jpg"
-                    class="hero171-placeholder-image12 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image4.jpg"
-                    class="hero171-placeholder-image13 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image5.jpg"
-                    class="hero171-placeholder-image14 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image6.jpg"
-                    class="hero171-placeholder-image15 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image1.jpg" class="hero171-placeholder-image10 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image2.jpg" class="hero171-placeholder-image11 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image3.jpg" class="hero171-placeholder-image12 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image4.jpg" class="hero171-placeholder-image13 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image5.jpg" class="hero171-placeholder-image14 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image6.jpg" class="hero171-placeholder-image15 thq-img-scale thq-img-ratio-1-1" />
                 </div>
                 <div class="thq-animated-group-horizontal">
-                  <img alt="Hero Image" src="/homeimages/image7.jpg"
-                    class="hero171-placeholder-image16 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image8.jpg"
-                    class="hero171-placeholder-image17 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image9.jpg"
-                    class="hero171-placeholder-image18 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image10.jpg"
-                    class="hero171-placeholder-image19 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image11.jpg"
-                    class="hero171-placeholder-image20 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image12.jpg"
-                    class="hero171-placeholder-image21 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image7.jpg" class="hero171-placeholder-image16 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image8.jpg" class="hero171-placeholder-image17 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image9.jpg" class="hero171-placeholder-image18 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image10.jpg" class="hero171-placeholder-image19 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image11.jpg" class="hero171-placeholder-image20 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image12.jpg" class="hero171-placeholder-image21 thq-img-scale thq-img-ratio-1-1" />
                 </div>
               </div>
               <div class="hero171-row-container2 thq-animated-group-container-horizontal thq-mask-image-horizontal">
                 <div class="thq-animated-group-horizontal-reverse">
-                  <img alt="Hero Image" src="/homeimages/image13.jpg"
-                    class="hero171-placeholder-image22 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image14.jpg"
-                    class="hero171-placeholder-image23 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image15.jpg"
-                    class="hero171-placeholder-image24 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image16.jpg"
-                    class="hero171-placeholder-image25 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image17.jpg"
-                    class="hero171-placeholder-image26 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image18.jpg"
-                    class="hero171-placeholder-image27 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image13.jpg" class="hero171-placeholder-image22 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image14.jpg" class="hero171-placeholder-image23 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image15.jpg" class="hero171-placeholder-image24 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image16.jpg" class="hero171-placeholder-image25 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image17.jpg" class="hero171-placeholder-image26 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image18.jpg" class="hero171-placeholder-image27 thq-img-scale thq-img-ratio-1-1" />
                 </div>
                 <div class="thq-animated-group-horizontal-reverse">
-                  <img alt="Hero Image" src="/homeimages/image19.jpg"
-                    class="hero171-placeholder-image28 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image20.jpg"
-                    class="hero171-placeholder-image29 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image21.jpg"
-                    class="hero171-placeholder-image30 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image22.jpg"
-                    class="hero171-placeholder-image31 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image23.jpg"
-                    class="hero171-placeholder-image32 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image24.jpg"
-                    class="hero171-placeholder-image33 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image19.jpg" class="hero171-placeholder-image28 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image20.jpg" class="hero171-placeholder-image29 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image21.jpg" class="hero171-placeholder-image30 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image22.jpg" class="hero171-placeholder-image31 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image23.jpg" class="hero171-placeholder-image32 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image24.jpg" class="hero171-placeholder-image33 thq-img-scale thq-img-ratio-1-1" />
                 </div>
               </div>
             </div>
@@ -264,37 +215,24 @@
               <div class="hero171-container2">
                 <style>
                   @keyframes scroll-x {
-                    from {
-                      transform: translateX(0);
-                    }
-
-                    to {
-                      transform: translateX(calc(-100% - 16px));
-                    }
+                    from { transform: translateX(0); }
+                    to { transform: translateX(calc(-100% - 16px)); }
                   }
-
                   @keyframes scroll-y {
-                    from {
-                      transform: translateY(0);
-                    }
-
-                    to {
-                      transform: translateY(calc(-100% - 16px));
-                    }
+                    from { transform: translateY(0); }
+                    to { transform: translateY(calc(-100% - 16px)); }
                   }
                 </style>
               </div>
             </div>
           </div>
+        </div>
       </hero171-wrapper>
       <features241-wrapper class="features241-wrapper">
-        <!--Features241 component-->
         <div class="thq-section-padding">
           <div class="features241-container2 thq-section-max-width">
             <div class="features241-image-container">
-              <img alt="feature 1"
-                src="https://images.unsplash.com/photo-1552250575-e508473b090f?ixid=M3w5MTMyMXwwfDF8c2VhcmNofDE1Mnx8YWJzdHJhY3R8ZW58MHx8fHwxNzE2MjAxNjAyfDA&amp;ixlib=rb-4.0.3&amp;w=1400"
-                class="features241-image1 thq-img-ratio-16-9" />
+              <img alt="feature 1" src="https://images.unsplash.com/photo-1552250575-e508473b090f?ixid=M3w5MTMyMXwwfDF8c2VhcmNofDE1Mnx8YWJzdHJhY3R8ZW58MHx8fHwxNzE2MjAxNjAyfDA&ixlib=rb-4.0.3&w=1400" class="features241-image1 thq-img-ratio-16-9" />
             </div>
             <div class="features241-tabs-menu">
               <div class="features241-tab-horizontal1">
@@ -360,14 +298,11 @@
         </div>
       </features241-wrapper>
       <steps21-wrapper class="steps21-wrapper">
-        <!--Steps21 component-->
         <div class="steps21-container1 thq-section-padding">
           <div class="steps21-max-width thq-section-max-width">
             <div class="steps21-container2 thq-grid-2">
               <div class="steps21-section-header">
-                <h2 class="thq-heading-2">
-                  How it works
-                </h2>
+                <h2 class="thq-heading-2">How it works</h2>
               </div>
               <div class="steps21-container3">
                 <div class="steps21-container4 thq-card">
@@ -379,7 +314,7 @@
                   <span class="steps21-text14 thq-body-small">
                     <fragment class="landing-fragment184">
                       <span class="landing-text184">
-                        Sign up or log in to start your artistic journey.......
+                        Sign up or log in to start your artistic journey...
                       </span>
                     </fragment>
                   </span>
@@ -394,7 +329,7 @@
                   <span class="steps21-text17 thq-body-small">
                     <fragment class="landing-fragment187">
                       <span class="landing-text187">
-                        Upload your artwork and gain visibility among art lovers.......
+                        Upload your artwork and gain visibility among art lovers...
                       </span>
                     </fragment>
                   </span>
@@ -409,7 +344,7 @@
                   <span class="steps21-text20 thq-body-small">
                     <fragment class="landing-fragment185">
                       <span class="landing-text185">
-                        Join competitions and showcase your creativity to the world.......
+                        Join competitions and showcase your creativity to the world...
                       </span>
                     </fragment>
                   </span>
@@ -424,7 +359,7 @@
                   <span class="steps21-text23 thq-body-small">
                     <fragment class="landing-fragment190">
                       <span class="landing-text190">
-                        Win competitions and get rewarded for your artistic skills.......
+                        Win competitions and get rewarded for your artistic skills...
                       </span>
                     </fragment>
                   </span>
@@ -434,10 +369,8 @@
             </div>
           </div>
         </div>
-
       </steps21-wrapper>
       <footer4-wrapper class="footer4-wrapper">
-        <!--Footer4 component-->
         <footer class="footer4-footer7 thq-section-padding">
           <div class="footer4-max-width thq-section-max-width">
             <div class="footer4-content">
@@ -465,24 +398,35 @@
                 </a>
               </div>
             </div>
+          </div>
         </footer>
       </footer4-wrapper>
     </div>
-
   </div>
-  <script defer="" src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
+
+  <script defer src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
   <script>
     function toggleNavbar() {
       const navbarMenu = document.getElementById("navbarMenu");
       navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
     }
 
+    function scrollToFooter(action) {
+      if (window.innerWidth <= 768) { // Only trigger on mobile
+        const footer = document.querySelector(".footer4-footer7");
+        footer.scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => {
+          const targetButton = document.querySelector(`#Logout-buttons1 .navbar8-action${action === 'login' ? '11' : '21'}`);
+          targetButton.style.backgroundColor = "#e02e4f";
+          setTimeout(() => targetButton.style.backgroundColor = "", 1000);
+        }, 500);
+      }
+    }
 
     document.body.addEventListener("click", function (event) {
       let target = event.target.closest("a");
       if (target && target.href && !target.href.includes("login") && !target.href.includes("signup")) {
         event.preventDefault();
-
         let messageBox = document.createElement("div");
         messageBox.innerText = "You need to log in first";
         messageBox.style.position = "absolute";
@@ -494,15 +438,10 @@
         messageBox.style.borderRadius = "5px";
         messageBox.style.zIndex = "1000";
         messageBox.style.fontSize = "14px";
-
         document.body.appendChild(messageBox);
         setTimeout(() => messageBox.remove(), 2000);
       }
     });
-
-
-
   </script>
 </body>
-
 </html>

@@ -880,7 +880,7 @@ main {
 /* Post Form Container */
 .post-form {
     display: none;
-    position: absolute;
+    position: sticky;
     top: 60px;
     left: 50%;
     transform: translateX(-50%);
@@ -1154,11 +1154,10 @@ main {
 
 /* Existing styles remain unchanged unless specified */
 
-/* Post Media */
 .post-media {
     width: 100%;
-    height: 225px;
-    /* Matches cropped output */
+    height: auto; /* Allow height to adapt to cropped image */
+    max-height: 500px; /* Cap height for large crops */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1167,15 +1166,16 @@ main {
 
 .post-image {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* Ensures cropped image fits perfectly */
+    height: auto;
+    max-height: 500px; /* Match max-height of container */
+    object-fit: cover; /* Ensure image fills container without distortion */
     border-radius: 8px;
 }
 
 .post-video {
     width: 100%;
-    height: 100%;
+    height: auto;
+    max-height: 500px;
     border-radius: 8px;
 }
 
@@ -1183,8 +1183,8 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 300px;
-    /* Fixed width for uniformity */
+    width: 100%;
+    max-width: 400px; /* Cap width, but allow smaller crops */
     padding: 10px;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -1201,23 +1201,19 @@ main {
 
 .gallery-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Flexible width */
     gap: 20px;
     justify-content: center;
 }
 
+/* Tablet View */
 @media (max-width: 768px) {
     .gallery-item {
-        width: 100%;
-        max-width: 400px;
-    }
-
-    .gallery-container {
-        grid-template-columns: 1fr;
+        max-width: 100%;
     }
 
     .post-media {
-        height: 450px;
+        max-height: 450px;
     }
 }
 
@@ -1225,14 +1221,12 @@ main {
 @media (max-width: 480px) {
     .gallery-item {
         width: 90%;
-        max-width: 400px;
     }
 
     .post-media {
-        height: 375px;
+        max-height: 375px;
     }
 }
-
 @media (max-width: 480px) {
     #competitionPosts {
         display: flex;
