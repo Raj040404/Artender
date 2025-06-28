@@ -937,8 +937,8 @@ app.post("/api/create-cf-order", requireLogin, async (req, res) => {
       order_note: "Artender Competition Enrollment",
       // --- ADD THIS BLOCK ---
       order_meta: {
-        return_url: `http://localhost:3000/enroll/cf-callback?order_id={order_id}&contestId=${contestId}&userName=${req.session.username}&email=${req.session.email}`,
-        notify_url: "http://localhost:3000/enroll/cf-callback"
+        return_url: `https://www.artender.in/enroll/cf-callback?order_id={order_id}&contestId=${contestId}&userName=${req.session.username}&email=${req.session.email}`,
+        notify_url: "http://www.artender.in/enroll/cf-callback"
       }
       // --- END BLOCK ---
     };
