@@ -1,0 +1,150 @@
+/* ✅ Main Section Styling (Profile Consistency) */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  background-color: #F7F3F0; /* Light background */
+}
+
+/* ✅ User Info - Styled Like Profile Page */
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background-color: #EADADA; /* Soft pastel pink */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s ease;
+  width: 90%;
+  max-width: 600px;
+}
+
+.user-info img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.user-info .details {
+  flex: 1;
+  text-align: left;
+  color: #333;
+}
+
+.user-info:hover {
+  background-color: #F0E0E0;
+}
+
+.user-info img:hover {
+  transform: scale(1.1);
+}
+
+/* ✅ Fixes post alignment and spacing */
+.user-posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  max-width: 900px;
+  margin-top: 20px;
+}
+
+/* ✅ Post Card Styling */
+.post-item {
+  background-color: #EADADA;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.post-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ Post Media Fix */
+.post-media {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.post-image, .post-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* ✅ Post Content Alignment */
+.post-content {
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+  color: #333;
+}
+
+/* ✅ Fixes Layout for Smaller Screens */
+@media screen and (max-width: 768px) {
+  .user-posts {
+      grid-template-columns: 1fr; /* Single column layout */
+  }
+
+  .post-item {
+      max-width: 100%;
+  }
+}
+
+/* ✅ Default Like Button */
+.like-button {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ddd;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* ✅ Hover Effect */
+.like-button:hover {
+  background-color: rgb(208, 90, 110);
+  color: white;
+}
+
+/* ✅ Clicked (Liked) Button - Persists after reload */
+.like-button.liked {
+  background-color: rgb(208, 90, 110);
+  color: white;
+  font-weight: bold;
+}
+
+/* Button Animation When Clicked */
+.like-button:active {
+  transform: scale(0.95);
+}
+
+.user-info {
+  gap: 72px!important;
+}
+
+.user-info img {
+  width: 150px!important;
+  height: 150px!important;
+}

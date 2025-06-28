@@ -1,0 +1,971 @@
+const express = require("express");
+const app = express();
+const path = require("path");
+const hbs = require("hbs");
+const multer = require("multer");
+const session = require("express-session");
+const { LogInCollection, CompetitionPostCollection, ProfileCollection, ContestCollection, EnrollmentCollection } = require("./mongodb");
+const handlebars = require("hbs");
+const MongoStore = require("connect-mongo");
+const nodemailer = require("nodemailer");
+const bodyParser = require("body-parser");
+const axios = require("axios");
+
+// ✅ Register the "json" helper in hbs
+hbs.registerHelper("json", function (context) {
+  return JSON.stringify(context);
+});
+
+
+// Register the "startsWith" helper
+handlebars.registerHelper("startsWith", (str, prefix) => {
+  if (typeof str !== "string" || typeof prefix !== "string") {
+    return false;
+  }
+  return str.startsWith(prefix);
+});
+
+handlebars.registerHelper("formatPrice", (price, currency = "INR") => {
+  if (typeof price !== "number") {
+    return "Invalid Price";
+  }
+
+  // Ensure currency is a string
+  const validCurrency = typeof currency === "string" ? currency : "INR";
+
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: validCurrency,
+  }).format(price);
+});
+
+
+
+// Set up paths
+const templatePath = path.join(__dirname, "../templates");
+
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '../public')));
+
+
+
+// Set up session management
+require("dotenv").config();
+
+app.use(
+  session({
+    secret: process.env.secret, // Replace with a strong, random secret key
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI, // Replace with your MongoDB connection string
+    }),
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }, // Set to true only if using HTTPS
+  })
+);
+
+
+// Set up Multer for image and video uploads
+const storage = multer.memoryStorage(); // Use memory storage to store the file as Buffer
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image/") || file.mimetype.startsWith("video/")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Invalid file type! Only images and videos are allowed."), false);
+  }
+};
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB limit
+});
+
+// Set up view engine
+app.set("view engine", "hbs");
+app.set("views", templatePath);
+
+// Authentication middleware
+function requireLogin(req, res, next) {
+  if (req.session && req.session.userId) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+}
+
+// Public routes (no login required)
+app.get("/", (req, res) => {
+  res.redirect("/home1");
+});
+app.get("/home1", (req, res) => {
+  res.render("home1");
+});
+app.get("/signup", (req, res) => {
+  res.render("signup");
+});
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,  // Use App Password from Google
+  },
+});
+
+// Store OTPs temporarily
+const otpStorage = {};
+
+app.post("/signup", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (password.length < 8) {
+      return res.render("signup", {
+          error: "Password must be at least 8 characters long.",
+      });
+  }
+
+  try {
+      const existingUser = await LogInCollection.findOne({
+          $or: [{ email }, { name }],
+      });
+
+      if (existingUser) {
+          if (existingUser.email === email) {
+              return res.render("signup", { error: "Email is already registered." });
+          }
+          if (existingUser.name === name) {
+              return res.render("signup", { error: "Username is already taken." });
+          }
+      }
+
+      // Generate OTP
+      const otp = Math.floor(100000 + Math.random() * 900000);
+      otpStorage[email] = otp;
+
+      // Send OTP via email
+      await transporter.sendMail({
+          from: "your-email@example.com",
+          to: email,
+          subject: "Your OTP for Signup",
+          text: `Your OTP for signing up is ${otp}. This OTP is valid for 5 minutes.`,
+      });
+
+      // Store user data in session
+      req.session.tempUser = { name, email, password };
+
+      return res.render("verifyOTP", { email });
+  } catch (err) {
+      console.error(err);
+      res.status(500).render("signup", { error: "Error signing up. Please try again later." });
+  }
+});
+
+
+// Verify OTP Route
+app.post("/verify-otp", async (req, res) => {
+  const { email, otp } = req.body;
+
+  if (otpStorage[email] && otpStorage[email] == otp) {
+    const { name, email, password } = req.session.tempUser;
+
+    // Save user to the database
+    const newUser = new LogInCollection({ name, email, password });
+    await newUser.save();
+
+    // Set session and redirect to home
+    req.session.userId = newUser._id;
+    req.session.username = newUser.name;
+
+    delete otpStorage[email]; // Clear OTP after verification
+    delete req.session.tempUser; // Clear temporary session data
+
+    return res.redirect("/home");
+  } else {
+    return res.render("verifyOTP", { email, error: "Invalid OTP. Please try again." });
+  }
+});
+
+app.post("/resend-otp", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+      return res.status(400).json({ success: false, message: "Invalid email." });
+  }
+
+  try {
+      // Generate a new OTP
+      const otp = Math.floor(100000 + Math.random() * 900000);
+      otpStorage[email] = otp;
+
+      // Send OTP via email
+      await transporter.sendMail({
+          from: "your-email@example.com",
+          to: email,
+          subject: "Your New OTP for Signup",
+          text: `Your new OTP is ${otp}. This OTP is valid for 5 minutes.`,
+      });
+
+      return res.json({ success: true, message: "OTP resent successfully." });
+  } catch (err) {
+      console.error("Error resending OTP:", err);
+      return res.status(500).json({ success: false, message: "Failed to resend OTP." });
+  }
+});
+
+// Login POST route
+app.post("/login", async (req, res) => {
+  const { loginType, loginInput, password } = req.body; // Accept email or username
+
+  try {
+    // Find the user by either email or username
+    let user;
+    if (loginType === "email") {
+      user = await LogInCollection.findOne({ email: loginInput });
+    } else {
+      user = await LogInCollection.findOne({ name: loginInput });
+    }
+
+    if (!user) {
+      return res.render("login", { error: "User not found. Please sign up." });
+    }
+
+    // Validate password
+    if (user.password === password) {
+      req.session.userId = user._id;
+      req.session.username = user.name;
+      req.session.email = user.email; // <-- ADD THIS LINE
+      res.redirect("/home");
+    } else {
+      res.render("login", { error: "Incorrect password." });
+    }
+  } catch (err) {
+    console.error("Error logging in:", err);
+    res.status(500).send("Error logging in. Please try again later.");
+  }
+});
+
+// Protected routes (login required)
+app.get("/home", requireLogin, (req, res) => {
+  res.render("home");
+});
+app.get("/completeenrollment", requireLogin, (req, res) => {
+  res.render("completeenrollment");
+});
+app.get("/explorecompetitions", requireLogin, async (req, res) => {
+  try {
+    const userId = req.session.userId; // ✅ Get logged-in user ID
+
+    // Fetch all competition posts
+    const posts = await CompetitionPostCollection.find().sort({ createdAt: -1 });
+
+    // Extract unique usernames
+    const usernames = [...new Set(posts.map((post) => post.username))];
+
+    // Fetch profiles of post authors
+    const profiles = await ProfileCollection.find({ username: { $in: usernames } });
+
+    // Map profile pictures to usernames
+    const profileMap = profiles.reduce((map, profile) => {
+      map[profile.username] = profile.profilePicture
+        ? `data:image/jpeg;base64,${profile.profilePicture.toString("base64")}`
+        : null;
+      return map;
+    }, {});
+
+    // Format posts with like information
+    const formattedPosts = posts.map((post) => {
+      return {
+        username: post.username, // Post owner's username
+        description: post.description,
+        file: post.file ? post.file.toString("base64") : null,
+        fileType: post.fileType || "image/png",
+        profilePicture: profileMap[post.username] || "/default-profile.png", // Use default if no profile picture
+        postNo: post.postNo, // Ensure postNo is included
+        likeCount: post.likes.length, // Send only the count for display
+        isLiked: post.likes.includes(userId), // ✅ Check if logged-in user has liked the post
+      };
+    });
+
+    // Render the explore competitions page
+    res.render("explorecompetitions", { posts: formattedPosts });
+  } catch (err) {
+    console.error("Error fetching competition posts:", err);
+    res.status(500).send("Error loading competitions. Please try again later.");
+  }
+});
+
+// Publish Post Route
+app.post("/publish", requireLogin, upload.single("file"), async (req, res) => {
+  const { description, croppedImageData } = req.body;
+  const file = req.file; // Uploaded file from Multer
+  const userId = req.session.userId;
+
+  if (!userId) {
+    return res.redirect("/login");
+  }
+
+  if (!description || (!file && !croppedImageData)) {
+    return res.status(400).send("Description and an image are required.");
+  }
+
+  try {
+    const user = await LogInCollection.findById(userId);
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+
+    // Calculate the next post number for the user
+    const lastPost = await CompetitionPostCollection.findOne({ username: user.name }).sort({
+      postNo: -1,
+    });
+    const nextPostNo = lastPost ? lastPost.postNo + 1 : 1;
+
+    let fileBuffer = null;
+    let fileType = null;
+
+    // Handle cropped image (base64)
+    if (croppedImageData) {
+      const base64Data = croppedImageData.replace(/^data:image\/\w+;base64,/, "");
+      fileBuffer = Buffer.from(base64Data, "base64");
+      fileType = "image/jpeg"; // Default to JPEG from Cropper.js
+    }
+    // Fallback to multer-uploaded file
+    else if (file) {
+      fileBuffer = file.buffer;
+      fileType = file.mimetype;
+    }
+
+    // Create a new post with `postNo`
+    const newPost = new CompetitionPostCollection({
+      username: user.name,
+      description,
+      file: fileBuffer,
+      fileType,
+      postNo: nextPostNo,
+      likes: [],
+      createdAt: new Date(),
+    });
+
+    await newPost.save();
+    res.redirect("/explorecompetitions");
+  } catch (err) {
+    console.error("Error posting work:", err.message);
+    res.status(500).send("Error posting work. Please try again later.");
+  }
+});
+
+app.post("/delete-post/:postNo", requireLogin, async (req, res) => {
+  const userId = req.session.userId;
+  if (!userId) {
+    return res.status(401).send("Unauthorized. Please log in.");
+  }
+
+  try {
+    const user = await LogInCollection.findById(userId);
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+
+    const post = await CompetitionPostCollection.findOneAndDelete({
+      username: user.name,
+      postNo: req.params.postNo
+    });
+
+    if (!post) {
+      return res.status(404).send("Post not found or you are not authorized to delete it.");
+    }
+
+    res.redirect("/profile");
+  } catch (err) {
+    console.error("Error deleting post:", err);
+    res.status(500).send("Error deleting post. Please try again later.");
+  }
+});
+
+app.post("/edit-post/:postNo", requireLogin, async (req, res) => {
+  const userId = req.session.userId;
+  const { description } = req.body;
+
+  if (!userId) {
+    return res.status(401).send("Unauthorized. Please log in.");
+  }
+
+  try {
+    const user = await LogInCollection.findById(userId);
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+
+    const post = await CompetitionPostCollection.findOneAndUpdate(
+      { username: user.name, postNo: req.params.postNo },
+      { description },
+      { new: true }
+    );
+
+    if (!post) {
+      return res.status(404).send("Post not found or you are not authorized to edit it.");
+    }
+
+    res.redirect("/profile");
+  } catch (err) {
+    console.error("Error updating post:", err);
+    res.status(500).send("Error updating post. Please try again later.");
+  }
+});
+
+
+
+app.get("/profile", requireLogin, async (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    return res.redirect("/login");
+  }
+
+  try {
+    const user = await LogInCollection.findById(userId);
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+
+    // Fetch profile details
+    const profile = await ProfileCollection.findOne({ email: user.email });
+
+    const profileData = profile || {
+      username: user.name,
+      email: user.email,
+      bio: "This is your default bio. Update it in your profile.",
+      followers: 0,
+      location: "No location set",
+    };
+
+    // Fetch user's posts
+    const posts = await CompetitionPostCollection.find({ username: user.name }).sort({ createdAt: -1 });
+
+    const formattedPosts = posts.map((post) => {
+      return {
+        username: post.username,
+        description: post.description,
+        file: post.file ? post.file.toString("base64") : null,
+        fileType: post.fileType || "image/png",
+        postNo: post.postNo,
+        likes: post.likes, // Send the full likes array
+        likeCount: post.likes.length, // Send only the count for display
+        isLiked: post.likes.includes(userId), // Check if the logged-in user liked it
+      };
+    });
+
+    // Fetch enrolled contests for the user
+    const enrolledContests = await EnrollmentCollection.find({ userName: user.name }).exec();
+    const contestIds = enrolledContests.map((enrollment) => enrollment.contestId);
+    const populatedContests = await ContestCollection.find({ contestId: { $in: contestIds } });
+
+    // Pass the results to the view
+    res.render("profile", {
+      name: profileData.username,
+      email: profileData.email,
+      bio: profileData.bio,
+      followers: profileData.followers,
+      location: profileData.location,
+      posts: formattedPosts,
+      enrolledContests: populatedContests,
+      profilePicture: profileData.profilePicture ? profileData.profilePicture.toString("base64") : null,
+    });
+  } catch (err) {
+    console.error("Error loading profile:", err.message);
+    res.status(500).send("Error loading profile. Please try again later.");
+  }
+});
+
+
+
+app.post("/updateProfile", requireLogin, upload.single("profilePicture"), async (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    return res.redirect("/login");
+  }
+
+  const { bio, location, croppedImageData } = req.body;
+
+  try {
+    const user = await LogInCollection.findById(userId);
+
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+
+    const existingProfile = await ProfileCollection.findOne({ email: user.email });
+
+    // Prepare profile picture data
+    let profilePictureBuffer = null;
+
+    // Check if a cropped image was provided (base64 string from Cropper.js)
+    if (croppedImageData) {
+      // Remove the "data:image/jpeg;base64," prefix if present and convert to Buffer
+      const base64Data = croppedImageData.replace(/^data:image\/\w+;base64,/, "");
+      profilePictureBuffer = Buffer.from(base64Data, "base64");
+    }
+    // Fallback to multer-uploaded file if no cropped image is provided
+    else if (req.file) {
+      profilePictureBuffer = req.file.buffer;
+    }
+    // If neither is provided, retain the existing profile picture (if any)
+    else if (existingProfile && existingProfile.profilePicture) {
+      profilePictureBuffer = existingProfile.profilePicture;
+    }
+
+    if (existingProfile) {
+      // If a profile exists, update it
+      await ProfileCollection.updateOne(
+        { email: user.email },
+        {
+          $set: {
+            bio: bio || existingProfile.bio, // Retain existing bio if not provided
+            location: location || existingProfile.location, // Retain existing location if not provided
+            profilePicture: profilePictureBuffer, // Update with new buffer or retain existing
+          },
+        }
+      );
+    } else {
+      // Create a new profile if none exists
+      await ProfileCollection.create({
+        username: user.name,
+        email: user.email,
+        bio: bio || "No bio added yet.",
+        followers: 0,
+        following: [],
+        location: location || "No location added.",
+        profilePicture: profilePictureBuffer, // Store profile picture if available
+      });
+    }
+
+    res.redirect("/profile"); // Redirect to the profile page
+  } catch (err) {
+    console.error("Error updating profile:", err.message);
+    res.status(500).send("Error updating profile. Please try again later.");
+  }
+});
+
+app.get("/user/:username", requireLogin, async (req, res) => {
+  try {
+    const { username } = req.params;
+    const userId = req.session.userId; // ✅ Get logged-in user ID
+
+    // Fetch user from LogInCollection
+    const user = await LogInCollection.findOne({ name: username });
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+
+    // Fetch profile from ProfileCollection
+    const profile = await ProfileCollection.findOne({ username: user.name });
+
+    // Use existing profile or provide default values
+    const profileData = {
+      username: user.name,
+      email: user.email,
+      bio: profile?.bio || "This user has not updated their profile yet.",
+      followers: profile?.followers || 0,
+      location: profile?.location || "No location set",
+      profilePicture: profile?.profilePicture || null,
+    };
+
+    // Fetch user's posts from CompetitionPostCollection
+    const posts = await CompetitionPostCollection.find({ username: user.name }).sort({ createdAt: -1 });
+
+    // Format posts to include Base64 conversion for file & like status
+    const formattedPosts = posts.map((post) => ({
+      username: post.username,
+      description: post.description,
+      file: post.file ? post.file.toString("base64") : null,
+      fileType: post.fileType || "image/png",
+      postNo: post.postNo, // Include post number
+      likeCount: post.likes.length, // ✅ Send only the count for display
+      isLiked: post.likes.includes(userId), // ✅ Check if logged-in user has liked the post
+    }));
+
+    // Render user profile page
+    res.render("userProfile", {
+      name: profileData.username,
+      email: profileData.email,
+      bio: profileData.bio,
+      followers: profileData.followers,
+      location: profileData.location,
+      profilePicture: profileData.profilePicture ? profileData.profilePicture.toString("base64") : null,
+      posts: formattedPosts,
+    });
+  } catch (err) {
+    console.error("Error loading user profile:", err.message);
+    res.status(500).send("Error loading profile. Please try again later.");
+  }
+});
+
+
+
+
+
+app.get("/search", requireLogin, async (req, res) => {
+  const { query } = req.query;
+  const loggedInUser = req.session.username; // Get the logged-in user's username from the session
+
+  try {
+    // Fetch users matching the query
+    const users = await ProfileCollection.find({
+      username: { $regex: query, $options: "i" }, // Case-insensitive search
+    });
+
+    if (!users || users.length === 0) {
+      return res.render("searchResults", { users: [], message: "No users found." });
+    }
+
+    // Fetch the logged-in user's profile to check their following list
+    const currentUserProfile = await ProfileCollection.findOne({ username: loggedInUser });
+    if (!currentUserProfile) {
+      return res.status(404).send("Logged-in user profile not found.");
+    }
+
+    // Format user data with follow status and profile picture
+    const formattedUsers = users.map((user) => {
+      const isFollowed = currentUserProfile.following.includes(user.username); // Check if logged-in user is following
+
+      return {
+        username: user.username,
+        bio: user.bio || "No bio provided.",
+        following: user.following || 0, // Ensure 'following' is defined
+        isFollowed, // Add follow status
+        profilePicture: user.profilePicture
+          ? `data:image/jpeg;base64,${user.profilePicture.toString("base64")}`
+          : "/default-profile.png", // Use default if no profile picture
+      };
+    });
+
+    // Render the template with users, profile pictures, and follow status
+    res.render("searchResults", { users: formattedUsers });
+
+  } catch (err) {
+    console.error("Error searching users:", err.message);
+    res.status(500).send("Error searching users. Please try again later.");
+  }
+});
+
+
+
+
+app.post('/follow/:username', requireLogin, async (req, res) => {
+  const { username } = req.params;
+
+  const userId = req.session.userId; // Logged-in user's ID from session
+
+  if (!userId) {
+    return res.status(401).send("Unauthorized: Please log in.");
+  }
+
+  try {
+    // Fetch the logged-in user's profile using their username
+    const currentUserProfile = await ProfileCollection.findOne({ username: req.session.username });
+    if (!currentUserProfile) {
+      return res.status(404).send("Your profile not found.");
+    }
+
+    // Fetch the target user's profile using the username
+    const userToFollow = await ProfileCollection.findOne({ username });
+    if (!userToFollow) {
+      return res.status(404).send("User not found.");
+    }
+
+    // Prevent self-following
+    if (currentUserProfile.username === username) {
+      return res.status(400).send("You cannot follow yourself.");
+    }
+
+    // Check if the user is already following the target user
+    if (currentUserProfile.following.includes(username)) {
+      // If already followed, return a message and no further changes are needed
+      return res.status(400).send("You are already following this user.");
+    }
+
+    // Add to the logged-in user's following list
+    currentUserProfile.following.push(username);
+    await currentUserProfile.save();
+
+    // Increment followers count for the target user
+    userToFollow.followers = (userToFollow.followers || 0) + 1;
+    await userToFollow.save();
+
+    res.status(200).send("Followed successfully.");
+  } catch (err) {
+    console.error("Error following user:", err.message);
+    res.status(500).send("An error occurred while following the user.");
+  }
+});
+
+
+app.get("/competitions", requireLogin, async (req, res) => {
+  try {
+    const contests = await ContestCollection.find({});
+    // Clean up poster URLs if they have unwanted quotes
+    contests.forEach(contest => {
+      contest.poster = contest.poster.replace(/"/g, '');  // Remove all double quotes
+    });
+    res.render("competitions", { contests });
+  } catch (err) {
+    console.error("Error fetching contests:", err);
+    res.status(500).send("Error fetching contests. Please try again later.");
+  }
+});
+
+const mongoose = require("mongoose");
+
+
+// Enrollment Submission Route (save file and info before payment)
+app.post("/enroll/:contestId", requireLogin, upload.single("file"), async (req, res) => {
+  const { contestId } = req.params;
+  const userName = req.session.username;
+  const email = req.session.email;
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).send("No file uploaded. Please upload an image or video.");
+  }
+
+  if (!file.mimetype.startsWith("image/") && !file.mimetype.startsWith("video/")) {
+    return res.status(400).send("Invalid file type! Only images and videos are allowed.");
+  }
+
+  // Save enrollment with paid: false (upsert so user can retry payment)
+  await EnrollmentCollection.findOneAndUpdate(
+    { userName, contestId: String(contestId) },
+    {
+      userName,
+      email,
+      contestId: String(contestId),
+      file: file.buffer.toString("base64"),
+      fileType: file.mimetype,
+      paid: false,
+    },
+    { upsert: true }
+  );
+
+  // Proceed to payment (your frontend should handle this)
+  res.redirect(`/enroll/${contestId}`);
+})
+// Payment callback (Cashfree will redirect here)
+app.get("/enroll/cf-callback", async (req, res) => {
+  try {
+    const { order_id, contestId, userName, email } = req.query;
+
+    // Fetch payment details from Cashfree API
+    const paymentRes = await axios.get(
+      `https://sandbox.cashfree.com/pg/orders/${order_id}/payments`,
+      {
+        headers: {
+          'x-api-version': '2022-09-01',
+          'x-client-id': CASHFREE_CLIENT_ID,
+          'x-client-secret': CASHFREE_SECRET,
+        }
+      }
+    );
+
+    // Handle array or object
+    let paymentData;
+    if (Array.isArray(paymentRes.data)) {
+      paymentData = paymentRes.data[0];
+    } else if (Array.isArray(paymentRes.data?.payments)) {
+      paymentData = paymentRes.data.payments[0];
+    } else {
+      paymentData = undefined;
+    }
+    console.log("CF Callback: paymentData =", paymentData);
+
+    if (paymentData && paymentData.payment_status === "SUCCESS") {
+      // Update enrollment to mark as paid and add paymentId
+      await EnrollmentCollection.findOneAndUpdate(
+        { userName, contestId: String(contestId) },
+        { paid: true, paymentId: order_id }
+      );
+
+      res.redirect("/completeenrollment");
+    } else {
+      res.redirect("/enroll/" + (contestId || ""));
+    }
+  } catch (err) {
+    res.redirect("/enroll/" + (req.query.contestId || ""));
+  }
+});
+
+app.get("/enroll/:contestId", requireLogin, async (req, res) => {
+  const { contestId } = req.params;
+
+  // Check if the user is logged in
+  if (!req.session || !req.session.userId) {
+    console.error("Error: User not logged in");
+    return res.redirect("/login");
+  }
+
+  try {
+    // Fetch contest details
+    console.log("Looking for contestId:", contestId, "as string:", String(contestId));
+    const contest = await ContestCollection.findOne({ contestId: { $regex: "^" + contestId + "$", $options: "i" } });
+    console.log("Contest found:", contest);
+
+    if (!contest) {
+      console.error("Error: Contest not found");
+      return res.status(404).send("Contest not found.");
+    }
+
+    // Fetch the logged-in user's details
+    const user = await LogInCollection.findById(req.session.userId);
+    if (!user) {
+      console.error("Error: User not found in the database");
+      return res.status(404).send("User not found.");
+    }
+
+    // Check if the user is already enrolled in the contest
+    const existingEnrollment = await EnrollmentCollection.findOne({
+      contestId: String(contestId), // Always use string
+      userName: user.name,
+    });
+
+    if (existingEnrollment) {
+      return res.render("enrollment", {
+        contest,
+        userName: user.name,
+        email: user.email,
+        alreadyEnrolled: true,
+      });
+    }
+
+    // If not already enrolled, render the enrollment page with contest and user details
+    res.render("enrollment", {
+      contest,
+      userName: user.name,
+      email: user.email,
+      alreadyEnrolled: false,
+    });
+
+  } catch (err) {
+    console.error("Error fetching contest or user details:", err.message);
+    res.status(500).send("Error fetching contest details.");
+  }
+});
+
+
+app.post("/like", requireLogin, async (req, res) => {
+  const { username, postNo } = req.body;
+  const userId = req.session.userId; // ✅ Get logged-in user ID
+
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized. Please log in." });
+  }
+
+  try {
+    console.log(`🔍 Searching Post - Username: ${username}, Post No: ${postNo}`);
+
+    // ✅ Find the post by `postNo` & `username`
+    const post = await CompetitionPostCollection.findOne({ username, postNo });
+
+    if (!post) {
+      console.error("❌ Post not found.");
+      return res.status(404).json({ error: "Post not found." });
+    }
+
+    console.log(`✅ Post Found - ID: ${post._id}, Likes: ${post.likes.length}`);
+
+    // ✅ Check if the user already liked the post
+    const userIndex = post.likes.indexOf(userId);
+    let updatedLikes;
+
+    if (userIndex === -1) {
+      updatedLikes = [...post.likes, userId]; // ✅ Add like
+    } else {
+      updatedLikes = post.likes.filter((id) => id !== userId); // ✅ Remove like
+    }
+
+    // ✅ Use `findOneAndUpdate()` to prevent `VersionError`
+    const updatedPost = await CompetitionPostCollection.findOneAndUpdate(
+      { _id: post._id },
+      { $set: { likes: updatedLikes } },
+      { new: true, runValidators: true }
+    );
+
+    res.json({
+      likes: updatedPost.likes.length,
+      isLiked: updatedPost.likes.includes(userId),
+    });
+  } catch (err) {
+    console.error("❌ Error liking post:", err);
+    res.status(500).json({ error: "Server error while liking post." });
+  }
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/login");
+  });
+});
+
+// Cashfree credentials (use env vars in production)
+const CASHFREE_CLIENT_ID = process.env.CASHFREE_CLIENT_ID;
+const CASHFREE_SECRET = process.env.CASHFREE_SECRET;
+const CASHFREE_BASE_URL = "https://sandbox.cashfree.com/pg"; // Use sandbox for testing
+
+// Create Cashfree order
+app.post("/api/create-cf-order", requireLogin, async (req, res) => {
+  try {
+    const { contestId, phone } = req.body;
+    const contest = await ContestCollection.findOne({ contestId });
+    if (!contest) return res.status(404).json({ error: "Contest not found" });
+
+    const orderPayload = {
+      order_amount: Number(contest.price),
+      order_currency: "INR",
+      order_id: "artender_" + Date.now(),
+      customer_details: {
+        customer_id: req.session.userId.toString(),
+        customer_phone: phone,
+        customer_name: req.session.username || "User",
+        customer_email: req.session.username || "test@cashfree.com"
+      },
+      order_note: "Artender Competition Enrollment",
+      // --- ADD THIS BLOCK ---
+      order_meta: {
+        return_url: `http://localhost:3000/enroll/cf-callback?order_id={order_id}&contestId=${contestId}&userName=${req.session.username}&email=${req.session.email}`,
+        notify_url: "http://localhost:3000/enroll/cf-callback"
+      }
+      // --- END BLOCK ---
+    };
+
+    const response = await axios.post(
+      'https://sandbox.cashfree.com/pg/orders',
+      orderPayload,
+      {
+        headers: {
+          'x-api-version': '2022-09-01',
+          'x-client-id': CASHFREE_CLIENT_ID,
+          'x-client-secret': CASHFREE_SECRET,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error creating order:', error.response?.data?.message || error.message);
+    res.status(500).json({ error: error.response?.data?.message || error.message });
+  }
+});
+
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}/`);
+});

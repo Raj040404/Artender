@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Profile</title>
+    <!-- Character Set & Viewport -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Web App Capabilities -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Favicon (Browser Tabs) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo/logo32.png">
+
+    <!-- Apple Touch Icons (iOS Home Screen) -->
+    <link rel="apple-touch-icon" sizes="192x192" href="/logo/logo192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/logo/logo512.png">
+
+    <!-- Social Media & SEO Meta Tags -->
+    <meta name="theme-color" content="#3399cc">
+    <meta property="og:title" content="Artender">
+    <meta property="og:description" content="manage your profile">
+    <meta property="og:image" content="/logo/WhatsApp%20Image%202025-02-23%20at%2000.10.41_0364758d.jpg">
+    <meta property="og:url" content="http://www.artender.in">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card for Social Sharing -->
+    <meta property="twitter:card" content="summary_large_image">
+
+
+    <style data-tag="reset-style-sheet">
+        html {
+            line-height: 1.15;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        p,
+        li,
+        ul,
+        pre,
+        div,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        figure,
+        blockquote,
+        figcaption {
+            margin: 0;
+            padding: 0;
+        }
+
+        button {
+            background-color: transparent;
+        }
+
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            font-family: inherit;
+            font-size: 100%;
+            line-height: 1.15;
+            margin: 0;
+        }
+
+        button,
+        select {
+            text-transform: none;
+        }
+
+        button,
+        [type="button"],
+        [type="reset"],
+        [type="submit"] {
+            -webkit-appearance: button;
+            color: inherit;
+        }
+
+        button::-moz-focus-inner,
+        [type="button"]::-moz-focus-inner,
+        [type="reset"]::-moz-focus-inner,
+        [type="submit"]::-moz-focus-inner {
+            border-style: none;
+            padding: 0;
+        }
+
+        button:-moz-focus,
+        [type="button"]:-moz-focus,
+        [type="reset"]:-moz-focus,
+        [type="submit"]:-moz-focus {
+            outline: 1px dotted ButtonText;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: inherit;
+        }
+
+        input {
+            padding: 2px 4px;
+        }
+
+        img {
+            display: block;
+        }
+
+        details {
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        [data-thq="accordion"] [data-thq="accordion-content"] {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            padding: 0;
+        }
+
+        [data-thq="accordion"] details[data-thq="accordion-trigger"][open]+[data-thq="accordion-content"] {
+            max-height: 1000vh;
+        }
+
+        details[data-thq="accordion-trigger"][open] summary [data-thq="accordion-icon"] {
+            transform: rotate(180deg);
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+    </style>
+    <style data-tag="default-style-sheet">
+        html {
+            font-family: Inter;
+            font-size: 16px;
+        }
+
+        body {
+            font-weight: 400;
+            font-style: normal;
+            text-decoration: none;
+            text-transform: none;
+            letter-spacing: normal;
+            line-height: 1.15;
+            color: var(--dl-color-theme-neutral-dark);
+            background: var(--dl-color-theme-neutral-light);
+
+            fill: var(--dl-color-theme-neutral-dark);
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+        data-tag="font" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap"
+        data-tag="font" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+        data-tag="font" />
+    <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css" />
+    <!-- ... Existing meta tags and styles ... -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <!-- <link href="/public/css/home1.css" rel="stylesheet" /> -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/explore.css" />
+</head>
+
+<body>
+    <div>
+        <div class="landing-container">
+            <navbar8-wrapper class="navbar8-wrapper">
+                <!--Navbar8 component-->
+                <header class="navbar8-container1">
+                    <header data-thq="thq-navbar" class="navbar8-navbar-interactive">
+                        <img alt="logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg"
+                            class="navbar8-image1" />
+                        <div data-thq="thq-navbar-nav" class="navbar8-desktop-menu">
+                            <nav class="navbar8-links1">
+                                <a href="/home" class="navbar8-link11 thq-link thq-body-small">
+                                    <fragment class="landing-fragment104">
+                                        <span class="landing-text104">Home</span>
+                                    </fragment>
+                                </a>
+                                <a href="/explorecompetitions" class="navbar8-link11 thq-link thq-body-small">
+                                    <fragment class="landing-fragment104">
+                                        <span class="landing-text104">Explore Artworks</span>
+                                    </fragment>
+                                </a>
+                                <a href="/competitions" class="thq-link thq-body-small">
+                                    <fragment class="landing-fragment102">
+                                        <span class="landing-text102">Participate in Competitions</span>
+                                    </fragment>
+                                </a>
+                                <a href="#" target="_blank" rel="noreferrer noopener"
+                                    class="navbar8-link31 thq-link thq-body-small">
+                                    <fragment class="landing-fragment110">
+                                        <span class="landing-text110">Contact</span>
+                                    </fragment>
+                                </a>
+                            </nav>
+                            <div class="navbar8-buttons1">
+                                <a href="/logout">
+                                    <button class="navbar8-action11 thq-button-animated thq-button-filled">
+                                        <span>
+                                            <fragment class="landing-fragment101">
+                                                <span class="landing-text101">Logout</span>
+                                            </fragment>
+                                        </span>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="navbar8-container7 thq-box-shadow">
+                    </header>
+                </header>
+            </navbar8-wrapper>
+            <div class="navbar-toggle" onclick="toggleNavbar()">
+                <img src="/navigation-aligned-dots-more-horizontal-three-dots-option-icon-svgrepo-com.svg" alt="Menu"
+                    class="navbar-toggle-icon">
+            </div>
+
+            <div id="navbarMenu" class="navbar-menu">
+                <nav class="navbar-menu-links">
+                    <a href="/home" class="navbar-menu-link">Home</a>
+                    <a href="/explorecompetitions" class="navbar-menu-link">Explore Artworks</a>
+                    <a href="/competitions" class="navbar-menu-link">Participate in Competitions</a>
+                    <a href="#" class="navbar-menu-link">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <main>
+        <!-- User Info Section -->
+        <section id="userInfo" class="profile-section">
+            <div class="user-info">
+                {{#if profilePicture}}
+                <img src="data:image/jpeg;base64,{{profilePicture}}" alt="Profile Picture" />
+                {{else}}
+                <div class="no-image">No profile picture</div>
+                {{/if}}
+                <div class="details">
+                    <h2>{{name}}</h2>
+                    <p>Email: {{email}}</p>
+                    <p>{{bio}}</p>
+                    <p>{{location}}</p>
+                </div>
+                <div class="stats">
+                    <p><strong>Followers:</strong> {{followers}}</p>
+                </div>
+            </div>
+            <button id="editProfileBtn">Edit Profile</button>
+        </section>
+
+        <!-- Edit Profile Form -->
+        <!-- Edit Profile Form -->
+        <section id="editProfileForm" class="edit-profile-form">
+            <form action="/updateProfile" method="POST" enctype="multipart/form-data">
+                <label for="bio">Bio:</label>
+                <textarea id="bio" name="bio">{{bio}}</textarea>
+
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" value="{{location}}" />
+
+                <label for="profilePicture">Profile Picture:</label>
+                <input type="file" id="profilePicture" name="profilePicture" accept="image/*" />
+
+                <!-- Image Preview and Cropping Area -->
+                <div id="imagePreview" style="display: none; margin-top: 10px;">
+                    <img id="imageToCrop" style="max-width: 100%; max-height: 400px;" />
+                    <div style="margin-top: 10px;">
+                        <button type="button" id="cropImageBtn">Crop Image</button>
+                        <button type="button" id="resetCropBtn">Reset</button>
+                    </div>
+                </div>
+                <!-- Hidden input to store cropped image data -->
+                <input type="hidden" id="croppedImageData" name="croppedImageData" />
+
+                <button type="submit">Update Profile</button>
+                <button type="button" id="cancelEditBtn">Cancel</button>
+            </form>
+        </section>
+
+        <!-- Enrolled Contests Section -->
+        <section id="enrolledContests" class="profile-section">
+            <h3>Enrolled Contests</h3>
+            {{#if enrolledContests.length}}
+            {{#each enrolledContests}}
+            <div class="contest">
+                <h4>{{name}}</h4>
+                {{#if poster}}
+                <img src="{{poster}}" alt="{{name}} Poster" />
+                {{/if}}
+                <div class="contest-details">
+                    <p><strong>Start Date:</strong> {{deadline}}</p>
+                    <p><strong>Price:</strong> ${{price}}</p>
+                    <p><strong>Type:</strong> {{type}}</p>
+                    <p><strong>Theme:</strong> {{theme}}</p>
+                </div>
+            </div>
+            {{/each}}
+            {{else}}
+            <p>No contests enrolled yet.</p>
+            {{/if}}
+        </section>
+
+        <!-- User's Posts Section -->
+        <section id="userPosts" class="profile-section">
+            <h3>Your Posts</h3>
+            <div class="user-posts">
+                {{#if posts.length}}
+                {{#each posts}}
+                <article class="post-item">
+                    <div class="post-header">
+                        <h4>Post #{{postNo}}</h4>
+
+                        <!-- SVG Options Menu at Rightmost Corner -->
+                        <div class="options-menu">
+                            <svg onclick="toggleMenu('{{postNo}}')" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="5" r="2" fill="#FFF" />
+                                <circle cx="12" cy="12" r="2" fill="#FFF" />
+                                <circle cx="12" cy="19" r="2" fill="#FFF" />
+                            </svg>
+                            <div class="menu-dropdown" id="menu-{{postNo}}">
+                                <button onclick="editPost('{{postNo}}', '{{description}}')">✏️ Edit</button>
+                                <form action="/delete-post/{{postNo}}" method="POST">
+                                    <button type="submit">🗑 Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-media">
+                        {{#if file}}
+                        {{#if (startsWith fileType "image/")}}
+                        <img src="data:{{fileType}};base64,{{file}}" alt="Uploaded Image" class="post-image">
+                        {{else if (startsWith fileType "video/")}}
+                        <video controls class="post-video">
+                            <source src="data:{{fileType}};base64,{{file}}" type="{{fileType}}">
+                        </video>
+                        {{/if}}
+                        {{/if}}
+                    </div>
+                    <div class="post-content">
+                        <p id="desc-{{postNo}}">{{description}}</p>
+                    </div>
+                    <div class="like-container">
+                        <button class="like-button {{#if isLiked}}liked{{/if}}" data-username="{{username}}"
+                            data-post-no="{{postNo}}">
+                            <span class="button-text">{{#if isLiked}}Liked{{else}}Like{{/if}}</span>
+                            (<span class="like-count">{{likeCount}}</span>)
+                        </button>
+                    </div>
+                </article>
+                {{/each}}
+                {{else}}
+                <p>No posts to show.</p>
+                {{/if}}
+            </div>
+        </section>
+    </main>
+    <footer4-wrapper class="footer4-wrapper">
+        <!--Footer4 component-->
+        <footer class="footer4-footer7 thq-section-padding">
+            <div class="footer4-max-width thq-section-max-width">
+                <div class="footer4-content">
+                    <div class="footer4-logo1">
+                        <img alt="Logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg"
+                            class="footer4-logo2" />
+                    </div>
+                </div>
+                <div id="Logout-buttons1" class="navbar8-buttons1">
+                    <a href="/logout">
+                        <button class="navbar8-action11 thq-button-animated thq-button-filled">
+                            <span>
+                                <fragment class="landing-fragment101">
+                                    <span class="landing-text101">Logout</span>
+                                </fragment>
+                            </span>
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+        </footer>
+    </footer4-wrapper>
+
+    <script>
+
+        function toggleNavbar() {
+            const navbarMenu = document.getElementById("navbarMenu");
+            navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
+        }
+
+        document.addEventListener("keydown", function (e) {
+            if (e.ctrlKey && e.shiftKey && (e.key === "s")) {
+                e.preventDefault();
+                alert("Screenshots are disabled!");
+            }
+        });
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "PrintScreen") {
+                e.preventDefault();
+                alert("Screenshots are disabled!");
+            }
+        });
+        document.addEventListener("keydown", function (e) {
+            if (e.ctrlKey && (e.key === "u" || e.key === "U" || e.key === "i" || e.key === "I")) {
+                e.preventDefault();
+                alert("View Source and Inspect Element are disabled!");
+            }
+        });
+
+        // Toggle Edit Profile Form
+        document.getElementById("editProfileBtn").addEventListener("click", () => {
+            document.getElementById("editProfileForm").style.display = "block";
+        });
+
+        document.getElementById("cancelEditBtn").addEventListener("click", () => {
+            document.getElementById("editProfileForm").style.display = "none";
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const likeButtons = document.querySelectorAll(".like-button");
+
+            likeButtons.forEach((button) => {
+                const username = button.getAttribute("data-username");
+                const postNo = button.getAttribute("data-post-no");
+
+                button.addEventListener("click", async () => {
+                    try {
+                        const response = await fetch("/like", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ username, postNo }),
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+
+                            if (data.isLiked) {
+                                button.classList.add("liked");
+                                button.textContent = `Liked (${data.likes})`;
+                            } else {
+                                button.classList.remove("liked");
+                                button.textContent = `Like (${data.likes})`;
+                            }
+
+                            button.querySelector(".like-count").textContent = data.likes;
+                        } else {
+                            console.error("Failed to like the post.");
+                        }
+                    } catch (error) {
+                        console.error("Error liking the post:", error);
+                    }
+                });
+            });
+        });
+
+        function toggleMenu(postNo) {
+            let menu = document.getElementById(`menu-${postNo}`);
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!event.target.closest(".options-menu")) {
+                document.querySelectorAll(".menu-dropdown").forEach(menu => menu.style.display = "none");
+            }
+        });
+
+        function editPost(postNo, oldDesc) {
+            let newDesc = prompt("Edit your description:", oldDesc);
+            if (newDesc !== null && newDesc.trim() !== "") {
+                fetch(`/edit-post/${postNo}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `description=${encodeURIComponent(newDesc)}`
+                }).then(response => {
+                    if (response.ok) {
+                        document.getElementById(`desc-${postNo}`).innerText = newDesc;
+                    } else {
+                        alert("Error updating description. Try again.");
+                    }
+                });
+            }
+        }
+        let cropper;
+
+        // Toggle Edit Profile Form
+        document.getElementById("editProfileBtn").addEventListener("click", () => {
+            document.getElementById("editProfileForm").style.display = "block";
+        });
+
+        document.getElementById("cancelEditBtn").addEventListener("click", () => {
+            document.getElementById("editProfileForm").style.display = "none";
+            if (cropper) {
+                cropper.destroy(); // Clean up cropper instance
+            }
+            document.getElementById("imagePreview").style.display = "none";
+        });
+
+        // Handle Image Upload and Cropping
+        document.getElementById("profilePicture").addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith("image/")) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const img = document.getElementById("imageToCrop");
+                    img.src = event.target.result;
+                    document.getElementById("imagePreview").style.display = "block";
+
+                    // Destroy previous cropper instance if it exists
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+
+                    // Initialize Cropper.js with aspect ratio matching user-info img (250x200)
+                    cropper = new Cropper(img, {
+                        aspectRatio: 250 / 200, // Match the user-info img dimensions
+                        viewMode: 1, // Restrict crop box to image bounds
+                        autoCropArea: 0.8, // Default crop area size
+                        responsive: true,
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Crop Image Button
+        document.getElementById("cropImageBtn").addEventListener("click", function () {
+            if (cropper) {
+                const canvas = cropper.getCroppedCanvas({
+                    width: 250, // Match front-end display size
+                    height: 200,
+                });
+                const croppedImageData = canvas.toDataURL("image/jpeg"); // Convert to base64
+                document.getElementById("croppedImageData").value = croppedImageData; // Store in hidden input
+                document.getElementById("imageToCrop").src = croppedImageData; // Update preview
+                cropper.destroy(); // Destroy cropper after cropping
+                cropper = null;
+            }
+        });
+
+        // Reset Crop Button
+        document.getElementById("resetCropBtn").addEventListener("click", function () {
+            if (cropper) {
+                cropper.reset();
+            }
+        });
+
+        // Form Submission
+        document.querySelector("#editProfileForm form").addEventListener("submit", function (e) {
+            if (cropper) {
+                e.preventDefault();
+                alert("Please crop the image before submitting.");
+            }
+        });
+
+        // Existing toggleNavbar, like button, and menu functions remain unchanged
+        function toggleNavbar() {
+            const navbarMenu = document.getElementById("navbarMenu");
+            navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
+        }
+
+        // ... Rest of your existing JavaScript (like buttons, menu toggle, etc.) ...
+
+    </script>
+</body>
+
+</html>

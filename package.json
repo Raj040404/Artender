@@ -1,0 +1,31 @@
+{
+  "name": "artender",
+  "version": "1.0.0",
+  "description": "A web application for managing and selling art pieces.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "build": "echo 'No build step required'"
+  },
+  "dependencies": {
+    "axios": "^1.10.0",
+    "bcryptjs": "^2.4.3",
+    "cashfree-pg": "^5.0.8",
+    "connect-mongo": "^5.1.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.18.2",
+    "express-session": "^1.18.1",
+    "hbs": "^4.2.0",
+    "mongodb": "^6.13.0",
+    "mongoose": "^8.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^6.10.0",
+    "razorpay": "^2.9.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "author": "Rajkamal",
+  "license": "ISC"
+}
