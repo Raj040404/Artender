@@ -794,10 +794,10 @@ app.get("/enroll/cf-callback", async (req, res) => {
 
       res.redirect("/completeenrollment");
     } else {
-      res.redirect("/enroll/" + (contestId || ""));
+      res.redirect(`/enroll/${contestId}?payment=failed`);
     }
   } catch (err) {
-    res.redirect("/enroll/" + (req.query.contestId || ""));
+    res.redirect(`/enroll/${req.query.contestId || ""}?payment=failed`);
   }
 });
 
@@ -828,13 +828,13 @@ app.get("/enroll/:contestId", requireLogin, async (req, res) => {
       return res.status(404).send("User not found.");
     }
 
-    // Check if the user is already enrolled in the contest
+    // Check if the user is already enrolled in the contest AND has paid
     const existingEnrollment = await EnrollmentCollection.findOne({
-      contestId: String(contestId), // Always use string
+      contestId: String(contestId),
       userName: user.name,
     });
 
-    if (existingEnrollment) {
+    if (existingEnrollment && existingEnrollment.paid) {
       return res.render("enrollment", {
         contest,
         userName: user.name,
@@ -843,7 +843,7 @@ app.get("/enroll/:contestId", requireLogin, async (req, res) => {
       });
     }
 
-    // If not already enrolled, render the enrollment page with contest and user details
+    // If not paid or not enrolled, allow enrollment
     res.render("enrollment", {
       contest,
       userName: user.name,
@@ -938,7 +938,7 @@ app.post("/api/create-cf-order", requireLogin, async (req, res) => {
       // --- ADD THIS BLOCK ---
       order_meta: {
         return_url: `https://www.artender.in/enroll/cf-callback?order_id={order_id}&contestId=${contestId}&userName=${req.session.username}&email=${req.session.email}`,
-        notify_url: "http://www.artender.in/enroll/cf-callback"
+        notify_url: "https://www.artender.in/enroll/cf-callback"
       }
       // --- END BLOCK ---
     };
