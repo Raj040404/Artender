@@ -10,6 +10,7 @@ const MongoStore = require("connect-mongo");
 const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const axios = require("axios");
+const rateLimit = require('express-rate-limit');
 
 // ✅ Register the "json" helper in hbs
 hbs.registerHelper("json", function (context) {
@@ -965,6 +966,13 @@ app.post("/api/create-cf-order", requireLogin, async (req, res) => {
   }
 });
 
+// Apply to all requests
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: "Too many requests from this IP, please try again after a minute."
+});
+app.use(limiter);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
