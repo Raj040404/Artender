@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title> Competitions</title>
+    <title>Profile</title>
     <!-- Character Set & Viewport -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,14 +25,13 @@
     <!-- Social Media & SEO Meta Tags -->
     <meta name="theme-color" content="#3399cc">
     <meta property="og:title" content="Artender">
-    <meta property="og:description" content="Explore profiles of different users.">
+    <meta property="og:description" content="manage your profile">
     <meta property="og:image" content="/logo/WhatsApp%20Image%202025-02-23%20at%2000.10.41_0364758d.jpg">
     <meta property="og:url" content="http://www.artender.in">
     <meta property="og:type" content="website">
 
     <!-- Twitter Card for Social Sharing -->
     <meta property="twitter:card" content="summary_large_image">
-
 
 
     <style data-tag="reset-style-sheet">
@@ -184,10 +183,13 @@
         href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
         data-tag="font" />
     <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css" />
+    <!-- ... Existing meta tags and styles ... -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <!-- <link href="/public/css/home1.css" rel="stylesheet" /> -->
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/profile.css">
     <link rel="stylesheet" href="/css/explore.css" />
-    <link rel="stylesheet" href="/css/search.css" />
 </head>
 
 <body>
@@ -216,15 +218,9 @@
                                         <span class="landing-text102">Participate in Competitions</span>
                                     </fragment>
                                 </a>
-                                <a href="/profile" rel="noreferrer noopener"
-                                    class="navbar8-link31 thq-link thq-body-small">
+                                <a href="/profile" class="navbar8-link31 thq-link thq-body-small">
                                     <fragment class="landing-fragment110">
                                         <span class="landing-text110">Profile</span>
-                                    </fragment>
-                                </a>
-                                <a href="/about" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
-                                    <fragment class="landing-fragment110">
-                                        <span class="landing-text110">About us</span>
                                     </fragment>
                                 </a>
                             </nav>
@@ -238,7 +234,6 @@
                                         </span>
                                     </button>
                                 </a>
-
                             </div>
                             <div class="navbar8-container7 thq-box-shadow">
                     </header>
@@ -255,86 +250,92 @@
                     <a href="/explorecompetitions" class="navbar-menu-link">Explore Artworks</a>
                     <a href="/competitions" class="navbar-menu-link">Participate in Competitions</a>
                     <a href="/profile" class="navbar-menu-link">Profile</a>
-                    <a href="/about" class="navbar-menu-link">About us</a>
                 </nav>
             </div>
         </div>
     </div>
+
     <main>
-        <h1>Search Results</h1>
-        {{#if users.length}}
-        <div class="results-container">
-            {{#each users}}
-            <div class="user-card">
-                <div class="user-info">
-                    <!-- Show profile picture with small size -->
-                    <img src="{{profilePicture}}" alt="Profile Picture" class="small-profile-pic" />
-
-                    <!-- Display username -->
-                    <p><strong>Username:</strong> <a href="/user/{{username}}">{{username}}</a></p>
-                </div>
-                <p><strong>Bio:</strong> {{bio}}</p>
-
-                {{#if isFollowed}}
-                <button disabled>Followed</button>
-                {{else}}
-                <button onclick="handleFollow('{{username}}', this)">Follow</button>
-                {{/if}}
+        <h1 style="text-align: center; margin-top: 40px;">About Artender</h1>
+        <div class="aboutus-container">
+            <div class="aboutus-card">
+                <h2>Our Vision</h2>
+                <p>
+                    To create a vibrant and inclusive platform that empowers artists of all backgrounds to showcase their
+                    talent, connect with a broader audience, and transform their passion into recognition and rewards.
+                </p>
             </div>
-            {{/each}}
+            <div class="aboutus-card">
+                <h2>Our Mission</h2>
+                <p>
+                    We aim to organize engaging online competitions, exhibitions, and challenges that encourage creativity,
+                    foster community, and provide real opportunities for growth and visibility in the art world.
+                </p>
+            </div>
+            <div class="aboutus-card">
+                <h2>Our Goal</h2>
+                <p>
+                    To become India’s most trusted online art platform where both budding and professional artists feel
+                    valued, supported, and inspired to push boundaries in their artistic journey.
+                </p>
+            </div>
         </div>
-        {{else}}
-        <p>No users found.</p>
-        {{/if}}
     </main>
-    <footer4-wrapper class="footer4-wrapper">
-        <!--Footer4 component-->
-        <footer class="footer4-footer7 thq-section-padding">
-            <div class="footer4-max-width thq-section-max-width">
-                <div class="footer4-content">
-                    <div class="footer4-logo1">
-                        <img alt="Logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg"
-                            class="footer4-logo2" />
-                    </div>
-                </div>
-                <div id="Logout-buttons1" class="navbar8-buttons1">
-                    <a href="/logout" target="_blank">
-                        <button class="navbar8-action11 thq-button-animated thq-button-filled">
-                            <span>
-                                <fragment class="landing-fragment101">
-                                    <span class="landing-text101">Logout</span>
-                                </fragment>
-                            </span>
-                        </button>
-                    </a>
-                </div>
-            </div>
 
-        </footer>
-    </footer4-wrapper>
-    <script>
-        async function handleFollow(username, button) {
-            try {
-                const response = await fetch(`/follow/${username}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({})
-                });
+    <style>
+    .aboutus-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 16px;
+    }
 
-                if (response.ok) {
-                    button.textContent = 'Followed';
-                    button.disabled = true;
-                } else {
-                    const error = await response.text();
-                    alert(`Error: ${error}`);
-                }
-            } catch (err) {
-                alert('An error occurred. Please try again.');
-            }
+    .aboutus-card {
+        background: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 24px;
+        border-radius: 16px;
+        width: 100%;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .aboutus-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .aboutus-card h2 {
+        font-family: 'STIX Two Text', serif;
+        font-size: 24px;
+        color: #3399cc;
+        margin-bottom: 12px;
+    }
+
+    .aboutus-card p {
+        font-family: 'Noto Sans', sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    @media screen and (min-width: 768px) {
+        .aboutus-container {
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
         }
-    </script>
+
+        .aboutus-card {
+            width: 280px;
+        }
+    }
+    </style>
+    <!-- ...existing code... -->
+
 </body>
 
 </html>
