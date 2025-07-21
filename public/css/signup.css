@@ -116,3 +116,42 @@ input[type="submit"]:hover {
     max-width: 80%;
     transition: opacity 0.5s ease-in-out;
 }
+
+/* Terms Modal */
+.terms-modal {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 9999;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+.terms-modal h3 {
+    margin-top: 0;
+    color: #3399cc;
+}
+.terms-content {
+    font-size: 15px;
+    color: #222;
+    margin-bottom: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+.terms-modal button {
+    background: #3399cc;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}
+.terms-modal button:hover {
+    background: #267399;
+}

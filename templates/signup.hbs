@@ -64,7 +64,15 @@
                 <div class="password-strength" id="passwordStrength">Enter a strong password</div>
             </div>
 
-            <input type="submit" value="Sign Up">
+            <div class="form-group">
+                <input type="checkbox" id="acceptTerms" />
+                <label for="acceptTerms">
+                    I accept the
+                    <a href="#" id="viewTerms">Terms and Conditions</a>
+                </label>
+            </div>
+
+            <input type="submit" value="Sign Up" id="submitBtn" style="display: none;" />
         </form>
 
         <div class="form-group">
@@ -72,36 +80,106 @@
         </div>
     </div>
 
+    <!-- Terms and Conditions Modal -->
+    <div id="termsModal" class="terms-modal">
+        <h3>Terms and Conditions</h3>
+        <div class="terms-content">
+            <p>Welcome to Artender (“we”, “us”, or “our”). By accessing or using the Artender website, mobile application, or any services provided by us (collectively, the “Platform”), you (“User”, “you”) agree to be bound by these Terms and Conditions. These Terms apply in accordance with the laws of India, including the Information Technology Act, 2000 and related rules.</p>
+            <p><b>1. Eligibility</b><br>
+            You must be at least 18 years of age or have obtained parental/legal guardian consent to use the Platform.<br>
+            By registering, you represent and warrant that you have the right, authority, and capacity to enter into these Terms.</p>
+            <p><b>2. User Accounts</b><br>
+            To use certain features such as posting artwork or entering competitions, you must create an account.<br>
+            You agree to provide accurate and complete information and to keep it updated.<br>
+            You are responsible for maintaining the confidentiality of your account credentials.</p>
+            <p><b>3. User Content and Ownership</b><br>
+            Users can post artwork, images, videos, text, and other materials (“Content”).<br>
+            You retain ownership of the content you post, but by uploading it to Artender, you grant us a non-exclusive, royalty-free, worldwide license to use, display, reproduce, and distribute it solely for promotion and platform operation.<br>
+            You confirm that you have all necessary rights and permissions to upload and share such content, and that your content does not infringe on any third-party rights.</p>
+            <p><b>4. Competitions</b><br>
+            Artender hosts art competitions which may have additional rules, eligibility criteria, deadlines, and rewards.<br>
+            By entering a competition, you agree to be bound by the specific rules of that competition.<br>
+            Any prizes or rewards will be distributed as stated in the competition description. Taxes, if applicable, are the responsibility of the winner(s).<br>
+            Submissions must be original. Plagiarized or AI-generated content without proper disclosure may lead to disqualification.</p>
+            <p><b>5. Prohibited Activities</b><br>
+            You agree not to:<br>
+            Post any content that is unlawful, harmful, defamatory, obscene, hateful, or discriminatory.<br>
+            Use the platform to harass or threaten other users.<br>
+            Upload malware, spyware, or any harmful code.<br>
+            Violate any applicable local, national, or international laws or regulations.</p>
+            <p><b>6. Content Moderation and Removal</b><br>
+            We reserve the right to remove or disable content that violates these Terms or applicable laws, or that we find inappropriate at our discretion.<br>
+            Users may report content they believe violates platform rules or Indian laws.</p>
+            <p><b>7. Intellectual Property</b><br>
+            All trademarks, service marks, logos, and software on the platform (except for user-submitted content) are owned by Artender or its licensors.<br>
+            You agree not to copy, modify, or distribute platform materials without prior written consent.</p>
+            <p><b>8. Privacy Policy</b><br>
+            Your use of the Platform is also governed by our Privacy Policy, which outlines how your personal data is collected, used, and protected under the Information Technology (Reasonable Security Practices and Procedures and Sensitive Personal Data or Information) Rules, 2011.</p>
+            <p><b>9. Termination</b><br>
+            We may suspend or terminate your account at any time if you violate these Terms.<br>
+            Upon termination, your right to use the Platform will immediately cease, and your content may be removed.</p>
+            <p><b>10. Limitation of Liability</b><br>
+            Artender is not liable for any indirect, incidental, or consequential damages arising from your use of the Platform.<br>
+            We do not guarantee uninterrupted or error-free access to the Platform.</p>
+            <p><b>11. Dispute Resolution</b><br>
+            These Terms shall be governed by and construed in accordance with the laws of India.<br>
+            In case of any disputes, the jurisdiction shall lie with the courts of [Your City, e.g., Bhopal, Madhya Pradesh].</p>
+            <p><b>12. Amendments</b><br>
+            We reserve the right to modify these Terms at any time. We will notify users through the platform or via email. Continued use after such changes constitutes your acceptance.</p>
+            <p><b>13. Contact Us</b><br>
+            For any queries regarding these Terms, contact us at:<br>
+            📧 [Your Official Email]<br>
+            📞 [Phone Number]<br>
+            🏢 [Registered Office Address]</p>
+        </div>
+        <button type="button" onclick="document.getElementById('termsModal').style.display='none'">Close</button>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const passwordInput = document.getElementById('password');
-            const passwordStrength = document.getElementById('passwordStrength');
-            const errorBox = document.getElementById('errorBox');
+document.addEventListener('DOMContentLoaded', function () {
+    const passwordInput = document.getElementById('password');
+    const passwordStrength = document.getElementById('passwordStrength');
+    const errorBox = document.getElementById('errorBox');
+    const acceptTerms = document.getElementById('acceptTerms');
+    const submitBtn = document.getElementById('submitBtn');
+    const viewTerms = document.getElementById('viewTerms');
+    const termsModal = document.getElementById('termsModal');
 
-            // ✅ Hide Error Message After 3 Seconds
-            if (errorBox) {
-                setTimeout(() => {
-                    errorBox.style.opacity = "0";
-                    setTimeout(() => errorBox.style.display = "none", 500);
-                }, 3000);
-            }
+    // Hide error message after 3 seconds
+    if (errorBox) {
+        setTimeout(() => {
+            errorBox.style.opacity = "0";
+            setTimeout(() => errorBox.style.display = "none", 500);
+        }, 3000);
+    }
 
-            // ✅ Password Strength Checker
-            passwordInput.addEventListener('input', function () {
-                const password = passwordInput.value;
-                if (password.length < 8) {
-                    passwordStrength.textContent = "Weak Password ❌";
-                    passwordStrength.style.color = "red";
-                } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-                    passwordStrength.textContent = "Strong Password ✅";
-                    passwordStrength.style.color = "green";
-                } else {
-                    passwordStrength.textContent = "Medium Strength Password ⚠️";
-                    passwordStrength.style.color = "orange";
-                }
-            });
-        });
-    </script>
+    // Password strength checker
+    passwordInput.addEventListener('input', function () {
+        const password = passwordInput.value;
+        if (password.length < 8) {
+            passwordStrength.textContent = "Weak Password ❌";
+            passwordStrength.style.color = "red";
+        } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
+            passwordStrength.textContent = "Strong Password ✅";
+            passwordStrength.style.color = "green";
+        } else {
+            passwordStrength.textContent = "Medium Strength Password ⚠️";
+            passwordStrength.style.color = "orange";
+        }
+    });
+
+    // Show/hide submit button based on checkbox
+    acceptTerms.addEventListener('change', function () {
+        submitBtn.style.display = this.checked ? "inline-block" : "none";
+    });
+
+    // Show terms modal
+    viewTerms.addEventListener('click', function (e) {
+        e.preventDefault();
+        termsModal.style.display = "block";
+    });
+});
+</script>
 </body>
 
 </html>

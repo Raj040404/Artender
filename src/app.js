@@ -82,7 +82,10 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB limit
+  limits: {
+    fileSize: 20 * 1024 * 1024, // 20MB file size
+    fieldSize: 25 * 1024 * 1024 // 25MB for text fields (increase as needed)
+  }
 });
 
 // Set up view engine
@@ -311,6 +314,18 @@ app.post("/publish", requireLogin, upload.single("file"), async (req, res) => {
   const file = req.file; // Uploaded file from Multer
   const userId = req.session.userId;
 
+  // --- Cooldown logic: 10 seconds (10,000 ms) ---
+  const COOLDOWN_MS = 10 * 1000; // 10 seconds cooldown
+  if (!req.session.lastPostTime) {
+    req.session.lastPostTime = Date.now();
+  }
+  const now = Date.now();
+  if (req.session.lastPostTime && now - req.session.lastPostTime < COOLDOWN_MS) {
+    const waitSec = Math.ceil((COOLDOWN_MS - (now - req.session.lastPostTime)) / 1000);
+    return res.status(429).send(`Please wait ${waitSec} seconds before posting again.`);
+  }
+  // --------------------------------------------
+
   if (!userId) {
     return res.redirect("/login");
   }
@@ -358,6 +373,11 @@ app.post("/publish", requireLogin, upload.single("file"), async (req, res) => {
     });
 
     await newPost.save();
+
+    // --- Set last post time in session ---
+    req.session.lastPostTime = now;
+    // -------------------------------------
+
     res.redirect("/explorecompetitions");
   } catch (err) {
     console.error("Error posting work:", err.message);
@@ -973,6 +993,82 @@ const limiter = rateLimit({
   message: "Too many requests from this IP, please try again after a minute."
 });
 app.use(limiter);
+
+// --- Forgot Password Logic ---
+
+// Show forgot password form
+app.get("/forgot-password", (req, res) => {
+  res.render("forgotPassword");
+});
+
+// Handle forgot password form (send OTP)
+app.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+  const user = await LogInCollection.findOne({ email });
+  if (!user) {
+    return res.render("forgotPassword", { error: "No account found with this email." });
+  }
+
+  // Generate OTP and store in session (expires in 5 min)
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  req.session.forgotPassword = { email, otp, expires: Date.now() + 5 * 60 * 1000 };
+
+  // Send OTP via email
+  await transporter.sendMail({
+    from: "your-email@example.com",
+    to: email,
+    subject: "Artender Password Reset OTP",
+    text: `Your OTP for password reset is ${otp}. This OTP is valid for 5 minutes.`,
+  });
+
+  res.render("verifyForgotOTP", { email });
+});
+
+// Show OTP verification form (optional, can be combined with above)
+app.get("/verify-forgot-otp", (req, res) => {
+  res.render("verifyForgotOTP", { email: req.session.forgotPassword?.email });
+});
+
+// Handle OTP verification and show reset form
+app.post("/verify-forgot-otp", (req, res) => {
+  const { email, otp } = req.body;
+  const sessionData = req.session.forgotPassword;
+  if (
+    !sessionData ||
+    sessionData.email !== email ||
+    sessionData.otp != otp ||
+    Date.now() > sessionData.expires
+  ) {
+    return res.render("verifyForgotOTP", { email, error: "Invalid or expired OTP." });
+  }
+  // OTP valid, allow password reset
+  req.session.forgotPassword.verified = true;
+  res.render("resetPassword", { email });
+});
+
+// Handle password reset
+app.post("/reset-password", async (req, res) => {
+  const { email, password } = req.body;
+  const sessionData = req.session.forgotPassword;
+  if (
+    !sessionData ||
+    sessionData.email !== email ||
+    !sessionData.verified
+  ) {
+    return res.render("resetPassword", { email, error: "Session expired or unauthorized." });
+  }
+  if (!password || password.length < 8) {
+    return res.render("resetPassword", { email, error: "Password must be at least 8 characters." });
+  }
+
+  // Update password securely
+  await LogInCollection.findOneAndUpdate({ email }, { password });
+
+  // Clear session
+  delete req.session.forgotPassword;
+
+  res.render("login", { error: "Password reset successful. Please log in." });
+});
 
 // Start the server
 const PORT = process.env.PORT || 3000;
