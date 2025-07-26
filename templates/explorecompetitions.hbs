@@ -309,7 +309,7 @@
             <button
               type="button"
               id="resetCropBtn"
-              style="background:#eee;color:#333;border:none;padding:8px 18px;border-radius:5px;cursor:pointer;font-size:15px;transition:background 0.2s;"
+              style="background:#ef7777;color:#333;border:none;padding:8px 18px;border-radius:5px;cursor:pointer;font-size:15px;transition:background 0.2s;"
               onmouseover="this.style.background='#ccc'"
               onmouseout="this.style.background='#eee'"
             >
@@ -320,7 +320,7 @@
         <!-- Hidden input to store cropped image data -->
         <input type="hidden" id="croppedImageData" name="croppedImageData" />
 
-        <button type="submit">Publish</button>
+        <button type="submit" id="publishBtn">Publish</button>
         <button type="button" id="cancelFormBtn">Cancel</button>
       </form>
     </div>
@@ -466,6 +466,28 @@
           e.preventDefault();
           alert("Please crop the image before submitting.");
         }
+      });
+
+      // Cooldown logic for Publish button
+      const publishBtn = document.getElementById("publishBtn");
+      let publishCooldown = false;
+
+      document.querySelector("#postYourWorkForm form").addEventListener("submit", function (e) {
+        if (publishCooldown) {
+          e.preventDefault();
+          alert("Please wait before posting again.");
+          return;
+        }
+        // Disable button and start cooldown
+        publishBtn.disabled = true;
+        publishBtn.textContent = "Please wait...";
+        publishCooldown = true;
+
+        setTimeout(() => {
+          publishBtn.disabled = false;
+          publishBtn.textContent = "Publish";
+          publishCooldown = false;
+        }, 10000); // 10 seconds
       });
 
       // Like Button Functionality

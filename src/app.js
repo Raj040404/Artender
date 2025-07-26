@@ -316,9 +316,6 @@ app.post("/publish", requireLogin, upload.single("file"), async (req, res) => {
 
   // --- Cooldown logic: 10 seconds (10,000 ms) ---
   const COOLDOWN_MS = 10 * 1000; // 10 seconds cooldown
-  if (!req.session.lastPostTime) {
-    req.session.lastPostTime = Date.now();
-  }
   const now = Date.now();
   if (req.session.lastPostTime && now - req.session.lastPostTime < COOLDOWN_MS) {
     const waitSec = Math.ceil((COOLDOWN_MS - (now - req.session.lastPostTime)) / 1000);

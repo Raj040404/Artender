@@ -4480,4 +4480,48 @@
 .landing-text219 {
   display: inline-block;
 }
+.pricing-announcement {
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  text-align: center;
+  padding: 40px 20px;
+  margin: 32px auto;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(51, 153, 204, 0.08);
+  max-width: 700px;
+}
 
+.pricing-announcement-title {
+  font-size: 2rem;
+  color: #3399cc;
+  margin-bottom: 10px;
+  font-family: 'STIX Two Text', serif;
+  font-weight: 700;
+}
+
+.pricing-announcement-price {
+  font-size: 1.5rem;
+  color: #007BFF;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-family: 'Inter', sans-serif;
+}
+
+.pricing-announcement-desc {
+  font-size: 1rem;
+  color: #555;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+@media (max-width: 600px) {
+  .pricing-announcement {
+    padding: 24px 8px;
+    font-size: 1rem;
+    border-radius: 10px;
+  }
+  .pricing-announcement-title {
+    font-size: 1.3rem;
+  }
+  .pricing-announcement-price {
+    font-size: 1.1rem;
+  }
+}
