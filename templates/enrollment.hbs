@@ -297,6 +297,99 @@
       <li><strong>Failure to follow these guidelines will result in disqualification.</strong></li><br>
     </ul>
   </main>
+            <!-- Add this inside <main> after Important Guidelines -->
+<main>
+  <h3 style="text-align: center;">📄 Refund Policy:</h3><br>
+  <p style="text-align: center;">
+    To view refund policy <a href="javascript:void(0);" onclick="openRefundPolicy()" style="color:#007bff; text-decoration:underline;">click here</a>.
+  </p>
+</main>
+
+<!-- Refund Policy Modal -->
+<div id="refundPolicyModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
+  <div style="background-color:#fff; margin:5% auto; padding:20px; border:1px solid #888; width:90%; max-width:800px; border-radius:10px; font-family:Inter, sans-serif; line-height:1.6;">
+    <span onclick="closeRefundPolicy()" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
+    <h2 style="text-align:center;">Refund Policy</h2>
+    <p><strong>Effective Date:</strong> [Insert Date]<br>
+    <strong>Last Updated:</strong> [Insert Date]</p>
+
+    <p>At Artender, we strive to provide a fair and transparent experience to all our users and participants. This Refund Policy outlines the circumstances under which payments made on the platform may be refunded.</p>
+
+    <h4>1. Applicability</h4>
+    <p>This Refund Policy applies to:</p>
+    <ul>
+      <li>Competition entry fees</li>
+      <li>Promotional or featured profile charges</li>
+      <li>Subscription plans or paid services offered through Artender</li>
+    </ul>
+
+    <h4>2. General Policy</h4>
+    <p>All payments made on the platform are non-refundable unless otherwise specified in this policy.</p>
+    <p>By completing a payment, you agree to the terms outlined here and accept that refunds are limited to the cases described below.</p>
+
+    <h4>3. Refund Eligibility</h4>
+    <strong>A. Competition Entry Fees</strong>
+    <ul>
+      <li><strong>Technical Error:</strong> If a user is charged multiple times due to a technical error.</li>
+      <li><strong>Event Cancellation:</strong> If Artender cancels a competition before it begins.</li>
+      <li><strong>Entry Not Submitted Due to System Failure:</strong> If the user pays but is unable to submit their entry due to a verified platform-side issue.</li>
+    </ul>
+    <p><strong>Note:</strong> Refunds will not be provided if the participant fails to submit artwork before the deadline, is disqualified due to rule violations, or chooses to withdraw.</p>
+
+    <strong>B. Subscription or Paid Features</strong>
+    <ul>
+      <li><strong>Accidental Charges:</strong> Refunds may be granted if you were charged mistakenly and report it within 48 hours.</li>
+      <li><strong>Non-Usage:</strong> Refunds will not be issued for unused subscription time or unutilized features once the service has been activated.</li>
+      <li><strong>Recurring Payments:</strong> You are responsible for managing your subscription. Refunds will not be issued for auto-renewals unless cancellation was initiated and confirmed prior to the renewal.</li>
+    </ul>
+
+    <h4>4. How to Request a Refund</h4>
+    <p>To initiate a refund request, please contact us via email at [Insert Email] within the applicable refund period. Provide the following details:</p>
+    <ul>
+      <li>Full Name</li>
+      <li>Registered Email ID</li>
+      <li>Transaction ID</li>
+      <li>Reason for refund request</li>
+      <li>Screenshots or proof, if applicable</li>
+    </ul>
+    <p>Refund requests will be reviewed within 5-7 business days. If approved, refunds will be processed back to the original payment method within 7-14 business days.</p>
+
+    <h4>5. Chargebacks and Fraud</h4>
+    <p>Users initiating chargebacks without following the refund request process may be permanently suspended from Artender. Fraudulent claims will be reported to payment gateways and, if necessary, to appropriate legal authorities under the Information Technology Act, 2000 and Indian Penal Code (IPC), 1860.</p>
+
+    <h4>6. No Cash Refunds</h4>
+    <p>All refunds will be made to the original mode of payment. No cash refunds or offline payments will be issued.</p>
+
+    <h4>7. Changes to this Policy</h4>
+    <p>Artender reserves the right to modify or amend this policy at any time without prior notice. Please review this policy periodically. Continued use of our services implies your acceptance of any changes.</p>
+
+    <h4>8. Contact Us</h4>
+    <p>If you have any questions about this policy, feel free to contact us:<br>
+    📧 [Your Official Email]<br>
+    📞 [Your Contact Number]<br>
+    🏢 [Registered Office Address]</p>
+  </div>
+</div>
+
+<!-- JavaScript for Modal Control -->
+<script>
+  function openRefundPolicy() {
+    document.getElementById('refundPolicyModal').style.display = 'block';
+  }
+
+  function closeRefundPolicy() {
+    document.getElementById('refundPolicyModal').style.display = 'none';
+  }
+
+  // Optional: Close modal if user clicks outside the box
+  window.onclick = function (event) {
+    const modal = document.getElementById('refundPolicyModal');
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+</script>
+
 
   <footer4-wrapper class="footer4-wrapper">
     <!--Footer4 component-->
