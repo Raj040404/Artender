@@ -341,7 +341,72 @@
     }
     </style>
     <!-- ...existing code... -->
+                        <!-- ... your existing HTML content ... -->
+
+    <script>
+        function toggleNavbar() {
+            const menu = document.getElementById("navbarMenu");
+            menu.classList.toggle("open");
+        }
+    </script>
+
+    <style>
+        .navbar-menu {
+            display: none;
+            flex-direction: column;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 60px;
+            right: 16px;
+            border-radius: 8px;
+            padding: 12px;
+            z-index: 999;
+        }
+
+        .navbar-menu.open {
+            display: flex;
+        }
+
+        .navbar-menu-link {
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #333;
+            font-family: 'Noto Sans', sans-serif;
+        }
+
+        .navbar-menu-link:hover {
+            background-color: #f0f0f0;
+            border-radius: 6px;
+        }
+
+        .navbar-toggle {
+            display: none;
+            position: absolute;
+            top: 18px;
+            right: 16px;
+            cursor: pointer;
+        }
+
+        .navbar-toggle-icon {
+            width: 28px;
+            height: 28px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .navbar8-desktop-menu {
+                display: none;
+            }
+
+            .navbar-toggle {
+                display: block;
+            }
+        }
+    </style>
 
 </body>
 
 </html>
+
+
+
