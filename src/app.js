@@ -117,6 +117,9 @@ app.get("/login", (req, res) => {
 app.get("/about", (req, res) => {
   res.render("about");
 });
+app.get("/help", (req, res) => {
+  res.render("help");
+});
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
