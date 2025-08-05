@@ -73,6 +73,55 @@
       }
     }
   </style>
+  <style>
+  .artender-box {
+    background: #fff9f4; /* Matches enrollment page background */
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 1.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #333;
+  }
+
+  .artender-box h2 {
+    margin-top: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .artender-box a {
+    color: #007bff;
+    text-decoration: underline;
+  }
+
+  .modal-content {
+    background: #fff9f4;
+    padding: 30px;
+    border-radius: 16px;
+    max-width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
+    position: relative;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+  }
+
+  .close-modal-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+</style>
+
 </head>
 
 <body>
@@ -142,106 +191,120 @@
   </div>
 <main style="padding: 2rem; max-width: 1000px; margin: auto;">
   <!-- Box 1: Help Message -->
-  <section style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 1.5rem;">
-    
+  <section class="artender-box">
     <p>This is the help page. More content will be added soon.</p>
   </section>
 
   <!-- Box 2: Refund Policy Card with Modal -->
-  <section style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 1.5rem;">
+  <section class="artender-box">
     <h2>Refund Policy</h2>
-    <p>To view refund policy <a href="#" onclick="openModal()" style="color: #007bff; text-decoration: underline;">click here</a>.</p>
+    <p>To view refund policy <a href="#" onclick="openModal()">click here</a>.</p>
   </section>
 
   <!-- Box 3: Contact Us -->
-  <section style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <section class="artender-box">
     <p>If you have another query, mail us at <strong>help.artender@gmail.com</strong>.</p>
   </section>
 
-  <!-- Modal for Refund Policy -->
- <div id="refundModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
-  <div style="background: white; padding: 30px; border-radius: 12px; max-width: 90%; max-height: 90%; overflow-y: auto; position: relative;">
-    <button onclick="closeModal()" style="position: absolute; top: 10px; right: 15px; background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Close</button>
+  <!-- Modal -->
+  <div id="refundModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+    <div class="modal-content">
+      <button onclick="closeModal()" class="close-modal-btn">Close</button>
 
-    <h2 style="text-align:center;">Refund Policy</h2>
-    <p><strong>Effective Date:</strong> 30/07/2025<br>
-    <strong>Last Updated:</strong> 30/07/2025</p>
+      <section id="refund-policy">
+      <h2>Know Our Refund Policy</h2>
+      <p><strong>Effective Date:</strong>30/07/2025<br>
+        <strong>Last Updated:</strong> 30/07/2025</p>
 
-    <p>At Artender, we strive to provide a fair and transparent experience to all our users and participants. This Refund Policy outlines the circumstances under which payments made on the platform may be refunded.</p>
+      <p>At Artender, we strive to provide a fair and transparent experience to all our users and participants. This Refund Policy outlines the circumstances under which payments made on the platform may be refunded.</p>
 
-    <h4>1. Applicability</h4>
-    <p>This Refund Policy applies to:</p>
-    <ul>
-      <li>Competition entry fees</li>
-      <li>Promotional or featured profile charges</li>
-      <li>Subscription plans or paid services offered through Artender</li>
-    </ul>
+      <h3>1. Applicability</h3>
+      <p>This Refund Policy applies to:</p>
+      <ul>
+        <li>Competition entry fees</li>
+        <li>Promotional or featured profile charges</li>
+        <li>Subscription plans or paid services offered through Artender</li>
+      </ul>
 
-    <h4>2. General Policy</h4>
-    <p>All payments made on the platform are non-refundable unless otherwise specified in this policy.</p>
-    <p>By completing a payment, you agree to the terms outlined here and accept that refunds are limited to the cases described below.</p>
+      <h3>2. General Policy</h3>
+      <p>All payments made on the platform are non-refundable unless otherwise specified in this policy.</p>
+      <p>By completing a payment, you agree to the terms outlined here and accept that refunds are limited to the cases described below.</p>
 
-    <h4>3. Refund Eligibility</h4>
-    <strong>A. Competition Entry Fees</strong>
-    <ul>
-      <li><strong>Technical Error:</strong> If a user is charged multiple times due to a technical error.</li>
-      <li><strong>Event Cancellation:</strong> If Artender cancels a competition before it begins.</li>
-      <li><strong>Entry Not Submitted Due to System Failure:</strong> If the user pays but is unable to submit their entry due to a verified platform-side issue.</li>
-    </ul>
-    <p><strong>Note:</strong> Refunds will not be provided if the participant fails to submit artwork before the deadline, is disqualified due to rule violations, or chooses to withdraw.</p>
+      <h3>3. Refund Eligibility</h3>
 
-    <strong>B. Subscription or Paid Features</strong>
-    <ul>
-      <li><strong>Accidental Charges:</strong> Refunds may be granted if you were charged mistakenly and report it within 48 hours.</li>
-      <li><strong>Non-Usage:</strong> Refunds will not be issued for unused subscription time or unutilized features once the service has been activated.</li>
-      <li><strong>Recurring Payments:</strong> You are responsible for managing your subscription. Refunds will not be issued for auto-renewals unless cancellation was initiated and confirmed prior to the renewal.</li>
-    </ul>
+      <h4>A. Competition Entry Fees</h4>
+      <p>Refunds for competition entries will only be granted under the following conditions:</p>
+      <ul>
+        <li><strong>Technical Error:</strong> If a user is charged multiple times due to a technical error.</li>
+        <li><strong>Event Cancellation:</strong> If Artender cancels a competition before it begins.</li>
+        <li><strong>Entry Not Submitted Due to System Failure:</strong> If the user pays but is unable to submit their entry due to a verified platform-side issue.</li>
+      </ul>
+      <p><strong>Note:</strong> Refunds will not be provided if the participant fails to submit artwork before the deadline, is disqualified due to rule violations, or chooses to withdraw.</p>
 
-    <h4>4. How to Request a Refund</h4>
-    <p>To initiate a refund request, please contact us via email at <strong>help.artender@gmail.com</strong> within the applicable refund period. Provide the following details:</p>
-    <ul>
-      <li>Full Name</li>
-      <li>Registered Email ID</li>
-      <li>Transaction ID</li>
-      <li>Reason for refund request</li>
-      <li>Screenshots or proof, if applicable</li>
-    </ul>
-    <p>Refund requests will be reviewed within 5-7 business days. If approved, refunds will be credited back to the original payment method within 7-14 business days.</p>
+      <h4>B. Subscription or Paid Features</h4>
+      <ul>
+        <li><strong>Accidental Charges:</strong> Refunds may be granted if you were charged mistakenly and report it within 48 hours.</li>
+        <li><strong>Non-Usage:</strong> Refunds will not be issued for unused subscription time or unutilized features once the service has been activated.</li>
+        <li><strong>Recurring Payments:</strong> You are responsible for managing your subscription. Refunds will not be issued for auto-renewals unless cancellation was initiated and confirmed prior to the renewal.</li>
+      </ul>
 
-    <h4>5. Chargebacks and Fraud</h4>
-    <p>Users initiating chargebacks without following the refund request process may be permanently suspended from Artender. Fraudulent claims will be reported to payment gateways and, if necessary, to appropriate legal authorities under the Information Technology Act, 2000 and Indian Penal Code (IPC), 1860.</p>
+      <h3>4. How to Request a Refund</h3>
+      <p>To initiate a refund request, please contact us via email at <strong>help.artender@gmail.com</strong> within the applicable refund period. Provide the following details:</p>
+      <ul>
+        <li>Full Name</li>
+        <li>Registered Email ID</li>
+        <li>Transaction ID</li>
+        <li>Reason for refund request</li>
+        <li>Screenshots or proof, if applicable</li>
+      </ul>
+      <p>Refund requests will be reviewed within 5–7 business days. If approved, refunds will be credited back to the original payment method within 7–14 business days.</p>
 
-    <h4>>6. Mode of Refund</h4>
-    <p>Any approved refund will be credited back to the original mode of payment. Refunds will not be issued through any alternate methods.</p>
+      <h3>5. Chargebacks and Fraud</h3>
+      <p>Users initiating chargebacks without following the refund request process may be permanently suspended from Artender. Fraudulent claims will be reported to payment gateways and, if necessary, to appropriate legal authorities under the Information Technology Act, 2000 and Indian Penal Code (IPC), 1860.</p>
 
-    <h4>7. Changes to this Policy</h4>
-    <p>Artender reserves the right to modify or amend this policy at any time without prior notice. Please review this policy periodically. Continued use of our services implies your acceptance of any changes.</p>
+      <h3>6. Mode of Refund</h3>
+      <p>Any approved refund will be credited back to the original mode of payment. Refunds will not be issued through any alternate methods.</p>
 
-    <h4>8. Contact Us</h4>
-    <p>If you have any questions about this policy, feel free to contact us:<br>
-    📧 help.artender@gmail.com<br>
-    🏢 Sishu Mandir Road, Dindori, 481880</p>
+      <h3>7. Changes to this Policy</h3>
+      <p>Artender reserves the right to modify or amend this policy at any time without prior notice. Please review this policy periodically. Continued use of our services implies your acceptance of any changes.</p>
+
+      <h3>8. Contact Us</h3>
+      <p>If you have any questions about this policy, feel free to contact us:</p>
+      <ul>
+        <li>📧 <strong>help.artender@gmail.com</strong></li>
+        <li>🏢 <strong>Sishu Mandir Road, Dindori, 481880</strong></li>
+      </ul>
+        </section>
+
+    </div>
   </div>
-</div>
+  
 
-
-  <script>
-    function openModal() {
-      document.getElementById('refundModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-      document.getElementById('refundModal').style.display = 'none';
-    }
-  </script>
 </main>
+
 
   <script>
     function toggleNavbar() {
       const menu = document.getElementById("navbarMenu");
       menu.classList.toggle("open");
     }
+    
   </script>
+            <script>
+  function toggleNavbar() {
+    const menu = document.getElementById("navbarMenu");
+    menu.classList.toggle("open");
+  }
+
+  function openModal() {
+    document.getElementById('refundModal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('refundModal').style.display = 'none';
+  }
+</script>
+
 </body>
 
 </html>
