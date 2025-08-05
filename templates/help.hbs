@@ -154,7 +154,7 @@
               </a>
               <a href="/about" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
                 <fragment class="landing-fragment110">
-                  <span class="landing-text110">About us</span>
+                  < class="landing-text110">About us</>
                 </fragment>
               </a>
             </nav>
@@ -209,7 +209,7 @@
   <!-- Modal -->
  <div id="refundPolicyModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
   <div style="background-color:#fff; margin:5% auto; padding:20px; border:1px solid #888; width:90%; max-width:800px; border-radius:10px; font-family:Inter, sans-serif; line-height:1.6;">
-    <span onclick="closeRefundPolicy()" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
+    <span onclick="closeModal()" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
 <!--       <button onclick="closeModal()" class="close-modal-btn">Close</button> -->
 
       <section id="refund-policy">
@@ -284,14 +284,8 @@
 </main>
 
 
+  
   <script>
-    function toggleNavbar() {
-      const menu = document.getElementById("navbarMenu");
-      menu.classList.toggle("open");
-    }
-    
-  </script>
-            <script>
   function toggleNavbar() {
     const menu = document.getElementById("navbarMenu");
     menu.classList.toggle("open");
