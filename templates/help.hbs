@@ -1,99 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Help - Artender</title>
+
   <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/profile.css">
+  <link rel="stylesheet" href="/css/explore.css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" />
+
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      padding: 0;
       background: #fafafa;
-      color: #333;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    header {
-      background: linear-gradient(90deg, #ff758c, #ff7eb3);
-      color: white;
-      padding: 1.5rem 2rem;
-      text-align: center;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    .navbar-menu {
+      display: none;
+      flex-direction: column;
+      background-color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: absolute;
+      top: 60px;
+      right: 16px;
+      border-radius: 8px;
+      padding: 12px;
+      z-index: 999;
     }
 
-    main {
-      padding: 2rem;
-      max-width: 1000px;
-      margin: auto;
+    .navbar-menu.open {
+      display: flex;
     }
 
-    section {
-      background: white;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      transition: transform 0.3s ease;
-    }
-
-    section:hover {
-      transform: translateY(-4px);
-    }
-
-    h1, h2, h3, h4 {
-      font-weight: 700;
-      color: #2b2b2b;
-    }
-
-    h2 {
-      color: #d6336c;
-      border-left: 6px solid #ff8fab;
-      padding-left: 12px;
-      margin-top: 0;
-    }
-
-    ul {
-      padding-left: 1.5rem;
-      margin-top: 0.5rem;
-    }
-
-    ul li {
-      margin-bottom: 0.5rem;
-    }
-
-    strong {
-      color: #333;
-    }
-
-    p {
-      line-height: 1.6;
-    }
-
-    a {
-      color: #ff5c8a;
+    .navbar-menu-link {
+      padding: 8px 12px;
       text-decoration: none;
+      color: #333;
+      font-family: 'Noto Sans', sans-serif;
     }
 
-    a:hover {
-      text-decoration: underline;
+    .navbar-menu-link:hover {
+      background-color: #f0f0f0;
+      border-radius: 6px;
+    }
+
+    .navbar-toggle {
+      display: none;
+      position: absolute;
+      top: 18px;
+      right: 16px;
+      cursor: pointer;
+    }
+
+    .navbar-toggle-icon {
+      width: 28px;
+      height: 28px;
+    }
+
+    @media screen and (max-width: 768px) {
+      .navbar8-desktop-menu {
+        display: none;
+      }
+
+      .navbar-toggle {
+        display: block;
+      }
     }
   </style>
 </head>
-<body>
-  <header>
-    <h1>Help & Support</h1>
-  </header>
 
-  <main>
+<body>
+  <div class="landing-container">
+    <navbar8-wrapper class="navbar8-wrapper">
+      <header class="navbar8-container1">
+        <header data-thq="thq-navbar" class="navbar8-navbar-interactive">
+          <img alt="logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg" class="navbar8-image1" />
+          <div data-thq="thq-navbar-nav" class="navbar8-desktop-menu">
+            <nav class="navbar8-links1">
+              <a href="/home" class="navbar8-link11 thq-link thq-body-small">
+                <fragment class="landing-fragment104">
+                  <span class="landing-text104">Home</span>
+                </fragment>
+              </a>
+              <a href="/explorecompetitions" class="navbar8-link11 thq-link thq-body-small">
+                <fragment class="landing-fragment104">
+                  <span class="landing-text104">Explore Artworks</span>
+                </fragment>
+              </a>
+              <a href="/competitions" class="thq-link thq-body-small">
+                <fragment class="landing-fragment102">
+                  <span class="landing-text102">Participate in Competitions</span>
+                </fragment>
+              </a>
+              <a href="/profile" class="navbar8-link31 thq-link thq-body-small">
+                <fragment class="landing-fragment110">
+                  <span class="landing-text110">Profile</span>
+                </fragment>
+              </a>
+              <a href="/about" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
+                <fragment class="landing-fragment110">
+                  <span class="landing-text110">About us</span>
+                </fragment>
+              </a>
+            </nav>
+            <div class="navbar8-buttons1">
+              <a href="/logout">
+                <button class="navbar8-action11 thq-button-animated thq-button-filled">
+                  <span>
+                    <fragment class="landing-fragment101">
+                      <span class="landing-text101">Logout</span>
+                    </fragment>
+                  </span>
+                </button>
+              </a>
+            </div>
+            <div class="navbar8-container7 thq-box-shadow">
+        </header>
+      </header>
+    </navbar8-wrapper>
+
+    <div class="navbar-toggle" onclick="toggleNavbar()">
+      <img src="/navigation-aligned-dots-more-horizontal-three-dots-option-icon-svgrepo-com.svg" alt="Menu"
+        class="navbar-toggle-icon">
+    </div>
+
+    <div id="navbarMenu" class="navbar-menu">
+      <nav class="navbar-menu-links">
+        <a href="/home" class="navbar-menu-link">Home</a>
+        <a href="/explorecompetitions" class="navbar-menu-link">Explore Artworks</a>
+        <a href="/competitions" class="navbar-menu-link">Participate in Competitions</a>
+        <a href="/profile" class="navbar-menu-link">Profile</a>
+        <a href="/about" class="navbar-menu-link">About us</a>
+      </nav>
+    </div>
+  </div>
+
+  <main style="padding: 2rem; max-width: 1000px; margin: auto;">
     <section>
+      <h1>Help & Support</h1>
       <p>This is the help page. More content will be added soon.</p>
     </section>
 
     <section id="refund-policy">
       <h2>Know Our Refund Policy</h2>
       <p><strong>Effective Date:</strong>30/07/2025<br>
-         <strong>Last Updated:</strong> 30/07/2025</p>
+        <strong>Last Updated:</strong> 30/07/2025</p>
 
       <p>At Artender, we strive to provide a fair and transparent experience to all our users and participants. This Refund Policy outlines the circumstances under which payments made on the platform may be refunded.</p>
 
@@ -155,5 +212,13 @@
       </ul>
     </section>
   </main>
+
+  <script>
+    function toggleNavbar() {
+      const menu = document.getElementById("navbarMenu");
+      menu.classList.toggle("open");
+    }
+  </script>
 </body>
+
 </html>
