@@ -1,161 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
+<main style="padding: 2rem; max-width: 1000px; margin: auto;">
+  <!-- Box 1: Help Message -->
+  <section style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 1.5rem;">
+    <h1>Help & Support</h1>
+    <p>This is the help page. More content will be added soon.</p>
+  </section>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Help - Artender</title>
+  <!-- Box 2: Refund Policy Card with Modal -->
+  <section style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 1.5rem;">
+    <h2>Refund Policy</h2>
+    <p>To view refund policy <a href="#" onclick="openModal()" style="color: #007bff; text-decoration: underline;">click here</a>.</p>
+  </section>
 
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/css/profile.css">
-  <link rel="stylesheet" href="/css/explore.css" />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" />
+  <!-- Box 3: Contact Us -->
+  <section style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    <p>If you have another query, mail us at <strong>help.artender@gmail.com</strong>.</p>
+  </section>
 
-  <style>
-    body {
-      margin: 0;
-      background: #fafafa;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .navbar-menu {
-      display: none;
-      flex-direction: column;
-      background-color: white;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      position: absolute;
-      top: 60px;
-      right: 16px;
-      border-radius: 8px;
-      padding: 12px;
-      z-index: 999;
-    }
-
-    .navbar-menu.open {
-      display: flex;
-    }
-
-    .navbar-menu-link {
-      padding: 8px 12px;
-      text-decoration: none;
-      color: #333;
-      font-family: 'Noto Sans', sans-serif;
-    }
-
-    .navbar-menu-link:hover {
-      background-color: #f0f0f0;
-      border-radius: 6px;
-    }
-
-    .navbar-toggle {
-      display: none;
-      position: absolute;
-      top: 18px;
-      right: 16px;
-      cursor: pointer;
-    }
-
-    .navbar-toggle-icon {
-      width: 28px;
-      height: 28px;
-    }
-
-    @media screen and (max-width: 768px) {
-      .navbar8-desktop-menu {
-        display: none;
-      }
-
-      .navbar-toggle {
-        display: block;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="landing-container">
-    <navbar8-wrapper class="navbar8-wrapper">
-      <header class="navbar8-container1">
-        <header data-thq="thq-navbar" class="navbar8-navbar-interactive">
-          <img alt="logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg" class="navbar8-image1" />
-          <div data-thq="thq-navbar-nav" class="navbar8-desktop-menu">
-            <nav class="navbar8-links1">
-              <a href="/home" class="navbar8-link11 thq-link thq-body-small">
-                <fragment class="landing-fragment104">
-                  <span class="landing-text104">Home</span>
-                </fragment>
-              </a>
-              <a href="/explorecompetitions" class="navbar8-link11 thq-link thq-body-small">
-                <fragment class="landing-fragment104">
-                  <span class="landing-text104">Explore Artworks</span>
-                </fragment>
-              </a>
-              <a href="/competitions" class="thq-link thq-body-small">
-                <fragment class="landing-fragment102">
-                  <span class="landing-text102">Participate in Competitions</span>
-                </fragment>
-              </a>
-              <a href="/profile" class="navbar8-link31 thq-link thq-body-small">
-                <fragment class="landing-fragment110">
-                  <span class="landing-text110">Profile</span>
-                </fragment>
-              </a>
-              <a href="/about" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
-                <fragment class="landing-fragment110">
-                  <span class="landing-text110">About us</span>
-                </fragment>
-              </a>
-            </nav>
-            <div class="navbar8-buttons1">
-              <a href="/logout">
-                <button class="navbar8-action11 thq-button-animated thq-button-filled">
-                  <span>
-                    <fragment class="landing-fragment101">
-                      <span class="landing-text101">Logout</span>
-                    </fragment>
-                  </span>
-                </button>
-              </a>
-            </div>
-            <div class="navbar8-container7 thq-box-shadow">
-        </header>
-      </header>
-    </navbar8-wrapper>
-
-    <div class="navbar-toggle" onclick="toggleNavbar()">
-      <img src="/navigation-aligned-dots-more-horizontal-three-dots-option-icon-svgrepo-com.svg" alt="Menu"
-        class="navbar-toggle-icon">
-    </div>
-
-    <div id="navbarMenu" class="navbar-menu">
-      <nav class="navbar-menu-links">
-        <a href="/home" class="navbar-menu-link">Home</a>
-        <a href="/explorecompetitions" class="navbar-menu-link">Explore Artworks</a>
-        <a href="/competitions" class="navbar-menu-link">Participate in Competitions</a>
-        <a href="/profile" class="navbar-menu-link">Profile</a>
-        <a href="/about" class="navbar-menu-link">About us</a>
-      </nav>
-    </div>
-  </div>
-
-  <main style="padding: 2rem; max-width: 1000px; margin: auto;">
-    <section>
-      <h1>Help & Support</h1>
-      <p>This is the help page. More content will be added soon.</p>
-    </section>
-
-    <section id="refund-policy">
-      <h2>Know Our Refund Policy</h2>
-      <p><strong>Effective Date:</strong>30/07/2025<br>
-        <strong>Last Updated:</strong> 30/07/2025</p>
-
-      <p>At Artender, we strive to provide a fair and transparent experience to all our users and participants. This Refund Policy outlines the circumstances under which payments made on the platform may be refunded.</p>
+  <!-- Modal for Refund Policy -->
+  <div id="refundModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: white; padding: 30px; border-radius: 12px; max-width: 90%; max-height: 90%; overflow-y: auto; position: relative;">
+      <button onclick="closeModal()" style="position: absolute; top: 10px; right: 15px; background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Close</button>
+      <h2>Refund Policy</h2>
+      <p><strong>Effective Date:</strong> 30/07/2025<br><strong>Last Updated:</strong> 30/07/2025</p>
+      <p>At Artender, we strive to provide a fair and transparent experience...</p>
 
       <h3>1. Applicability</h3>
-      <p>This Refund Policy applies to:</p>
       <ul>
         <li>Competition entry fees</li>
         <li>Promotional or featured profile charges</li>
@@ -163,62 +32,56 @@
       </ul>
 
       <h3>2. General Policy</h3>
-      <p>All payments made on the platform are non-refundable unless otherwise specified in this policy.</p>
-      <p>By completing a payment, you agree to the terms outlined here and accept that refunds are limited to the cases described below.</p>
+      <p>All payments made on the platform are non-refundable unless otherwise specified...</p>
 
       <h3>3. Refund Eligibility</h3>
-
       <h4>A. Competition Entry Fees</h4>
-      <p>Refunds for competition entries will only be granted under the following conditions:</p>
       <ul>
-        <li><strong>Technical Error:</strong> If a user is charged multiple times due to a technical error.</li>
-        <li><strong>Event Cancellation:</strong> If Artender cancels a competition before it begins.</li>
-        <li><strong>Entry Not Submitted Due to System Failure:</strong> If the user pays but is unable to submit their entry due to a verified platform-side issue.</li>
+        <li><strong>Technical Error:</strong> Charged multiple times...</li>
+        <li><strong>Event Cancellation:</strong> If Artender cancels...</li>
+        <li><strong>System Failure:</strong> Paid but unable to submit due to system issue.</li>
       </ul>
-      <p><strong>Note:</strong> Refunds will not be provided if the participant fails to submit artwork before the deadline, is disqualified due to rule violations, or chooses to withdraw.</p>
 
-      <h4>B. Subscription or Paid Features</h4>
+      <h4>B. Subscriptions</h4>
       <ul>
-        <li><strong>Accidental Charges:</strong> Refunds may be granted if you were charged mistakenly and report it within 48 hours.</li>
-        <li><strong>Non-Usage:</strong> Refunds will not be issued for unused subscription time or unutilized features once the service has been activated.</li>
-        <li><strong>Recurring Payments:</strong> You are responsible for managing your subscription. Refunds will not be issued for auto-renewals unless cancellation was initiated and confirmed prior to the renewal.</li>
+        <li><strong>Accidental Charges</strong></li>
+        <li><strong>Non-Usage</strong></li>
+        <li><strong>Recurring Payments</strong></li>
       </ul>
 
       <h3>4. How to Request a Refund</h3>
-      <p>To initiate a refund request, please contact us via email at <strong>help.artender@gmail.com</strong> within the applicable refund period. Provide the following details:</p>
+      <p>Email us at <strong>help.artender@gmail.com</strong> with:</p>
       <ul>
         <li>Full Name</li>
-        <li>Registered Email ID</li>
+        <li>Registered Email</li>
         <li>Transaction ID</li>
-        <li>Reason for refund request</li>
-        <li>Screenshots or proof, if applicable</li>
+        <li>Reason and evidence</li>
       </ul>
-      <p>Refund requests will be reviewed within 5–7 business days. If approved, refunds will be credited back to the original payment method within 7–14 business days.</p>
 
       <h3>5. Chargebacks and Fraud</h3>
-      <p>Users initiating chargebacks without following the refund request process may be permanently suspended from Artender. Fraudulent claims will be reported to payment gateways and, if necessary, to appropriate legal authorities under the Information Technology Act, 2000 and Indian Penal Code (IPC), 1860.</p>
+      <p>Improper chargebacks may result in account suspension or legal action...</p>
 
       <h3>6. Mode of Refund</h3>
-      <p>Any approved refund will be credited back to the original mode of payment. Refunds will not be issued through any alternate methods.</p>
+      <p>Refunds only via original payment mode.</p>
 
       <h3>7. Changes to this Policy</h3>
-      <p>Artender reserves the right to modify or amend this policy at any time without prior notice. Please review this policy periodically. Continued use of our services implies your acceptance of any changes.</p>
+      <p>Policy may be updated without prior notice.</p>
 
-      <h3>8. Contact Us</h3>
-      <p>If you have any questions about this policy, feel free to contact us:</p>
+      <h3>8. Contact</h3>
       <ul>
-        <li>📧 <strong>help.artender@gmail.com</strong></li>
-        <li>🏢 <strong>Sishu Mandir Road, Dindori, 481880</strong></li>
+        <li>📧 help.artender@gmail.com</li>
+        <li>🏢 Sishu Mandir Road, Dindori, 481880</li>
       </ul>
-    </section>
-  </main>
+    </div>
+  </div>
 
   <script>
-    function toggleNavbar() {
-      const menu = document.getElementById("navbarMenu");
-      menu.classList.toggle("open");
+    function openModal() {
+      document.getElementById('refundModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('refundModal').style.display = 'none';
     }
   </script>
-</body>
-
-</html>
+</main>
