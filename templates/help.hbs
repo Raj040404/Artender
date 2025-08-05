@@ -207,9 +207,10 @@
   </section>
 
   <!-- Modal -->
-  <div id="refundModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
-    <div class="modal-content">
-      <button onclick="closeModal()" class="close-modal-btn">Close</button>
+ <div id="refundPolicyModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
+  <div style="background-color:#fff; margin:5% auto; padding:20px; border:1px solid #888; width:90%; max-width:800px; border-radius:10px; font-family:Inter, sans-serif; line-height:1.6;">
+    <span onclick="closeRefundPolicy()" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
+<!--       <button onclick="closeModal()" class="close-modal-btn">Close</button> -->
 
       <section id="refund-policy">
       <h2>Know Our Refund Policy</h2>
