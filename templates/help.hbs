@@ -225,11 +225,11 @@
                     <span class="landing-text110">About us</span>
                   </fragment>
                 </a>
-                 <a href="/help" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
+<!--                  <a href="/help" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
     <fragment class="landing-fragment111">
       <span class="landing-text111">Help</span>
     </fragment>
-  </a>
+  </a> -->
               </nav>
               <div class="navbar8-buttons1">
                 <a href="/logout">
@@ -287,16 +287,13 @@
     </form>
     <p>Amount to pay: ₹{{contest.price}}</p>
 
-  </main>
-  <main> -->
-    <h3 style="text-align: center;">⚠️ Important Guidelines:</h3><br>
-    <ul class="guidelines" style="list-style-position: inside; padding-left: 0; text-align: left;">
-      <li><strong>Your artwork must be original and self-created.</strong></li><br>
-      <li><strong>A visible signature should be placed at the bottom of the artwork.</strong></li><br>
-      <li><strong>The image should not exceed 20MB in size.</strong></li><br>
-      <li><strong>Failure to follow these guidelines will result in disqualification.</strong></li><br>
-    </ul>
-  </main>
+  </main>  -->
+  <main>
+  <h3 style="text-align: center;">🔒 Privacy Policy:</h3><br>
+  <p style="text-align: center;">
+    To view privacy policy <a href="javascript:void(0);" onclick="openPrivacyPolicy()" style="color:#007bff; text-decoration:underline;">click here</a>.
+  </p>
+</main>
             <!-- Add this inside <main> after Important Guidelines -->
 <main>
   <h3 style="text-align: center;">📄 Refund Policy:</h3><br>
@@ -304,6 +301,41 @@
     To view refund policy <a href="javascript:void(0);" onclick="openRefundPolicy()" style="color:#007bff; text-decoration:underline;">click here</a>.
   </p>
 </main>
+            <div id="privacyPolicyModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
+  <div style="background-color:#fff; margin:5% auto; padding:20px; border:1px solid #888; width:90%; max-width:800px; border-radius:10px; font-family:Inter, sans-serif; line-height:1.6;">
+    <span onclick="closePrivacyPolicy()" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
+    <h2 style="text-align:center;">Privacy Policy</h2>
+    <p><strong>Effective Date:</strong> 30/07/2025<br>
+    <strong>Last Updated:</strong> 30/07/2025</p>
+
+    <p>We value your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and protect your information when you use Artender.</p>
+
+    <h4>1. Information We Collect</h4>
+    <ul>
+      <li>Personal details such as name, email, phone number, etc.</li>
+      <li>Uploaded files (images/videos for contest entry)</li>
+      <li>Usage data (e.g., browsing activity on the site)</li>
+    </ul>
+
+    <h4>2. How We Use Your Information</h4>
+    <ul>
+      <li>To manage your participation in contests</li>
+      <li>To improve our platform and user experience</li>
+      <li>To communicate important updates and announcements</li>
+    </ul>
+
+    <h4>3. Data Protection</h4>
+    <p>We implement appropriate technical and organizational measures to secure your data and prevent unauthorized access.</p>
+
+    <h4>4. Sharing of Information</h4>
+    <p>Your data is never sold. It may be shared only with third-party services essential to running Artender (e.g., payment gateways), under strict privacy obligations.</p>
+
+    <h4>5. Contact Us</h4>
+    <p>If you have any questions about our Privacy Policy, reach out to:<br>
+    📧 help.artender@gmail.com<br>
+    🏢 Sishu Mandir Road, Dindori, 481880</p>
+  </div>
+</div>
 
 <!-- Refund Policy Modal -->
 <div id="refundPolicyModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
@@ -449,6 +481,20 @@
           alert('Failed to upload file: ' + (await uploadRes.text()));
           return;
         }
+        function openPrivacyPolicy() {
+    document.getElementById('privacyPolicyModal').style.display = 'block';
+  }
+
+  function closePrivacyPolicy() {
+    document.getElementById('privacyPolicyModal').style.display = 'none';
+  }
+
+  window.onclick = function (event) {
+    const modal = document.getElementById('privacyPolicyModal');
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
 
         // 2. Now create payment order
         const orderRes = await fetch('/api/create-cf-order', {
