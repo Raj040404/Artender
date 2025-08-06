@@ -449,39 +449,7 @@
   <!-- Place this at the END of your <body> -->
   <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // Handle already enrolled state
-      var alreadyEnrolled = {{#if alreadyEnrolled}}true{{else}}false{{/if}};
-      if (alreadyEnrolled) {
-        document.getElementById('enrollButton').disabled = true;
-        document.getElementById('popupMessage').style.display = 'block';
-        document.getElementById('enrollButton').textContent = 'Already Enrolled';
-      }
-
-      document.getElementById('enrollButton').onclick = async function (e) {
-        e.preventDefault();
-        if (alreadyEnrolled) return;
-
-        const contestId = "{{contest.contestId}}";
-        const phone = document.getElementById('phone').value;
-
-        // 1. Upload file and info to backend
-        const form = document.getElementById('enrollmentForm');
-        const formData = new FormData(form);
-
-        // Add phone to formData if not present
-        if (!formData.has('phone')) formData.append('phone', phone);
-
-        // Send to backend
-        const uploadRes = await fetch(`/enroll/${contestId}`, {
-          method: 'POST',
-          body: formData
-        });
-        if (!uploadRes.ok) {
-          alert('Failed to upload file: ' + (await uploadRes.text()));
-          return;
-        }
-        function openPrivacyPolicy() {
+  function openPrivacyPolicy() {
     document.getElementById('privacyPolicyModal').style.display = 'block';
   }
 
@@ -489,45 +457,27 @@
     document.getElementById('privacyPolicyModal').style.display = 'none';
   }
 
+  function openRefundPolicy() {
+    document.getElementById('refundPolicyModal').style.display = 'block';
+  }
+
+  function closeRefundPolicy() {
+    document.getElementById('refundPolicyModal').style.display = 'none';
+  }
+
+  // Close modal when user clicks outside of it
   window.onclick = function (event) {
-    const modal = document.getElementById('privacyPolicyModal');
-    if (event.target === modal) {
-      modal.style.display = "none";
+    const privacyModal = document.getElementById('privacyPolicyModal');
+    const refundModal = document.getElementById('refundPolicyModal');
+
+    if (event.target === privacyModal) {
+      privacyModal.style.display = "none";
+    } else if (event.target === refundModal) {
+      refundModal.style.display = "none";
     }
   };
+</script>
 
-        // 2. Now create payment order
-        const orderRes = await fetch('/api/create-cf-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contestId, phone })
-        });
-        const orderData = await orderRes.json();
-        console.log("Order data from backend:", orderData);
-
-        const paymentSessionId = orderData.paymentSessionId || orderData.payment_session_id;
-        if (!paymentSessionId) {
-          alert('Failed to create payment order');
-          return;
-        }
-
-        setTimeout(function() {
-          let cf = window.Cashfree;
-          if (typeof cf === "function") {
-            cf = cf({ mode: "sandbox" });
-          }
-          if (!cf || typeof cf.checkout !== "function") {
-            alert("Cashfree SDK not loaded or checkout not available!");
-            return;
-          }
-          cf.checkout({
-            paymentSessionId: paymentSessionId,
-            redirectTarget: "_self"
-          });
-        }, 0);
-      };
-    });
-  </script>
   <!-- Display uploaded file or video -->
   {{#if file}}
     {{#if (contains file ".mp4") }}
