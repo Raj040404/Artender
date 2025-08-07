@@ -301,6 +301,12 @@
     To view refund policy <a href="javascript:void(0);" onclick="openRefundPolicy()" style="color:#007bff; text-decoration:underline;">click here</a>.
   </p>
 </main>
+            <main>
+  <h3 style="text-align: center;">📜 Terms and Conditions:</h3><br>
+  <p style="text-align: center;">
+    To view terms and conditions <a href="javascript:void(0);" onclick="openTermsConditions()" style="color:#007bff; text-decoration:underline;">click here</a>.
+  </p>
+</main>
             <div id="privacyPolicyModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
   <div style="background-color:#fff; margin:5% auto; padding:20px; border:1px solid #888; width:90%; max-width:800px; border-radius:10px; font-family:Inter, sans-serif; line-height:1.6;">
     <span onclick="closePrivacyPolicy()" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
@@ -425,6 +431,30 @@
     🏢 Sishu Mandir Road, Dindori, 481880</p>
   </div>
 </div>
+
+            <!-- Terms and Conditions Modal -->
+<div id="termsConditionsModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
+  <div style="background-color:#fff; margin:5% auto; padding:20px; border:1px solid #888; width:90%; max-width:800px; border-radius:10px; font-family:Inter, sans-serif; line-height:1.6;">
+    <span onclick="closeTermsConditions()" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
+    <h2 style="text-align:center;">Terms and Conditions</h2>
+    <div class="terms-content">
+      <p>Welcome to Artender (“we”, “us”, or “our”). By accessing or using the Artender website, mobile application, or any services provided by us (collectively, the “Platform”), you (“User”, “you”) agree to be bound by these Terms and Conditions. These Terms apply in accordance with the laws of India, including the Information Technology Act, 2000 and related rules.</p>
+      <p><b>1. Eligibility</b><br>You must be at least 18 years of age or have obtained parental/legal guardian consent to use the Platform.<br>By registering, you represent and warrant that you have the right, authority, and capacity to enter into these Terms.</p>
+      <p><b>2. User Accounts</b><br>To use certain features such as posting artwork or entering competitions, you must create an account.<br>You agree to provide accurate and complete information and to keep it updated.<br>You are responsible for maintaining the confidentiality of your account credentials.</p>
+      <p><b>3. User Content and Ownership</b><br>Users can post artwork, images, videos, text, and other materials (“Content”).<br>You retain ownership of the content you post, but by uploading it to Artender, you grant us a non-exclusive, royalty-free, worldwide license to use, display, reproduce, and distribute it solely for promotion and platform operation.<br>You confirm that you have all necessary rights and permissions to upload and share such content, and that your content does not infringe on any third-party rights.</p>
+      <p><b>4. Competitions</b><br>Artender hosts art competitions which may have additional rules, eligibility criteria, deadlines, and rewards.<br>By entering a competition, you agree to be bound by the specific rules of that competition.<br>Any prizes or rewards will be distributed as stated in the competition description. Taxes, if applicable, are the responsibility of the winner(s).<br>Submissions must be original. Plagiarized or AI-generated content without proper disclosure may lead to disqualification.</p>
+      <p><b>5. Prohibited Activities</b><br>You agree not to:<br>Post any content that is unlawful, harmful, defamatory, obscene, hateful, or discriminatory.<br>Use the platform to harass or threaten other users.<br>Upload malware, spyware, or any harmful code.<br>Violate any applicable local, national, or international laws or regulations.</p>
+      <p><b>6. Content Moderation and Removal</b><br>We reserve the right to remove or disable content that violates these Terms or applicable laws, or that we find inappropriate at our discretion.<br>Users may report content they believe violates platform rules or Indian laws.</p>
+      <p><b>7. Intellectual Property</b><br>All trademarks, service marks, logos, and software on the platform (except for user-submitted content) are owned by Artender or its licensors.<br>You agree not to copy, modify, or distribute platform materials without prior written consent.</p>
+      <p><b>8. Privacy Policy</b><br>Your use of the Platform is also governed by our Privacy Policy, which outlines how your personal data is collected, used, and protected under the Information Technology (Reasonable Security Practices and Procedures and Sensitive Personal Data or Information) Rules, 2011.</p>
+      <p><b>9. Termination</b><br>We may suspend or terminate your account at any time if you violate these Terms.<br>Upon termination, your right to use the Platform will immediately cease, and your content may be removed.</p>
+      <p><b>10. Limitation of Liability</b><br>Artender is not liable for any indirect, incidental, or consequential damages arising from your use of the Platform.<br>We do not guarantee uninterrupted or error-free access to the Platform.</p>
+      <p><b>11. Dispute Resolution</b><br>These Terms shall be governed by and construed in accordance with the laws of India.<br>In case of any disputes, the jurisdiction shall lie with the courts of Dindori, Madhya Pradesh.</p>
+      <p><b>12. Amendments</b><br>We reserve the right to modify these Terms at any time. We will notify users through the platform or via email. Continued use after such changes constitutes your acceptance.</p>
+      <p><b>13. Contact Us</b><br>For any queries regarding these Terms, contact us at:<br>📧 help.artender@gmail.com<br>🏢 Sishu Mandir Road, Dindori , 481880</p>
+    </div>
+  </div>
+</div>
  
 
 
@@ -446,6 +476,13 @@
   function closeFullPrivacyPolicy() {
     document.getElementById('fullPrivacyPolicyModal').style.display = 'none';
   }
+  function openTermsConditions() {
+  document.getElementById('termsConditionsModal').style.display = 'block';
+}
+
+function closeTermsConditions() {
+  document.getElementById('termsConditionsModal').style.display = 'none';
+}
 
 
   // Optional: Close modal if user clicks outside the box
@@ -505,12 +542,16 @@
   window.onclick = function (event) {
     const privacyModal = document.getElementById('privacyPolicyModal');
     const refundModal = document.getElementById('refundPolicyModal');
+    const termsModal = document.getElementById('termsConditionsModal');
+
 
     if (event.target === privacyModal) {
       privacyModal.style.display = "none";
     } else if (event.target === refundModal) {
       refundModal.style.display = "none";
-    }
+    } else if (event.target === termsModal) {
+    termsModal.style.display = "none";
+  }
   };
 </script>
 
