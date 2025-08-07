@@ -537,6 +537,10 @@ function closeTermsConditions() {
   function closeRefundPolicy() {
     document.getElementById('refundPolicyModal').style.display = 'none';
   }
+  function toggleNavbar() {
+            const menu = document.getElementById("navbarMenu");
+            menu.classList.toggle("open");
+        }
 
   // Close modal when user clicks outside of it
   window.onclick = function (event) {
