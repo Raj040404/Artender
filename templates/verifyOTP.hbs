@@ -31,11 +31,177 @@
 
     <!-- Twitter Card for Social Sharing -->
     <meta property="twitter:card" content="summary_large_image">
-    <link rel="stylesheet" href="/css/verify.css">
+    
+    <style>
+        /* Different artistic gradient background */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2, #e0c3fc, #8ec5fc);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        /* Smooth gradient movement */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassy container effect */
+        .form-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 2rem 2.5rem;
+            border-radius: 1.2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 420px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        h2 {
+            text-align: center;
+            color: #5a67d8;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 1.2rem;
+        }
+
+        /* Error box */
+        .error-box {
+            background-color: #ffdddd;
+            border-left: 6px solid #e74c3c;
+            padding: 10px 15px;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #b02a1b;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        /* Form styling */
+        #otpForm {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            display: block;
+            color: #555;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ccc;
+            border-radius: 0.6rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #5a67d8;
+            box-shadow: 0 0 0 3px rgba(90, 103, 216, 0.2);
+        }
+
+        /* Submit button */
+        input[type="submit"] {
+            background: linear-gradient(90deg, #5a67d8, #805ad5);
+            border: none;
+            color: white;
+            font-size: 1rem;
+            padding: 0.8rem;
+            border-radius: 0.6rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(90, 103, 216, 0.25);
+        }
+
+        /* Resend OTP button */
+        #resendOtpBtn {
+            background: linear-gradient(90deg, #ed64a6, #d53f8c);
+            border: none;
+            color: white;
+            font-size: 1rem;
+            padding: 0.8rem;
+            border-radius: 0.6rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        #resendOtpBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(237, 100, 166, 0.25);
+        }
+
+        /* Links and messages */
+        p {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        #resendMsg {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .form-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-
     <div class="form-container">
         <h2>Verify Your OTP</h2>
 
