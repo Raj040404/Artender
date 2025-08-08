@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Sign Up</title>
+    <meta charset="UTF-8">
     <!-- Character Set & Viewport -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,86 +15,251 @@
     <!-- Web App Manifest -->
     <link rel="manifest" href="/manifest.json">
 
-    <!-- Favicon (Browser Tabs) -->
+    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/logo/logo32.png">
 
-    <!-- Apple Touch Icons (iOS Home Screen) -->
+    <!-- Apple Touch Icons -->
     <link rel="apple-touch-icon" sizes="192x192" href="/logo/logo192.png">
     <link rel="apple-touch-icon" sizes="512x512" href="/logo/logo512.png">
 
-    <!-- Social Media & SEO Meta Tags -->
+    <!-- Social Media & SEO -->
     <meta name="theme-color" content="#3399cc">
     <meta property="og:title" content="Artender">
-    <meta property="og:description" content="signup to Artender">
+    <meta property="og:description" content="Signup to your account">
     <meta property="og:image" content="/logo/WhatsApp%20Image%202025-02-23%20at%2000.10.41_0364758d.jpg">
     <meta property="og:url" content="http://www.artender.in">
     <meta property="og:type" content="website">
-
-    <!-- Twitter Card for Social Sharing -->
     <meta property="twitter:card" content="summary_large_image">
-    <link rel="stylesheet" href="/css/signup.css">
+
+    <title>Sign Up - Artender</title>
+
     <style>
-/* Overlay */
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 9998;
+        /* Background with art-inspired gradient */
+   body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    /* 🍑 Warm peach gradient */
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2, #ffcc80, #ffb74d);
+    background-size: 400% 400%;
+    animation: gradientMove 8s ease infinite;
+    
+    /* Layout & color */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #e65100;
 }
 
-/* Modal box */
-.terms-modal {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    z-index: 9999;
-    padding: 20px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 80%;
-    overflow-y: auto;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
-}
+        /* Smooth gradient movement for depth */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-.terms-modal h3 {
-    text-align: center;
-}
+        /* Glassy effect for the login container */
+        .login-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 2rem 2.5rem;
+            border-radius: 1.2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 420px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
 
-.terms-modal button {
-    display: block;
-    margin: 20px auto 0;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-</style>
 
+        h2 {
+            text-align: center;
+            color: #3399cc;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 1.2rem;
+        }
+
+        /* Error box */
+        .error-box {
+            background-color: #ffdddd;
+            border-left: 6px solid #e74c3c;
+            padding: 10px 15px;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #b02a1b;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        /* Password strength indicator */
+        .password-strength {
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.3rem;
+            display: inline-block;
+        }
+
+        /* Form */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            display: block;
+            color: #555;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group input[type="checkbox"] {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ccc;
+            border-radius: 0.6rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input[type="checkbox"] {
+            width: auto;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3399cc;
+            box-shadow: 0 0 0 3px rgba(51, 153, 204, 0.2);
+        }
+
+        /* Submit button */
+        .form-group input[type="submit"] {
+            background: linear-gradient(90deg, #3399cc, #66cdaa);
+            border: none;
+            color: white;
+            font-size: 1rem;
+            padding: 0.8rem;
+            border-radius: 0.6rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 100%;
+        }
+
+        .form-group input[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(51, 153, 204, 0.25);
+        }
+
+        /* Links */
+        a {
+            color: #3399cc;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: #267399;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .login-container {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 9998;
+        }
+
+        /* Modal box */
+        .terms-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            z-index: 9999;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .terms-modal h3 {
+            text-align: center;
+        }
+
+        .terms-modal button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
-
-    <div class="form-container">
+    <div class="login-container">
         <h2>Sign Up</h2>
 
         <!-- ✅ Error Message Box -->
         {{#if error}}
-        <div id="errorBox" class="error-box">
+        <div class="error-box" id="errorBox">
             {{error}}
         </div>
         {{/if}}
 
-        <form id="signupForm" action="/signup" method="post">
+        <form class="login-form" id="signupForm" action="/signup" method="post">
             <div class="form-group">
                 <label for="name">Username:</label>
                 <input type="text" id="name" name="name" required autocomplete="off" maxlength="30" />
@@ -111,32 +276,31 @@
                 <div class="password-strength" id="passwordStrength">Enter a strong password</div>
             </div>
 
-         <div class="form-group">
-  <label for="acceptTerms" style="display: inline-block; cursor: pointer;">
-    <input type="checkbox" id="acceptTerms" style="vertical-align: middle; margin-right: 6px;" />
-    I accept the <a href="#" id="viewTerms" style="white-space: nowrap;">Terms and Conditions</a>
-  </label>
-</div>
+            <div class="form-group">
+                <label for="acceptTerms" style="display: inline-block; cursor: pointer;">
+                    <input type="checkbox" id="acceptTerms" />
+                    I accept the <a href="#" id="viewTerms" style="white-space: nowrap;">Terms and Conditions</a>
+                </label>
+            </div>
 
-
-
-
-            <input type="submit" value="Sign Up" id="submitBtn" style="display: none;" />
+            <div class="form-group">
+                <input type="submit" value="Sign Up" id="submitBtn" style="display: none;" />
+            </div>
         </form>
 
-        <div class="form-group">
+        <div class="form-group" style="text-align:center;">
             <p>Already have an Account? <a href="/login">Login</a></p>
         </div>
     </div>
 
     <!-- Modal Overlay -->
-<div id="modalOverlay" class="modal-overlay"></div>
+    <div id="modalOverlay" class="modal-overlay"></div>
 
-<!-- Terms and Conditions Modal -->
-<div id="termsModal" class="terms-modal">
-    <h3>Terms and Conditions</h3>
-    <div class="terms-content">
-            <p>Welcome to Artender (“we”, “us”, or “our”). By accessing or using the Artender website, mobile application, or any services provided by us (collectively, the “Platform”), you (“User”, “you”) agree to be bound by these Terms and Conditions. These Terms apply in accordance with the laws of India, including the Information Technology Act, 2000 and related rules.</p>
+    <!-- Terms and Conditions Modal -->
+    <div id="termsModal" class="terms-modal">
+        <h3>Terms and Conditions</h3>
+        <div class="terms-content">
+            <p>Welcome to Artender ("we", "us", or "our"). By accessing or using the Artender website, mobile application, or any services provided by us (collectively, the "Platform"), you ("User", "you") agree to be bound by these Terms and Conditions. These Terms apply in accordance with the laws of India, including the Information Technology Act, 2000 and related rules.</p>
             <p><b>1. Eligibility</b><br>
             You must be at least 18 years of age or have obtained parental/legal guardian consent to use the Platform.<br>
             By registering, you represent and warrant that you have the right, authority, and capacity to enter into these Terms.</p>
@@ -145,7 +309,7 @@
             You agree to provide accurate and complete information and to keep it updated.<br>
             You are responsible for maintaining the confidentiality of your account credentials.</p>
             <p><b>3. User Content and Ownership</b><br>
-            Users can post artwork, images, videos, text, and other materials (“Content”).<br>
+            Users can post artwork, images, videos, text, and other materials ("Content").<br>
             You retain ownership of the content you post, but by uploading it to Artender, you grant us a non-exclusive, royalty-free, worldwide license to use, display, reproduce, and distribute it solely for promotion and platform operation.<br>
             You confirm that you have all necessary rights and permissions to upload and share such content, and that your content does not infringe on any third-party rights.</p>
             <p><b>4. Competitions</b><br>
@@ -183,67 +347,60 @@
             📧 help.artender@gmail.com<br>
             🏢 Sishu Mandir Road, Dindori , 481880</p>
         </div>
-       <button type="button" onclick="closeTermsModal()">Close</button>
+        <button type="button" onclick="closeTermsModal()">Close</button>
     </div>
 
     <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const passwordInput = document.getElementById('password');
-    const passwordStrength = document.getElementById('passwordStrength');
-    const errorBox = document.getElementById('errorBox');
-    const acceptTerms = document.getElementById('acceptTerms');
-    const submitBtn = document.getElementById('submitBtn');
-    const viewTerms = document.getElementById('viewTerms');
-    const termsModal = document.getElementById('termsModal');
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordInput = document.getElementById('password');
+            const passwordStrength = document.getElementById('passwordStrength');
+            const errorBox = document.getElementById('errorBox');
+            const acceptTerms = document.getElementById('acceptTerms');
+            const submitBtn = document.getElementById('submitBtn');
+            const viewTerms = document.getElementById('viewTerms');
+            const termsModal = document.getElementById('termsModal');
+            const modalOverlay = document.getElementById('modalOverlay');
 
-    // Hide error message after 3 seconds
-    if (errorBox) {
-        setTimeout(() => {
-            errorBox.style.opacity = "0";
-            setTimeout(() => errorBox.style.display = "none", 500);
-        }, 3000);
-    }
+            // Hide error message after 3 seconds
+            if (errorBox) {
+                setTimeout(() => {
+                    errorBox.style.opacity = "0";
+                    setTimeout(() => errorBox.style.display = "none", 500);
+                }, 3000);
+            }
 
-    // Password strength checker
-    passwordInput.addEventListener('input', function () {
-        const password = passwordInput.value;
-        if (password.length < 8) {
-            passwordStrength.textContent = "Weak Password ❌";
-            passwordStrength.style.color = "red";
-        } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-            passwordStrength.textContent = "Strong Password ✅";
-            passwordStrength.style.color = "green";
-        } else {
-            passwordStrength.textContent = "Medium Strength Password ⚠️";
-            passwordStrength.style.color = "orange";
-        }
-    });
-    const modalOverlay = document.getElementById('modalOverlay');
+            // Password strength checker
+            passwordInput.addEventListener('input', function () {
+                const password = passwordInput.value;
+                if (password.length < 8) {
+                    passwordStrength.textContent = "Weak Password ❌";
+                    passwordStrength.style.color = "red";
+                } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
+                    passwordStrength.textContent = "Strong Password ✅";
+                    passwordStrength.style.color = "green";
+                } else {
+                    passwordStrength.textContent = "Medium Strength Password ⚠️";
+                    passwordStrength.style.color = "orange";
+                }
+            });
 
-    viewTerms.addEventListener('click', function (e) {
-        e.preventDefault();
-        termsModal.style.display = "block";
-        modalOverlay.style.display = "block";
-    });
+            viewTerms.addEventListener('click', function (e) {
+                e.preventDefault();
+                termsModal.style.display = "block";
+                modalOverlay.style.display = "block";
+            });
 
-    window.closeTermsModal = function () {
-        termsModal.style.display = "none";
-        modalOverlay.style.display = "none";
-    };
+            window.closeTermsModal = function () {
+                termsModal.style.display = "none";
+                modalOverlay.style.display = "none";
+            };
 
-
-    // Show/hide submit button based on checkbox
-    acceptTerms.addEventListener('change', function () {
-        submitBtn.style.display = this.checked ? "inline-block" : "none";
-    });
-
-    // Show terms modal
-    // viewTerms.addEventListener('click', function (e) {
-    //     e.preventDefault();
-    //     termsModal.style.display = "block";
-    // });
-});
-</script>
+            // Show/hide submit button based on checkbox
+            acceptTerms.addEventListener('change', function () {
+                submitBtn.style.display = this.checked ? "inline-block" : "none";
+            });
+        });
+    </script>
 </body>
 
 </html>
