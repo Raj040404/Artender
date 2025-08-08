@@ -35,15 +35,15 @@
 
     <style>
         /* Background with art-inspired gradient */
-       body {
+    body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: 
-        linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
-        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%23ffe3d8'/><stop offset='100%' stop-color='%23d8f0ff'/></linearGradient></defs><rect width='1920' height='1080' fill='url(%23g)'/><path d='M0,300 C400,200 800,400 1200,300 C1600,200 1920,400 1920,400 L1920,1080 L0,1080 Z' fill='%23f9c0bb' opacity='0.4'/><path d='M0,500 C500,600 1000,300 1500,500 C1800,600 1920,500 1920,500 L1920,1080 L0,1080 Z' fill='%23a6dcef' opacity='0.35'/></svg>");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    /* 🎨 Static artistic color blend */
+    background: linear-gradient(135deg, #ffecd2, #fcb69f, #a1c4fd, #c2e9fb);
+    background-size: 400% 400%;
+    animation: gradientMove 15s ease infinite;
+
+    /* Layout & color */
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -51,17 +51,26 @@
     color: #333;
 }
 
+/* Smooth gradient movement for depth */
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
-        .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
-            padding: 2rem 2.5rem;
-            border-radius: 1.2rem;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            width: 100%;
-            max-width: 420px;
-            animation: fadeIn 0.8s ease-in-out;
-        }
+/* Glassy effect for the login container */
+.login-container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 2rem 2.5rem;
+    border-radius: 1.2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 420px;
+    animation: fadeIn 0.5s ease-in-out;
+}
 
         h2 {
             text-align: center;
