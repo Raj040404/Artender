@@ -34,37 +34,34 @@
     <title>Sign Up - Artender</title>
 
     <style>
-        /* Background with art-inspired gradient */
-         body {
+        * { box-sizing: border-box; }
+        
+        body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
-            /* 🎨 Static artistic color blend */
             background: linear-gradient(135deg, #ffecd2, #fcb69f, #a1c4fd, #c2e9fb);
             background-size: 400% 400%;
             animation: gradientMove 15s ease infinite;
-
-            /* Layout & color */
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 1rem;
             color: #333;
         }
 
-        /* Smooth gradient movement for depth */
         @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Glassy effect for the login container */
         .login-container {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 2rem 2.5rem;
+            padding: clamp(1.5rem, 4vw, 2.5rem);
             border-radius: 1.2rem;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             width: 100%;
@@ -72,16 +69,15 @@
             animation: fadeIn 0.5s ease-in-out;
         }
 
-
         h2 {
             text-align: center;
             color: #3399cc;
             font-weight: 700;
             letter-spacing: 1px;
             margin-bottom: 1.2rem;
+            font-size: clamp(1.5rem, 4vw, 2rem);
         }
 
-        /* Error box */
         .error-box {
             background-color: #ffdddd;
             border-left: 6px solid #e74c3c;
@@ -93,16 +89,6 @@
             animation: slideDown 0.4s ease-out;
         }
 
-        /* Password strength indicator */
-        .password-strength {
-            font-size: 0.8rem;
-            margin-top: 0.3rem;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.3rem;
-            display: inline-block;
-        }
-
-        /* Form */
         .login-form {
             display: flex;
             flex-direction: column;
@@ -114,24 +100,18 @@
             margin-bottom: 0.3rem;
             display: block;
             color: #555;
+            font-size: 0.9rem;
         }
 
         .form-group input[type="text"],
         .form-group input[type="email"],
-        .form-group input[type="password"],
-        .form-group input[type="checkbox"] {
+        .form-group input[type="password"] {
             width: 100%;
-            padding: 0.7rem;
+            padding: 0.875rem;
             border: 1px solid #ccc;
             border-radius: 0.6rem;
-            font-size: 0.95rem;
+            font-size: 1rem;
             transition: all 0.3s ease;
-        }
-
-        .form-group input[type="checkbox"] {
-            width: auto;
-            vertical-align: middle;
-            margin-right: 6px;
         }
 
         .form-group input:focus {
@@ -140,7 +120,6 @@
             box-shadow: 0 0 0 3px rgba(51, 153, 204, 0.2);
         }
 
-        /* Submit button */
         .form-group input[type="submit"] {
             background: linear-gradient(90deg, #3399cc, #66cdaa);
             border: none;
@@ -151,6 +130,7 @@
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             width: 100%;
+            margin-top: 0.5rem;
         }
 
         .form-group input[type="submit"]:hover {
@@ -158,7 +138,28 @@
             box-shadow: 0 6px 18px rgba(51, 153, 204, 0.25);
         }
 
-        /* Links */
+        .form-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+            transform: scale(1.2);
+        }
+
+        .checkbox-label {
+            display: flex !important;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .password-strength {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+
         a {
             color: #3399cc;
             text-decoration: none;
@@ -169,81 +170,80 @@
             color: #267399;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .form-group[style*="text-align:center"] {
+            text-align: center;
+            margin-top: 0.5rem;
         }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 500px) {
-            .login-container {
-                padding: 1.5rem;
-            }
-        }
-
-        /* Overlay */
+        /* Modal styles */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
-            height: 100%;
             width: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 9998;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
 
-        /* Modal box */
         .terms-modal {
             display: none;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: white;
-            z-index: 9999;
-            padding: 20px;
-            border-radius: 10px;
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
             width: 90%;
             max-width: 600px;
-            max-height: 80%;
+            max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+            z-index: 1000;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         }
 
         .terms-modal h3 {
             text-align: center;
+            color: #4a5568;
+            margin-bottom: 1rem;
         }
 
         .terms-modal button {
             display: block;
-            margin: 20px auto 0;
-            padding: 10px 20px;
-            background-color: #007bff;
+            margin: 1.5rem auto 0;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(90deg, #3399cc, #66cdaa);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 0.5rem;
             cursor: pointer;
+            font-weight: 500;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            body { padding: 0.5rem; }
+            .login-container { padding: 1.5rem; }
+            .form-group input { font-size: 16px; } /* Prevents zoom on iOS */
+            .terms-modal { padding: 1.5rem; width: 95%; }
+        }
+
+        /* Landscape mobile */
+        @media (max-height: 700px) and (orientation: landscape) {
+            body { align-items: flex-start; padding-top: 1rem; }
+            .login-container { margin: 1rem 0; }
         }
     </style>
 </head>
@@ -277,9 +277,9 @@
             </div>
 
             <div class="form-group">
-                <label for="acceptTerms" style="display: inline-block; cursor: pointer;">
+                <label for="acceptTerms" class="checkbox-label">
                     <input type="checkbox" id="acceptTerms" />
-                    I accept the <a href="#" id="viewTerms" style="white-space: nowrap;">Terms and Conditions</a>
+                    I accept the <a href="#" id="viewTerms">Terms and Conditions</a>
                 </label>
             </div>
 
