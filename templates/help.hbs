@@ -510,7 +510,10 @@
 function closeTermsConditions() {
   document.getElementById('termsConditionsModal').style.display = 'none';
 }
-
+ function toggleNavbar() {
+            const navbarMenu = document.getElementById("navbarMenu");
+            navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
+        }
 
   // Optional: Close modal if user clicks outside the box
   window.onclick = function (event) {
