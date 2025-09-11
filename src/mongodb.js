@@ -2,13 +2,10 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 // Connect to MongoDB
-const mongoURI = process.env.MONGO_URI || "mongodb://localhost:27017/LoginSignup";
+const mongoURI = process.env.MONGO_URI;
 
 mongoose
-  .connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(mongoURI)
   .then(() => {
     console.log("MongoDB Connected Successfully!");
   })
@@ -81,7 +78,7 @@ const ProfileSchema = new mongoose.Schema({
 });
 
 const ContestSchema = new mongoose.Schema({
-  contestId: { type: String, required: true, unique: true },
+  contestId: { type: String, required: true, unique: true, trim: true },
   name: { type: String, required: true },
   poster: { type: String }, 
   deadline: { type: Date, required: true },
@@ -95,13 +92,16 @@ const EnrollmentSchema = new mongoose.Schema({
   email: { type: String, required: true },
   contestId: { type: String, ref: "Contest", required: true },
   paymentId: { type: String, default: null },
-  paid: { type: Boolean, default: false }, // <-- Add this line
-  file: { type: String }, // Store Base64 string
+  paid: { type: Boolean, default: false },
+  file: { type: String },
+  fileType: { type: String }, // <-- Add this line
+  phone: { type: String },    // <-- Add this line
   createdAt: { type: Date, default: Date.now }
 });
 
 const EnrollmentCollection = mongoose.model("Enrollment", EnrollmentSchema);
-const ContestCollection = mongoose.model("Contest", ContestSchema);
+const conn = mongoose.connection.useDb("test");
+const ContestCollection = conn.model("Contest", ContestSchema, "contests");
 const LogInCollection = mongoose.model("LogInCollection", LogInSchema);
 const CompetitionPostCollection = mongoose.model(
   "CompetitionPostCollection",

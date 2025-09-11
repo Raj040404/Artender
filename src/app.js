@@ -11,6 +11,7 @@ const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const axios = require("axios");
 const rateLimit = require('express-rate-limit');
+const crypto = require("crypto"); // Add this for hashing
 
 // ✅ Register the "json" helper in hbs
 hbs.registerHelper("json", function (context) {
@@ -136,44 +137,44 @@ app.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
   if (password.length < 8) {
-      return res.render("signup", {
-          error: "Password must be at least 8 characters long.",
-      });
+    return res.render("signup", {
+      error: "Password must be at least 8 characters long.",
+    });
   }
 
   try {
-      const existingUser = await LogInCollection.findOne({
-          $or: [{ email }, { name }],
-      });
+    const existingUser = await LogInCollection.findOne({
+      $or: [{ email }, { name }],
+    });
 
-      if (existingUser) {
-          if (existingUser.email === email) {
-              return res.render("signup", { error: "Email is already registered." });
-          }
-          if (existingUser.name === name) {
-              return res.render("signup", { error: "Username is already taken." });
-          }
+    if (existingUser) {
+      if (existingUser.email === email) {
+        return res.render("signup", { error: "Email is already registered." });
       }
+      if (existingUser.name === name) {
+        return res.render("signup", { error: "Username is already taken." });
+      }
+    }
 
-      // Generate OTP
-      const otp = Math.floor(100000 + Math.random() * 900000);
-      otpStorage[email] = otp;
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    otpStorage[email] = otp;
 
-      // Send OTP via email
-      await transporter.sendMail({
-          from: "your-email@example.com",
-          to: email,
-          subject: "Your OTP for Signup",
-          text: `Your OTP for signing up is ${otp}. This OTP is valid for 5 minutes.`,
-      });
+    // Send OTP via email
+    await transporter.sendMail({
+      from: "your-email@example.com",
+      to: email,
+      subject: "Your OTP for Signup",
+      text: `Your OTP for signing up is ${otp}. This OTP is valid for 5 minutes.`,
+    });
 
-      // Store user data in session
-      req.session.tempUser = { name, email, password };
+    // Store user data in session
+    req.session.tempUser = { name, email, password };
 
-      return res.render("verifyOTP", { email });
+    return res.render("verifyOTP", { email });
   } catch (err) {
-      console.error(err);
-      res.status(500).render("signup", { error: "Error signing up. Please try again later." });
+    console.error(err);
+    res.status(500).render("signup", { error: "Error signing up. Please try again later." });
   }
 });
 
@@ -206,26 +207,26 @@ app.post("/resend-otp", async (req, res) => {
   const { email } = req.body;
 
   if (!email) {
-      return res.status(400).json({ success: false, message: "Invalid email." });
+    return res.status(400).json({ success: false, message: "Invalid email." });
   }
 
   try {
-      // Generate a new OTP
-      const otp = Math.floor(100000 + Math.random() * 900000);
-      otpStorage[email] = otp;
+    // Generate a new OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    otpStorage[email] = otp;
 
-      // Send OTP via email
-      await transporter.sendMail({
-          from: "your-email@example.com",
-          to: email,
-          subject: "Your New OTP for Signup",
-          text: `Your new OTP is ${otp}. This OTP is valid for 5 minutes.`,
-      });
+    // Send OTP via email
+    await transporter.sendMail({
+      from: "your-email@example.com",
+      to: email,
+      subject: "Your New OTP for Signup",
+      text: `Your new OTP is ${otp}. This OTP is valid for 5 minutes.`,
+    });
 
-      return res.json({ success: true, message: "OTP resent successfully." });
+    return res.json({ success: true, message: "OTP resent successfully." });
   } catch (err) {
-      console.error("Error resending OTP:", err);
-      return res.status(500).json({ success: false, message: "Failed to resend OTP." });
+    console.error("Error resending OTP:", err);
+    return res.status(500).json({ success: false, message: "Failed to resend OTP." });
   }
 });
 
@@ -266,8 +267,19 @@ app.get("/home", requireLogin, (req, res) => {
   res.render("home");
 });
 app.get("/completeenrollment", requireLogin, (req, res) => {
-  res.render("completeenrollment");
+  const contestId = req.query.contestId || "";
+  res.render("completeenrollment", { contestId });
 });
+
+app.get("/paymentfailed", (req, res) => {
+  const reason = req.query.reason || "Unknown error";
+  res.render("paymentfailed", { reason });
+});
+app.get("/paymentpending", (req, res) => {
+  const reason =  "Unknown error";
+  res.render("paymentpending", { reason });
+});
+
 app.get("/explorecompetitions", requireLogin, async (req, res) => {
   try {
     const userId = req.session.userId; // ✅ Get logged-in user ID
@@ -748,138 +760,112 @@ app.get("/competitions", requireLogin, async (req, res) => {
 
 const mongoose = require("mongoose");
 
+// PhonePe payment callback
+app.get("/enroll/phonepe-callback", requireLogin, async (req, res) => {
+  const { orderId, contestId } = req.query;
+  console.log("[phonepe-callback] orderId:", orderId, "contestId:", contestId);
 
-// Enrollment Submission Route (save file and info before payment)
-app.post("/enroll/:contestId", requireLogin, upload.single("file"), async (req, res) => {
-  const { contestId } = req.params;
-  const userName = req.session.username;
-  const email = req.session.email;
-  const file = req.file;
-
-  if (!file) {
-    return res.status(400).send("No file uploaded. Please upload an image or video.");
-  }
-
-  if (!file.mimetype.startsWith("image/") && !file.mimetype.startsWith("video/")) {
-    return res.status(400).send("Invalid file type! Only images and videos are allowed.");
-  }
-
-  // Save enrollment with paid: false (upsert so user can retry payment)
-  await EnrollmentCollection.findOneAndUpdate(
-    { userName, contestId: String(contestId) },
-    {
-      userName,
-      email,
-      contestId: String(contestId),
-      file: file.buffer.toString("base64"),
-      fileType: file.mimetype,
-      paid: false,
-    },
-    { upsert: true }
-  );
-
-  // Proceed to payment (your frontend should handle this)
-  res.redirect(`/enroll/${contestId}`);
-})
-// Payment callback (Cashfree will redirect here)
-app.get("/enroll/cf-callback", async (req, res) => {
   try {
-    const { order_id, contestId, userName, email } = req.query;
+    const accessToken = await getPhonePeAccessToken();
+    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${orderId}/status?details=false`;
+    console.log("[phonepe-callback] Checking status at:", statusUrl);
 
-    // Fetch payment details from Cashfree API
-    const paymentRes = await axios.get(
-      `https://sandbox.cashfree.com/pg/orders/${order_id}/payments`,
-      {
-        headers: {
-          'x-api-version': '2022-09-01',
-          'x-client-id': CASHFREE_CLIENT_ID,
-          'x-client-secret': CASHFREE_SECRET,
-        }
+    const response = await axios.get(statusUrl, {
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `O-Bearer ${accessToken}`
       }
-    );
+    });
 
-    // Handle array or object
-    let paymentData;
-    if (Array.isArray(paymentRes.data)) {
-      paymentData = paymentRes.data[0];
-    } else if (Array.isArray(paymentRes.data?.payments)) {
-      paymentData = paymentRes.data.payments[0];
-    } else {
-      paymentData = undefined;
-    }
-    console.log("CF Callback: paymentData =", paymentData);
+    const statusResponse = response.data;
+    console.log("[phonepe-callback] PhonePe status response:", statusResponse);
 
-    if (paymentData && paymentData.payment_status === "SUCCESS") {
-      // Update enrollment to mark as paid and add paymentId
+    // Use the state from paymentDetails[0] if present, otherwise fallback to overall state
+    const paymentState = statusResponse?.paymentDetails?.[0]?.state || statusResponse?.state;
+    console.log("[phonepe-callback] Determined paymentState:", paymentState);
+
+    // ✅ Check for both COMPLETED and SUCCESS for sandbox/real environment
+    if (paymentState === "SUCCESS" || paymentState === "COMPLETED") {
       await EnrollmentCollection.findOneAndUpdate(
-        { userName, contestId: String(contestId) },
-        { paid: true, paymentId: order_id }
+        { contestId: String(contestId), paymentId: orderId },
+        { $set: { paid: true } },
+        { new: true }
       );
-
-      res.redirect("/completeenrollment");
-    } else {
-      res.redirect(`/enroll/${contestId}?payment=failed`);
+      console.log("[phonepe-callback] Payment SUCCESS for order:", orderId);
+      return res.redirect(`/completeenrollment?contestId=${contestId}`);
+    } 
+    else if (paymentState === "PENDING") {
+      console.log("[phonepe-callback] Payment PENDING for order:", orderId);
+      return res.redirect(`/paymentpending?orderId=${orderId}`);
+    } 
+    else {
+      const reason = statusResponse?.message || "Payment failed";
+      console.log("[phonepe-callback] Payment FAILED for order:", orderId, "Reason:", reason);
+      return res.redirect(`/paymentfailed?reason=${encodeURIComponent(reason)}`);
     }
+
   } catch (err) {
-    res.redirect(`/enroll/${req.query.contestId || ""}?payment=failed`);
+    console.error("[phonepe-callback] Error:", err.response?.data || err.message);
+    return res.redirect(`/paymentfailed?reason=${encodeURIComponent(err.message)}`);
   }
 });
 
-app.get("/enroll/:contestId", requireLogin, async (req, res) => {
-  const { contestId } = req.params;
 
-  // Check if the user is logged in
+
+app.get("/enroll/:contestId", requireLogin, async (req, res) => {
+  const { contestId: rawContestId } = req.params;
+  const contestId = (rawContestId || "").trim();
+
+  console.log(`[enroll GET] URL: ${req.originalUrl} | method: ${req.method}`);
+  console.log("[enroll GET] params:", req.params, "session.userId:", req.session?.userId);
+
   if (!req.session || !req.session.userId) {
-    console.error("Error: User not logged in");
+    console.error("[enroll GET] User not logged in");
     return res.redirect("/login");
   }
 
   try {
-    // Fetch contest details
-    console.log("Looking for contestId:", contestId, "as string:", String(contestId));
-    const contest = await ContestCollection.findOne({ contestId: { $regex: "^" + contestId + "$", $options: "i" } });
-    console.log("Contest found:", contest);
+    if (!contestId) {
+      console.error("[enroll GET] Missing contestId in params");
+      return res.status(400).send("Invalid contest id.");
+    }
+
+    // Single, consistent lookup
+    const contest = await ContestCollection.findOne({ contestId }).lean();
+    console.log("[enroll GET] contest lookup result for", contestId, ":", !!contest);
 
     if (!contest) {
-      console.error("Error: Contest not found");
+      console.error("[enroll GET] Error: Contest not found for", contestId);
+      // stack trace to know where this log originated
+      console.trace();
       return res.status(404).send("Contest not found.");
     }
 
-    // Fetch the logged-in user's details
     const user = await LogInCollection.findById(req.session.userId);
     if (!user) {
-      console.error("Error: User not found in the database");
+      console.error("[enroll GET] User not found in DB for session id:", req.session.userId);
       return res.status(404).send("User not found.");
     }
 
-    // Check if the user is already enrolled in the contest AND has paid
     const existingEnrollment = await EnrollmentCollection.findOne({
       contestId: String(contestId),
       userName: user.name,
-    });
+    }).lean();
 
-    if (existingEnrollment && existingEnrollment.paid) {
-      return res.render("enrollment", {
-        contest,
-        userName: user.name,
-        email: user.email,
-        alreadyEnrolled: true,
-      });
-    }
+    const alreadyEnrolled = !!(existingEnrollment && existingEnrollment.paid);
 
-    // If not paid or not enrolled, allow enrollment
-    res.render("enrollment", {
+    return res.render("enrollment", {
       contest,
       userName: user.name,
       email: user.email,
-      alreadyEnrolled: false,
+      alreadyEnrolled,
     });
-
   } catch (err) {
-    console.error("Error fetching contest or user details:", err.message);
-    res.status(500).send("Error fetching contest details.");
+    console.error("[enroll GET] Error fetching contest or user details:", err);
+    return res.status(500).send("Error fetching contest details.");
   }
 });
+
 
 
 app.post("/like", requireLogin, async (req, res) => {
@@ -935,56 +921,128 @@ app.get("/logout", (req, res) => {
     res.redirect("/login");
   });
 });
+// PhonePe Integration
 
-// Cashfree credentials (use env vars in production)
-const CASHFREE_CLIENT_ID = process.env.CASHFREE_CLIENT_ID;
-const CASHFREE_SECRET = process.env.CASHFREE_SECRET;
-const CASHFREE_BASE_URL = "https://sandbox.cashfree.com/pg"; // Use sandbox for testing
+// Helper: Get PhonePe access token
+async function getPhonePeAccessToken() {
+  const tokenUrl = 'https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token';
+  const requestHeaders = {
+    "Content-Type": "application/x-www-form-urlencoded"
+  };
+  const requestBody = new URLSearchParams({
+    client_version: 1,
+    grant_type: "client_credentials",
+    client_id: process.env.PHONEPE_MERCHANT_ID,
+    client_secret: process.env.PHONEPE_MERCHANT_KEY
+  }).toString();
 
-// Create Cashfree order
-app.post("/api/create-cf-order", requireLogin, async (req, res) => {
+
+  const response = await axios.post(tokenUrl, requestBody, { headers: requestHeaders });
+  return response.data.access_token;
+}
+
+// Create PhonePe order using PG Checkout API
+// Create PhonePe order using PG Checkout API
+app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async (req, res) => {
   try {
-    const { contestId, phone } = req.body;
-    const contest = await ContestCollection.findOne({ contestId });
+    console.log("[create-phonepe-order] URL:", req.originalUrl, "| method:", req.method);
+    console.log("[create-phonepe-order] req.body keys:", Object.keys(req.body));
+    console.log("[create-phonepe-order] req.file:", req.file ? req.file.originalname : "No file uploaded");
+
+    const contestId = (req.body.contestId || req.query.contestId || "").trim();
+    const phone = req.body.phone;
+    console.log("[create-phonepe-order] contestId extracted:", JSON.stringify(contestId));
+
+    // Validate contest
+    const contest = await ContestCollection.findOne({ contestId }).lean();
+    console.log("[create-phonepe-order] contest lookup result for", contestId, ":", !!contest);
     if (!contest) return res.status(404).json({ error: "Contest not found" });
 
-    const orderPayload = {
-      order_amount: Number(contest.price),
-      order_currency: "INR",
-      order_id: "artender_" + Date.now(),
-      customer_details: {
-        customer_id: req.session.userId.toString(),
-        customer_phone: phone,
-        customer_name: req.session.username || "User",
-        customer_email: req.session.username || "test@cashfree.com"
+    // Validate user
+    const user = await LogInCollection.findById(req.session.userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    // Validate file
+    const file = req.file;
+    if (!file) return res.status(400).json({ error: "No file uploaded." });
+
+    // Validate phone
+    let mobileNumber = phone;
+    if (!/^\d{10}$/.test(mobileNumber)) {
+      return res.status(400).json({ error: "Invalid phone number." });
+    }
+
+    const orderId = `ARTENDER_${contestId}_${user._id}_${Date.now()}`;
+    console.log(`[create-phonepe-order] Generated orderId: ${orderId}`);
+
+
+    // Save enrollment with paid: false
+    await EnrollmentCollection.findOneAndUpdate(
+      { userName: user.name, contestId: String(contestId) },
+      {
+        userName: user.name,
+        email: user.email,
+        contestId: String(contestId),
+        file: file.buffer.toString("base64"),
+        fileType: file.mimetype,
+        paid: false,
+        phone: mobileNumber,
+        paymentId: orderId,
       },
-      order_note: "Artender Competition Enrollment",
-      // --- ADD THIS BLOCK ---
-      order_meta: {
-        return_url: `https://www.artender.in/enroll/cf-callback?order_id={order_id}&contestId=${contestId}&userName=${req.session.username}&email=${req.session.email}`,
-        notify_url: "https://www.artender.in/enroll/cf-callback"
-      }
-      // --- END BLOCK ---
+      { upsert: true, new: true }
+    );
+
+    // ✅ Step 1: Get access token
+    const accessToken = await getPhonePeAccessToken();
+
+    // ✅ Step 2: Create order using env
+    const payUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`;
+    const requestHeaders = {
+      "Content-Type": "application/json",
+      Authorization: `O-Bearer ${accessToken}`,
+    };
+    const amount = Number(contest.price) * 100; // amount in paise
+
+    const requestBody = {
+      amount: amount,
+      expireAfter: 1200,
+      metaInfo: {
+        udf1: user.name,
+        udf2: contestId,
+        udf3: mobileNumber,
+        udf4: user.email,
+        udf5: "Artender",
+      },
+      paymentFlow: {
+        type: "PG_CHECKOUT",
+        message: "Payment for contest enrollment",
+        merchantUrls: {
+          redirectUrl: `http://localhost:${process.env.PORT}/enroll/phonepe-callback?orderId=${orderId}&contestId=${contestId}`,
+        },
+      },
+      merchantOrderId: orderId,
     };
 
-    const response = await axios.post(
-      'https://sandbox.cashfree.com/pg/orders',
-      orderPayload,
-      {
-        headers: {
-          'x-api-version': '2022-09-01',
-          'x-client-id': CASHFREE_CLIENT_ID,
-          'x-client-secret': CASHFREE_SECRET,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-    res.json(response.data);
-  } catch (error) {
-    console.error('Error creating order:', error.response?.data?.message || error.message);
-    res.status(500).json({ error: error.response?.data?.message || error.message });
+    const response = await axios.post(payUrl, requestBody, { headers: requestHeaders });
+    const data = response.data;
+
+    let redirectUrl = data?.redirectUrl;
+
+    if (redirectUrl) {
+      return res.json({ redirectUrl, orderId });
+    } else {
+      console.error("[create-phonepe-order] Could not find redirectUrl in response:", data);
+      return res.status(500).json({ error: "Failed to create PhonePe order", details: data });
+    }
+  } catch (err) {
+    console.error("[create-phonepe-order] Error:", err.response?.data || err.message);
+    res.status(500).json({
+      error: "Failed to create PhonePe order",
+      details: err.response?.data || err.message,
+    });
   }
 });
+
 
 // Apply to all requests
 const limiter = rateLimit({

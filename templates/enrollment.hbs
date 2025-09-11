@@ -292,7 +292,7 @@
     <a href="/logout" class="navbar-menu-auth-section" style="margin-top: 20px; text-align: center;">
       <button class="navbar8-action11 thq-button-animated thq-button-filled" style="width: 100%;">
         Logout
-      </button>
+      </button> 
     </a>
   </nav>
 </div>
@@ -302,7 +302,10 @@
       <p>You are already enrolled in this contest!</p>
     </div>
 
-    <form id="enrollmentForm" enctype="multipart/form-data" method="POST" action="/enroll/{{contest.contestId}}">
+    <form id="enrollmentForm" action="/api/create-phonepe-order" method="POST" enctype="multipart/form-data">
+      <!-- Add a hidden input to carry the contestId -->
+      <input type="hidden" name="contestId" value="{{contest.contestId}}"/>
+
       <label for="userName">Name:</label>
       <input type="text" id="userName" name="userName" value="{{userName}}" readonly />
 
@@ -447,10 +450,8 @@
     </footer>
   </footer4-wrapper>
   <!-- Place this at the END of your <body> -->
-  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      // Handle already enrolled state
       var alreadyEnrolled = {{#if alreadyEnrolled}}true{{else}}false{{/if}};
       if (alreadyEnrolled) {
         document.getElementById('enrollButton').disabled = true;
@@ -463,54 +464,44 @@
         if (alreadyEnrolled) return;
 
         const contestId = "{{contest.contestId}}";
-        const phone = document.getElementById('phone').value;
+        const phone = document.getElementById('phone').value.trim();
 
-        // 1. Upload file and info to backend
+        // Validate phone number (10 digits)
+        if (!/^\d{10}$/.test(phone)) {
+          alert("Please enter a valid 10-digit phone number.");
+          document.getElementById('phone').focus();
+          return;
+        }
+
+        // 1. Create FormData to send file and other details
         const form = document.getElementById('enrollmentForm');
         const formData = new FormData(form);
 
-        // Add phone to formData if not present
-        if (!formData.has('phone')) formData.append('phone', phone);
+        // Ensure phone and contestId are in formData
+        formData.set('phone', phone);
+        formData.set('contestId', contestId);
 
-        // Send to backend
-        const uploadRes = await fetch(`/enroll/${contestId}`, {
-          method: 'POST',
-          body: formData
-        });
-        if (!uploadRes.ok) {
-          alert('Failed to upload file: ' + (await uploadRes.text()));
-          return;
-        }
+        // 2. Create PhonePe payment order (which also handles enrollment)
+        let orderData;
+        try {
+          const orderRes = await fetch('/api/create-phonepe-order?contestId={{contest.contestId}}', {
+            method: 'POST',
+            body: formData // Send as FormData, not JSON
+          });
+          orderData = await orderRes.json();
+          console.log("Order data from backend:", orderData);
 
-        // 2. Now create payment order
-        const orderRes = await fetch('/api/create-cf-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contestId, phone })
-        });
-        const orderData = await orderRes.json();
-        console.log("Order data from backend:", orderData);
-
-        const paymentSessionId = orderData.paymentSessionId || orderData.payment_session_id;
-        if (!paymentSessionId) {
-          alert('Failed to create payment order');
-          return;
-        }
-
-        setTimeout(function() {
-          let cf = window.Cashfree;
-          if (typeof cf === "function") {
-            cf = cf({ mode: "sandbox" });
-          }
-          if (!cf || typeof cf.checkout !== "function") {
-            alert("Cashfree SDK not loaded or checkout not available!");
+          if (!orderRes.ok) {
+            alert('Failed to create payment order: ' + (orderData.error || 'Unknown error from server.'));
             return;
           }
-          cf.checkout({
-            paymentSessionId: paymentSessionId,
-            redirectTarget: "_self"
-          });
-        }, 0);
+        } catch (err) {
+          alert('Network error during payment order creation: ' + err.message);
+          return;
+        }
+
+        // Redirect to PhonePe payment page
+        window.location.href = orderData.redirectUrl;
       };
     });
   </script>
