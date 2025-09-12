@@ -1017,7 +1017,7 @@ app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async
         type: "PG_CHECKOUT",
         message: "Payment for contest enrollment",
         merchantUrls: {
-          redirectUrl: `http://localhost:${process.env.PORT}/enroll/phonepe-callback?orderId=${orderId}&contestId=${contestId}`,
+          redirectUrl: `https://www.artender.in/enroll/phonepe-callback?orderId=${orderId}&contestId=${contestId}`,
         },
       },
       merchantOrderId: orderId,
