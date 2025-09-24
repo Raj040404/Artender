@@ -780,11 +780,32 @@ const mongoose = require("mongoose");
 
 // PhonePe payment callback
 app.get("/enroll/phonepe-callback", async (req, res) => {
-  const phonepeOrderId = req.query.orderId || req.query.order_id || req.query.merchantOrderId || null;
-  console.log("[phonepe-callback] query:", req.query, "resolvedPhonePeOrderId:", phonepeOrderId);
+  // Normalize incoming identifiers
+  let phonepeOrderId = req.query.orderId || req.query.order_id || req.query.merchantOrderId || null;
+  const token = req.query.token || null;
+  console.log("[phonepe-callback] query keys:", Object.keys(req.query));
+  console.log("[phonepe-callback] initial phonepeOrderId:", phonepeOrderId, "token present:", !!token);
 
-  if (!phonepeOrderId) {
-    console.log("[phonepe-callback] no order id in query");
+  // If PhonePe sent token (common) but not orderId, try to locate the enrollment
+  // by matching the token contained in the saved redirect URL.
+  let merchantOrderId = null;
+  if (!phonepeOrderId && token) {
+    try {
+      const enrollment = await EnrollmentCollection.findOne({ phonepeRedirectUrl: { $regex: token } }).lean();
+      if (enrollment) {
+        phonepeOrderId = enrollment.phonepeOrderId || null;
+        merchantOrderId = enrollment.paymentId || null;
+        console.log("[phonepe-callback] matched enrollment:", { userName: enrollment.userName, paymentId: enrollment.paymentId, phonepeOrderId: enrollment.phonepeOrderId });
+      } else {
+        console.log("[phonepe-callback] no enrollment matched for token");
+      }
+    } catch (e) {
+      console.error("[phonepe-callback] db lookup error:", e.message);
+    }
+  }
+
+  if (!phonepeOrderId && !merchantOrderId) {
+    console.log("[phonepe-callback] no order id or merchantOrderId available after token lookup");
     return res.send("Callback received. If your payment completed, please wait and check profile.");
   }
 
