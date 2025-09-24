@@ -778,56 +778,29 @@ app.get("/competitions", requireLogin, async (req, res) => {
 
 const mongoose = require("mongoose");
 
-// PhonePe payment callback (restores working logic + token fallback)
-// ✅ Fully functional PhonePe payment callback
-// ✅ Fully fixed PhonePe callback
 app.get("/enroll/phonepe-callback", async (req, res) => {
-  let { orderId, merchantOrderId, contestId, token } = req.query;
+  let { orderId, merchantOrderId, contestId } = req.query;
   console.log("[phonepe-callback] incoming query:", req.query);
 
   try {
-    // 🔹 Case 1: Lookup by merchantOrderId (our own id)
-    if (!orderId && merchantOrderId) {
-      const enrollment = await EnrollmentCollection.findOne({ merchantOrderId }).lean();
-      if (enrollment) {
-        orderId = enrollment.phonepeOrderId;
-        contestId = contestId || enrollment.contestId;
-        console.log("[phonepe-callback] recovered via merchantOrderId:", merchantOrderId);
-      }
-    }
-
-    // 🔹 Case 2: Lookup by token (if redirect has token only)
-    if (!orderId && token) {
-      const enrollment = await EnrollmentCollection.findOne({ phonepeRedirectUrl: { $regex: token } }).lean();
-      if (enrollment) {
-        orderId = enrollment.phonepeOrderId;
-        contestId = contestId || enrollment.contestId;
-        merchantOrderId = enrollment.merchantOrderId;
-        console.log("[phonepe-callback] recovered via token:", token);
-      }
-    }
-
-    // 🔹 Case 3: If still no orderId, fallback to latest unpaid enrollment
-    if (!orderId) {
+    // If no params, fetch last unpaid enrollment
+    if (!orderId && !merchantOrderId) {
       const enrollment = await EnrollmentCollection.findOne({ paid: false }).sort({ createdAt: -1 }).lean();
       if (enrollment) {
         orderId = enrollment.phonepeOrderId;
-        contestId = enrollment.contestId;
         merchantOrderId = enrollment.merchantOrderId;
-        console.log("[phonepe-callback] fallback to last unpaid enrollment:", merchantOrderId);
+        contestId = enrollment.contestId;
+        console.log("[phonepe-callback] fallback enrollment found:", merchantOrderId);
       }
     }
 
-    if (!orderId) {
-      console.log("[phonepe-callback] No orderId found after all lookups");
-      return res.send("Callback received but no orderId found. Please check your payment status later.");
+    if (!merchantOrderId && !orderId) {
+      console.log("[phonepe-callback] No orderId/merchantOrderId found");
+      return res.redirect("/paymentfailed?reason=Missing+orderId");
     }
 
-    // 🔹 Step 1: Get access token
     const accessToken = await getPhonePeAccessToken();
-
-    // 🔹 Step 2: Status API
-    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${orderId}/status?details=false`;
+    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${orderId || merchantOrderId}/status?details=false`;
     console.log("[phonepe-callback] Checking status at:", statusUrl);
 
     const response = await axios.get(statusUrl, {
@@ -843,23 +816,17 @@ app.get("/enroll/phonepe-callback", async (req, res) => {
     const paymentState = statusResponse?.paymentDetails?.[0]?.state || statusResponse?.state;
     console.log("[phonepe-callback] Determined paymentState:", paymentState);
 
-    const merchantOrderFromResp = statusResponse?.merchantOrderId || merchantOrderId;
-
-    // 🔹 Step 3: Update enrollment + redirect
     if (paymentState === "SUCCESS" || paymentState === "COMPLETED") {
       await EnrollmentCollection.findOneAndUpdate(
-        { merchantOrderId: merchantOrderFromResp },
-        { $set: { paid: true, phonepeOrderId: orderId } },
+        { merchantOrderId: statusResponse?.merchantOrderId || merchantOrderId },
+        { $set: { paid: true, phonepeOrderId: orderId || statusResponse?.orderId } },
         { new: true }
       );
-      console.log("[phonepe-callback] Payment SUCCESS for order:", orderId);
       return res.redirect(`/completeenrollment?contestId=${contestId || ""}`);
     } else if (paymentState === "PENDING") {
-      console.log("[phonepe-callback] Payment PENDING for order:", orderId);
-      return res.redirect(`/paymentpending?orderId=${orderId}`);
+      return res.redirect(`/paymentpending?orderId=${orderId || merchantOrderId}`);
     } else {
       const reason = statusResponse?.message || "Payment failed";
-      console.log("[phonepe-callback] Payment FAILED for order:", orderId, "Reason:", reason);
       return res.redirect(`/paymentfailed?reason=${encodeURIComponent(reason)}`);
     }
   } catch (err) {
@@ -1004,78 +971,56 @@ async function getPhonePeAccessToken() {
   }
 }
 
-// Create PhonePe order using PG Checkout API
-// Create PhonePe order using PG Checkout API
 app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async (req, res) => {
   try {
-    console.log("[create-phonepe-order] URL:", req.originalUrl, "| method:", req.method);
-    console.log("[create-phonepe-order] req.body keys:", Object.keys(req.body));
-    console.log("[create-phonepe-order] req.file:", req.file ? req.file.originalname : "No file uploaded");
-
     const contestId = (req.body.contestId || req.query.contestId || "").trim();
     const phone = req.body.phone;
-    console.log("[create-phonepe-order] contestId extracted:", JSON.stringify(contestId));
 
-    // Validate contest
     const contest = await ContestCollection.findOne({ contestId }).lean();
     if (!contest) return res.status(404).json({ error: "Contest not found" });
 
-    // Validate user
     const user = await LogInCollection.findById(req.session.userId);
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    // Validate file
-    const file = req.file;
-    if (!file) return res.status(400).json({ error: "No file uploaded." });
+    if (!req.file) return res.status(400).json({ error: "No file uploaded." });
+    if (!/^\d{10}$/.test(phone)) return res.status(400).json({ error: "Invalid phone number." });
 
-    // Validate phone
-    let mobileNumber = phone;
-    if (!/^\d{10}$/.test(mobileNumber)) {
-      return res.status(400).json({ error: "Invalid phone number." });
-    }
-
-    // ✅ merchantOrderId (your own id)
+    // Always generate and save merchantOrderId (our ID)
     const merchantOrderId = `ARTENDER_${contestId}_${user._id}_${Date.now()}`;
-    console.log(`[create-phonepe-order] Generated merchantOrderId: ${merchantOrderId}`);
+    console.log("[create-phonepe-order] Generated merchantOrderId:", merchantOrderId);
 
-    // Save enrollment with paid: false
+    // Save pending enrollment
     await EnrollmentCollection.findOneAndUpdate(
-      { userName: user.name, contestId: String(contestId) },
+      { userName: user.name, contestId },
       {
         userName: user.name,
         email: user.email,
-        contestId: String(contestId),
-        file: file.buffer.toString("base64"),
-        fileType: file.mimetype,
+        contestId,
+        file: req.file.buffer.toString("base64"),
+        fileType: req.file.mimetype,
         paid: false,
-        phone: mobileNumber,
-        paymentId: merchantOrderId, // ✅ your order id
+        phone,
+        paymentId: merchantOrderId,   // your internal ID
+        merchantOrderId,              // duplicate field for clarity
       },
       { upsert: true, new: true }
     );
 
-    // ✅ Step 1: Get access token
     const accessToken = await getPhonePeAccessToken();
-
-    // ✅ Step 2: Create order
-    const base = (process.env.PHONEPE_BASE_URL || "https://api.phonepe.com/apis/pg").replace(/\/+$/, "");
-    const payUrl = `${base}/checkout/v2/pay`;
-    console.log("[create-phonepe-order] payUrl:", payUrl);
+    const payUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`;
 
     const requestHeaders = {
       "Content-Type": "application/json",
       Authorization: `O-Bearer ${accessToken}`,
     };
 
-    const amount = Number(contest.price) * 100; // amount in paise
-
     const requestBody = {
-      amount,
+      amount: Number(contest.price) * 100,
       expireAfter: 1200,
       metaInfo: {
         udf1: user.name,
         udf2: contestId,
-        udf3: mobileNumber,
+        udf3: phone,
         udf4: user.email,
         udf5: "Artender",
       },
@@ -1083,43 +1028,30 @@ app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async
         type: "PG_CHECKOUT",
         message: "Payment for contest enrollment",
         merchantUrls: {
-          // Must match EXACT whitelist in PhonePe dashboard
-          redirectUrl: (process.env.PHONEPE_CALLBACK_URL || "https://www.artender.in/enroll/phonepe-callback"),
+          redirectUrl: process.env.PHONEPE_CALLBACK_URL || "https://www.artender.in/enroll/phonepe-callback",
         },
       },
-      merchantOrderId, // ✅ your id sent to PhonePe
+      merchantOrderId, // send to PhonePe
     };
 
     const response = await axios.post(payUrl, requestBody, { headers: requestHeaders });
     const data = response.data;
 
-    // Save PhonePe orderId and redirectUrl
-    if (data?.orderId || data?.redirectUrl) {
-      await EnrollmentCollection.findOneAndUpdate(
-        { userName: user.name, contestId: String(contestId) },
-        {
-          $set: {
-            phonepeOrderId: data.orderId || null,
-            phonepeRedirectUrl: data.redirectUrl || null,
-            merchantOrderId, // ✅ also store explicitly
-          },
-        },
-        { new: true }
-      );
-    }
+    // Save PhonePe orderId (if returned)
+    await EnrollmentCollection.findOneAndUpdate(
+      { merchantOrderId },
+      { $set: { phonepeOrderId: data?.orderId || null, phonepeRedirectUrl: data?.redirectUrl || null } },
+      { new: true }
+    );
 
     if (data?.redirectUrl) {
       return res.json({ redirectUrl: data.redirectUrl, orderId: merchantOrderId });
     } else {
-      console.error("[create-phonepe-order] No redirectUrl in response:", data);
       return res.status(500).json({ error: "Failed to create PhonePe order", details: data });
     }
   } catch (err) {
     console.error("[create-phonepe-order] Error:", err.response?.data || err.message);
-    res.status(500).json({
-      error: "Failed to create PhonePe order",
-      details: err.response?.data || err.message,
-    });
+    res.status(500).json({ error: "Failed to create PhonePe order", details: err.response?.data || err.message });
   }
 });
 
