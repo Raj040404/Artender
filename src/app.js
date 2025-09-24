@@ -1050,9 +1050,10 @@ app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async
 
 // Apply to all requests
 const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: "Too many requests from this IP, please try again after a minute."
+  windowMs: 1 * 60 * 1000,
+  max: 100,
+  message: "Too many requests, please try again later.",
+  keyGenerator: (req) => req.ip   // use req.ip explicitly
 });
 app.use(limiter);
 
@@ -1131,6 +1132,11 @@ app.post("/reset-password", async (req, res) => {
 
   res.render("login", { error: "Password reset successful. Please log in." });
 });
+
+// Trust the first proxy (Render, Heroku, etc.) so X-Forwarded-* headers are valid
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
 
 // Start the server
 const PORT = process.env.PORT || 3000;
