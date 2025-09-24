@@ -761,9 +761,10 @@ app.get("/competitions", requireLogin, async (req, res) => {
 const mongoose = require("mongoose");
 
 // PhonePe payment callback
-app.get("/enroll/phonepe-callback", requireLogin, async (req, res) => {
-  const { orderId, contestId } = req.query;
-  console.log("[phonepe-callback] orderId:", orderId, "contestId:", contestId);
+app.get("/enroll/phonepe-callback",  async (req, res) => {
+  // Normalize incoming identifiers: PhonePe may send different param names
+  const phonepeOrderId = req.query.orderId || req.query.order_id || req.query.merchantOrderId || null;
+  console.log("[phonepe-callback] query:", req.query, "resolvedPhonePeOrderId:", phonepeOrderId);
 
   try {
     const accessToken = await getPhonePeAccessToken();
@@ -780,17 +781,19 @@ app.get("/enroll/phonepe-callback", requireLogin, async (req, res) => {
     const statusResponse = response.data;
     console.log("[phonepe-callback] PhonePe status response:", statusResponse);
 
+    // Get contestId from query or PhonePe metaInfo
+    const resolvedContestId = req.query.contestId || statusResponse?.metaInfo?.udf2 || null;
+    console.log("[phonepe-callback] Determined contestId:", resolvedContestId);
+
     // Use the state from paymentDetails[0] if present, otherwise fallback to overall state
     const paymentState = statusResponse?.paymentDetails?.[0]?.state || statusResponse?.state;
     console.log("[phonepe-callback] Determined paymentState:", paymentState);
 
-    // ✅ Check for both COMPLETED and SUCCESS for sandbox/real environment
+    // Reconcile enrollment by merchantOrderId (paymentId) if available, otherwise by PhonePe order id
+    const merchantOrderId = statusResponse?.merchantOrderId || statusResponse?.metaInfo?.udf2 || null;
+    const query = merchantOrderId ? { paymentId: merchantOrderId } : { phonepeOrderId };
     if (paymentState === "SUCCESS" || paymentState === "COMPLETED") {
-      await EnrollmentCollection.findOneAndUpdate(
-        { contestId: String(contestId), paymentId: orderId },
-        { $set: { paid: true } },
-        { new: true }
-      );
+      await EnrollmentCollection.findOneAndUpdate(query, { $set: { paid: true, phonepeOrderId } }, { new: true });
       console.log("[phonepe-callback] Payment SUCCESS for order:", orderId);
       return res.redirect(`/completeenrollment?contestId=${contestId}`);
     } 
@@ -925,7 +928,7 @@ app.get("/logout", (req, res) => {
 
 // Helper: Get PhonePe access token
 async function getPhonePeAccessToken() {
-  const tokenUrl = 'https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token';
+  const tokenUrl = process.env.PHONEPE_TOKEN_URL;
   const requestHeaders = {
     "Content-Type": "application/x-www-form-urlencoded"
   };
@@ -1017,7 +1020,8 @@ app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async
         type: "PG_CHECKOUT",
         message: "Payment for contest enrollment",
         merchantUrls: {
-          redirectUrl: `https://www.artender.in/enroll/phonepe-callback?orderId=${orderId}&contestId=${contestId}`,
+          // Use exact whitelisted callback (no dynamic query params). PhonePe will append params.
+          redirectUrl: (process.env.PHONEPE_CALLBACK_URL || "https://www.artender.in/enroll/phonepe-callback"),
         },
       },
       merchantOrderId: orderId,
@@ -1073,7 +1077,7 @@ app.post("/forgot-password", async (req, res) => {
 
   // Send OTP via email
   await transporter.sendMail({
-    from: "your-email@example.com",
+    from: process.env.EMAIL_USER,
     to: email,
     subject: "Artender Password Reset OTP",
     text: `Your OTP for password reset is ${otp}. This OTP is valid for 5 minutes.`,
