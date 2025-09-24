@@ -778,68 +778,67 @@ app.get("/competitions", requireLogin, async (req, res) => {
 
 const mongoose = require("mongoose");
 
-// PhonePe payment callback
+// PhonePe payment callback (restores working logic + token fallback)
 app.get("/enroll/phonepe-callback", async (req, res) => {
-  // Normalize incoming identifiers
-  let phonepeOrderId = req.query.orderId || req.query.order_id || req.query.merchantOrderId || null;
+  // Primary values expected from PhonePe
+  let { orderId, contestId } = req.query;
   const token = req.query.token || null;
-  console.log("[phonepe-callback] query keys:", Object.keys(req.query));
-  console.log("[phonepe-callback] initial phonepeOrderId:", phonepeOrderId, "token present:", !!token);
+  console.log("[phonepe-callback] incoming query:", req.query);
 
-  // If PhonePe sent token (common) but not orderId, try to locate the enrollment
-  // by matching the token contained in the saved redirect URL.
-  let merchantOrderId = null;
-  if (!phonepeOrderId && token) {
+  // If PhonePe returned only a token, try to find the enrollment that stored the redirectUrl containing that token
+  if (!orderId && token) {
     try {
       const enrollment = await EnrollmentCollection.findOne({ phonepeRedirectUrl: { $regex: token } }).lean();
       if (enrollment) {
-        phonepeOrderId = enrollment.phonepeOrderId || null;
-        merchantOrderId = enrollment.paymentId || null;
-        console.log("[phonepe-callback] matched enrollment:", { userName: enrollment.userName, paymentId: enrollment.paymentId, phonepeOrderId: enrollment.phonepeOrderId });
+        orderId = enrollment.phonepeOrderId || enrollment.paymentId || orderId;
+        contestId = contestId || enrollment.contestId || contestId;
+        console.log("[phonepe-callback] token matched enrollment:", { userName: enrollment.userName, paymentId: enrollment.paymentId, phonepeOrderId: enrollment.phonepeOrderId });
       } else {
-        console.log("[phonepe-callback] no enrollment matched for token");
+        console.log("[phonepe-callback] token did not match any enrollment");
       }
     } catch (e) {
-      console.error("[phonepe-callback] db lookup error:", e.message);
+      console.error("[phonepe-callback] DB lookup error for token:", e.message);
     }
   }
 
-  if (!phonepeOrderId && !merchantOrderId) {
-    console.log("[phonepe-callback] no order id or merchantOrderId available after token lookup");
+  if (!orderId) {
+    console.log("[phonepe-callback] No orderId available; returning generic message");
     return res.send("Callback received. If your payment completed, please wait and check profile.");
   }
 
   try {
     const accessToken = await getPhonePeAccessToken();
-    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${phonepeOrderId}/status?details=true`;
+    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${orderId}/status?details=false`;
     console.log("[phonepe-callback] Checking status at:", statusUrl);
 
     const response = await axios.get(statusUrl, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `O-Bearer ${accessToken}`,
-      },
+        "Authorization": `O-Bearer ${accessToken}`
+      }
     });
 
     const statusResponse = response.data;
-    console.log("[phonepe-callback] PhonePe status response (summary):", { orderId: statusResponse.orderId, state: statusResponse.state });
+    console.log("[phonepe-callback] PhonePe status response:", statusResponse);
 
-    const resolvedContestId = req.query.contestId || statusResponse?.metaInfo?.udf2 || null;
+    // Use the state from paymentDetails[0] if present, otherwise fallback to overall state
     const paymentState = statusResponse?.paymentDetails?.[0]?.state || statusResponse?.state;
+    console.log("[phonepe-callback] Determined paymentState:", paymentState);
 
+    // Reconcile enrollment using merchantOrderId or phonepe orderId
     const merchantOrderId = statusResponse?.merchantOrderId || statusResponse?.metaInfo?.udf2 || null;
-    const query = merchantOrderId ? { paymentId: merchantOrderId } : { phonepeOrderId };
+    const query = merchantOrderId ? { paymentId: merchantOrderId } : { phonepeOrderId: orderId };
 
     if (paymentState === "SUCCESS" || paymentState === "COMPLETED") {
-      await EnrollmentCollection.findOneAndUpdate(query, { $set: { paid: true, phonepeOrderId } }, { new: true });
-      console.log("[phonepe-callback] Payment SUCCESS for order:", phonepeOrderId);
-      return res.redirect(`/completeenrollment?contestId=${resolvedContestId || ""}`);
+      await EnrollmentCollection.findOneAndUpdate(query, { $set: { paid: true, phonepeOrderId: orderId } }, { new: true });
+      console.log("[phonepe-callback] Payment SUCCESS for order:", orderId);
+      return res.redirect(`/completeenrollment?contestId=${contestId || (statusResponse?.metaInfo?.udf2 || "")}`);
     } else if (paymentState === "PENDING") {
-      console.log("[phonepe-callback] Payment PENDING for order:", phonepeOrderId);
-      return res.redirect(`/paymentpending?orderId=${phonepeOrderId}`);
+      console.log("[phonepe-callback] Payment PENDING for order:", orderId);
+      return res.redirect(`/paymentpending?orderId=${orderId}`);
     } else {
       const reason = statusResponse?.message || "Payment failed";
-      console.log("[phonepe-callback] Payment FAILED for order:", phonepeOrderId, "Reason:", reason);
+      console.log("[phonepe-callback] Payment FAILED for order:", orderId, "Reason:", reason);
       return res.redirect(`/paymentfailed?reason=${encodeURIComponent(reason)}`);
     }
   } catch (err) {
