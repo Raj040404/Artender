@@ -783,9 +783,12 @@ app.get("/enroll/phonepe-callback", async (req, res) => {
   console.log("[phonepe-callback] incoming query:", req.query);
 
   try {
-    // If no params, fetch last unpaid enrollment
+    // ✅ If no IDs came back, recover last unpaid enrollment
     if (!orderId && !merchantOrderId) {
-      const enrollment = await EnrollmentCollection.findOne({ paid: false }).sort({ createdAt: -1 }).lean();
+      const enrollment = await EnrollmentCollection.findOne({ paid: false })
+        .sort({ createdAt: -1 })
+        .lean();
+
       if (enrollment) {
         orderId = enrollment.phonepeOrderId;
         merchantOrderId = enrollment.merchantOrderId;
@@ -799,8 +802,9 @@ app.get("/enroll/phonepe-callback", async (req, res) => {
       return res.redirect("/paymentfailed?reason=Missing+orderId");
     }
 
+    // ✅ Always use merchantOrderId if available
     const accessToken = await getPhonePeAccessToken();
-    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${orderId || merchantOrderId}/status?details=false`;
+    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${merchantOrderId || orderId}/status?details=false`;
     console.log("[phonepe-callback] Checking status at:", statusUrl);
 
     const response = await axios.get(statusUrl, {
@@ -822,11 +826,14 @@ app.get("/enroll/phonepe-callback", async (req, res) => {
         { $set: { paid: true, phonepeOrderId: orderId || statusResponse?.orderId } },
         { new: true }
       );
+      console.log("[phonepe-callback] Payment SUCCESS:", merchantOrderId);
       return res.redirect(`/completeenrollment?contestId=${contestId || ""}`);
     } else if (paymentState === "PENDING") {
-      return res.redirect(`/paymentpending?orderId=${orderId || merchantOrderId}`);
+      console.log("[phonepe-callback] Payment PENDING:", merchantOrderId);
+      return res.redirect(`/paymentpending?orderId=${merchantOrderId}`);
     } else {
       const reason = statusResponse?.message || "Payment failed";
+      console.log("[phonepe-callback] Payment FAILED:", merchantOrderId, "Reason:", reason);
       return res.redirect(`/paymentfailed?reason=${encodeURIComponent(reason)}`);
     }
   } catch (err) {
@@ -834,6 +841,7 @@ app.get("/enroll/phonepe-callback", async (req, res) => {
     return res.redirect(`/paymentfailed?reason=${encodeURIComponent(err.message)}`);
   }
 });
+
 
 
 app.get("/enroll/:contestId", requireLogin, async (req, res) => {

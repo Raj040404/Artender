@@ -87,17 +87,20 @@ const ContestSchema = new mongoose.Schema({
   theme: { type: String },
 });
 
-const EnrollmentSchema = new mongoose.Schema({
-  userName: { type: String, required: true },
-  email: { type: String, required: true },
-  contestId: { type: String, ref: "Contest", required: true },
-  paymentId: { type: String, default: null },
+const enrollmentSchema = new mongoose.Schema({
+  userName: String,
+  email: String,
+  contestId: String,
+  file: String,
+  fileType: String,
+  phone: String,
   paid: { type: Boolean, default: false },
-  file: { type: String },
-  fileType: { type: String }, // <-- Add this line
-  phone: { type: String },    // <-- Add this line
-  createdAt: { type: Date, default: Date.now }
-});
+  paymentId: String,         // your merchantOrderId
+  merchantOrderId: String,
+  phonepeOrderId: String,
+  phonepeRedirectUrl: String,
+}, { timestamps: true }); // ✅ this adds createdAt & updatedAt
+
 
 const EnrollmentCollection = mongoose.model("Enrollment", EnrollmentSchema);
 const conn = mongoose.connection.useDb("test");
