@@ -58,18 +58,34 @@ app.use(express.static(path.join(__dirname, '../public')));
 // Set up session management
 require("dotenv").config();
 
+// Trust proxy for platforms like Render
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
+
+// Rate limiter (apply early)
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 100,
+  message: "Too many requests, please try again later.",
+  keyGenerator: (req) => req.ip
+});
+app.use(limiter);
+
+// Set up session management
 app.use(
   session({
-    secret: process.env.secret, // Replace with a strong, random secret key
+    secret: process.env.secret,
     resave: false,
-    saveUninitialized: true,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI, // Replace with your MongoDB connection string
-    }),
-    cookie: { maxAge: 24 * 60 * 60 * 1000 }, // Set to true only if using HTTPS
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax"
+    }
   })
 );
-
 
 // Set up Multer for image and video uploads
 const storage = multer.memoryStorage(); // Use memory storage to store the file as Buffer
@@ -162,7 +178,7 @@ app.post("/signup", async (req, res) => {
 
     // Send OTP via email
     await transporter.sendMail({
-      from: "your-email@example.com",
+      from: process.env.EMAIL_USER,
       to: email,
       subject: "Your OTP for Signup",
       text: `Your OTP for signing up is ${otp}. This OTP is valid for 5 minutes.`,
@@ -217,7 +233,7 @@ app.post("/resend-otp", async (req, res) => {
 
     // Send OTP via email
     await transporter.sendMail({
-      from: "your-email@example.com",
+      from: process.env.EMAIL_USER,
       to: email,
       subject: "Your New OTP for Signup",
       text: `Your new OTP is ${otp}. This OTP is valid for 5 minutes.`,
@@ -749,7 +765,9 @@ app.get("/competitions", requireLogin, async (req, res) => {
     const contests = await ContestCollection.find({});
     // Clean up poster URLs if they have unwanted quotes
     contests.forEach(contest => {
-      contest.poster = contest.poster.replace(/"/g, '');  // Remove all double quotes
+      if (contest.poster && typeof contest.poster === 'string') {
+        contest.poster = contest.poster.replace(/"/g, '');
+      }
     });
     res.render("competitions", { contests });
   } catch (err) {
@@ -761,52 +779,48 @@ app.get("/competitions", requireLogin, async (req, res) => {
 const mongoose = require("mongoose");
 
 // PhonePe payment callback
-app.get("/enroll/phonepe-callback",  async (req, res) => {
-  // Normalize incoming identifiers: PhonePe may send different param names
+app.get("/enroll/phonepe-callback", async (req, res) => {
   const phonepeOrderId = req.query.orderId || req.query.order_id || req.query.merchantOrderId || null;
   console.log("[phonepe-callback] query:", req.query, "resolvedPhonePeOrderId:", phonepeOrderId);
 
+  if (!phonepeOrderId) {
+    console.log("[phonepe-callback] no order id in query");
+    return res.send("Callback received. If your payment completed, please wait and check profile.");
+  }
+
   try {
     const accessToken = await getPhonePeAccessToken();
-    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${orderId}/status?details=false`;
+    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${phonepeOrderId}/status?details=true`;
     console.log("[phonepe-callback] Checking status at:", statusUrl);
 
     const response = await axios.get(statusUrl, {
-      headers: { 
+      headers: {
         "Content-Type": "application/json",
-        "Authorization": `O-Bearer ${accessToken}`
-      }
+        "Authorization": `O-Bearer ${accessToken}`,
+      },
     });
 
     const statusResponse = response.data;
-    console.log("[phonepe-callback] PhonePe status response:", statusResponse);
+    console.log("[phonepe-callback] PhonePe status response (summary):", { orderId: statusResponse.orderId, state: statusResponse.state });
 
-    // Get contestId from query or PhonePe metaInfo
     const resolvedContestId = req.query.contestId || statusResponse?.metaInfo?.udf2 || null;
-    console.log("[phonepe-callback] Determined contestId:", resolvedContestId);
-
-    // Use the state from paymentDetails[0] if present, otherwise fallback to overall state
     const paymentState = statusResponse?.paymentDetails?.[0]?.state || statusResponse?.state;
-    console.log("[phonepe-callback] Determined paymentState:", paymentState);
 
-    // Reconcile enrollment by merchantOrderId (paymentId) if available, otherwise by PhonePe order id
     const merchantOrderId = statusResponse?.merchantOrderId || statusResponse?.metaInfo?.udf2 || null;
     const query = merchantOrderId ? { paymentId: merchantOrderId } : { phonepeOrderId };
+
     if (paymentState === "SUCCESS" || paymentState === "COMPLETED") {
       await EnrollmentCollection.findOneAndUpdate(query, { $set: { paid: true, phonepeOrderId } }, { new: true });
-      console.log("[phonepe-callback] Payment SUCCESS for order:", orderId);
-      return res.redirect(`/completeenrollment?contestId=${contestId}`);
-    } 
-    else if (paymentState === "PENDING") {
-      console.log("[phonepe-callback] Payment PENDING for order:", orderId);
-      return res.redirect(`/paymentpending?orderId=${orderId}`);
-    } 
-    else {
+      console.log("[phonepe-callback] Payment SUCCESS for order:", phonepeOrderId);
+      return res.redirect(`/completeenrollment?contestId=${resolvedContestId || ""}`);
+    } else if (paymentState === "PENDING") {
+      console.log("[phonepe-callback] Payment PENDING for order:", phonepeOrderId);
+      return res.redirect(`/paymentpending?orderId=${phonepeOrderId}`);
+    } else {
       const reason = statusResponse?.message || "Payment failed";
-      console.log("[phonepe-callback] Payment FAILED for order:", orderId, "Reason:", reason);
+      console.log("[phonepe-callback] Payment FAILED for order:", phonepeOrderId, "Reason:", reason);
       return res.redirect(`/paymentfailed?reason=${encodeURIComponent(reason)}`);
     }
-
   } catch (err) {
     console.error("[phonepe-callback] Error:", err.response?.data || err.message);
     return res.redirect(`/paymentfailed?reason=${encodeURIComponent(err.message)}`);
@@ -928,20 +942,26 @@ app.get("/logout", (req, res) => {
 
 // Helper: Get PhonePe access token
 async function getPhonePeAccessToken() {
-  const tokenUrl = process.env.PHONEPE_TOKEN_URL;
-  const requestHeaders = {
-    "Content-Type": "application/x-www-form-urlencoded"
-  };
-  const requestBody = new URLSearchParams({
-    client_version: 1,
-    grant_type: "client_credentials",
-    client_id: process.env.PHONEPE_MERCHANT_ID,
-    client_secret: process.env.PHONEPE_MERCHANT_KEY
-  }).toString();
+  try {
+    const tokenUrl = process.env.PHONEPE_TOKEN_URL || 'https://api.phonepe.com/apis/identity-manager/v1/oauth/token';
+    console.log("[getPhonePeAccessToken] tokenUrl (from env):", process.env.PHONEPE_TOKEN_URL);
+    const requestHeaders = {
+      "Content-Type": "application/x-www-form-urlencoded"
+    };
+    const requestBody = new URLSearchParams({
+      client_version: 1,
+      grant_type: "client_credentials",
+      client_id: process.env.PHONEPE_MERCHANT_ID,
+      client_secret: process.env.PHONEPE_MERCHANT_KEY
+    }).toString();
 
 
-  const response = await axios.post(tokenUrl, requestBody, { headers: requestHeaders });
-  return response.data.access_token;
+    const response = await axios.post(tokenUrl, requestBody, { headers: requestHeaders });
+    return response.data.access_token;
+  } catch (err) {
+    console.error("[getPhonePeAccessToken] Error:", err.response?.data || err.message);
+    throw new Error("Failed to get access token from PhonePe.");
+  }
 }
 
 // Create PhonePe order using PG Checkout API
@@ -999,7 +1019,10 @@ app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async
     const accessToken = await getPhonePeAccessToken();
 
     // ✅ Step 2: Create order using env
-    const payUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`;
+    const base = (process.env.PHONEPE_BASE_URL || "https://api.phonepe.com/apis/pg").replace(/\/+$/,'');
+    console.log("[create-phonepe-order] PHONEPE_BASE_URL (from env):", process.env.PHONEPE_BASE_URL);
+    console.log("[create-phonepe-order] payUrl:", `${base}/checkout/v2/pay`);
+    const payUrl = `${base}/checkout/v2/pay`;
     const requestHeaders = {
       "Content-Type": "application/json",
       Authorization: `O-Bearer ${accessToken}`,
@@ -1030,6 +1053,15 @@ app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async
     const response = await axios.post(payUrl, requestBody, { headers: requestHeaders });
     const data = response.data;
 
+    // Save PhonePe orderId and redirectUrl for reconciliation
+    if (data?.orderId || data?.redirectUrl) {
+      await EnrollmentCollection.findOneAndUpdate(
+        { userName: user.name, contestId: String(contestId) },
+        { $set: { phonepeOrderId: data.orderId || null, phonepeRedirectUrl: data.redirectUrl || null } },
+        { new: true }
+      );
+    }
+
     let redirectUrl = data?.redirectUrl;
 
     if (redirectUrl) {
@@ -1048,14 +1080,7 @@ app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async
 });
 
 
-// Apply to all requests
-const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 100,
-  message: "Too many requests, please try again later.",
-  keyGenerator: (req) => req.ip   // use req.ip explicitly
-});
-app.use(limiter);
+
 
 // --- Forgot Password Logic ---
 
@@ -1133,10 +1158,7 @@ app.post("/reset-password", async (req, res) => {
   res.render("login", { error: "Password reset successful. Please log in." });
 });
 
-// Trust the first proxy (Render, Heroku, etc.) so X-Forwarded-* headers are valid
-if (process.env.NODE_ENV === "production") {
-  app.set("trust proxy", 1);
-}
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;
