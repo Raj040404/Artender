@@ -783,7 +783,7 @@ app.get("/enroll/phonepe-callback", async (req, res) => {
   console.log("[phonepe-callback] incoming query:", req.query);
 
   try {
-    // ✅ If no IDs came back, recover last unpaid enrollment
+    // ✅ Recover last unpaid enrollment if IDs missing
     if (!orderId && !merchantOrderId) {
       const enrollment = await EnrollmentCollection.findOne({ paid: false })
         .sort({ createdAt: -1 })
@@ -802,25 +802,46 @@ app.get("/enroll/phonepe-callback", async (req, res) => {
       return res.redirect("/paymentfailed?reason=Missing+orderId");
     }
 
-    // ✅ Always use merchantOrderId if available
     const accessToken = await getPhonePeAccessToken();
     const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${merchantOrderId || orderId}/status?details=false`;
-    console.log("[phonepe-callback] Checking status at:", statusUrl);
 
-    const response = await axios.get(statusUrl, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `O-Bearer ${accessToken}`,
-      },
-    });
+    async function checkStatus() {
+      const response = await axios.get(statusUrl, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `O-Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    }
 
-    const statusResponse = response.data;
+    // First attempt
+    let statusResponse = await checkStatus();
     console.log("[phonepe-callback] PhonePe status response:", statusResponse);
 
-    const paymentState = statusResponse?.paymentDetails?.[0]?.state || statusResponse?.state;
-    console.log("[phonepe-callback] Determined paymentState:", paymentState);
+    // --- Normalize payment state ---
+    function resolveState(resp) {
+      const nested = resp?.paymentDetails?.[0]?.state;
+      const top = resp?.state;
+      if (nested === "SUCCESS" || nested === "COMPLETED") return "SUCCESS";
+      if (top === "SUCCESS" || top === "COMPLETED") return "SUCCESS";
+      if (nested === "PENDING" || top === "PENDING") return "PENDING";
+      return "FAILED";
+    }
 
-    if (paymentState === "SUCCESS" || paymentState === "COMPLETED") {
+    let paymentState = resolveState(statusResponse);
+    console.log("[phonepe-callback] Normalized paymentState:", paymentState);
+
+    // Retry once if still pending
+    if (paymentState === "PENDING") {
+      console.log("[phonepe-callback] Retrying after 2s...");
+      await new Promise(r => setTimeout(r, 2000));
+      statusResponse = await checkStatus();
+      paymentState = resolveState(statusResponse);
+      console.log("[phonepe-callback] After retry, paymentState:", paymentState);
+    }
+
+    if (paymentState === "SUCCESS") {
       await EnrollmentCollection.findOneAndUpdate(
         { merchantOrderId: statusResponse?.merchantOrderId || merchantOrderId },
         { $set: { paid: true, phonepeOrderId: orderId || statusResponse?.orderId } },
@@ -829,7 +850,7 @@ app.get("/enroll/phonepe-callback", async (req, res) => {
       console.log("[phonepe-callback] Payment SUCCESS:", merchantOrderId);
       return res.redirect(`/completeenrollment?contestId=${contestId || ""}`);
     } else if (paymentState === "PENDING") {
-      console.log("[phonepe-callback] Payment PENDING:", merchantOrderId);
+      console.log("[phonepe-callback] Payment still PENDING:", merchantOrderId);
       return res.redirect(`/paymentpending?orderId=${merchantOrderId}`);
     } else {
       const reason = statusResponse?.message || "Payment failed";
