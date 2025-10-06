@@ -1,11 +1,126 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
   <title>Payment Failed</title>
+
+  <!-- Character Set & Viewport -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Web App Capabilities -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Manifest & Favicon -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="/logo/logo32.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/logo/logo192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/logo/logo512.png">
+
+  <!-- Social Media & SEO -->
+  <meta name="theme-color" content="#3399cc">
+  <meta property="og:title" content="Payment Failed - Artender">
+  <meta property="og:description" content="Your payment was not successful.">
+  <meta property="og:image" content="/logo/WhatsApp%20Image%202025-02-23%20at%2000.10.41_0364758d.jpg">
+  <meta property="og:url" content="http://www.artender.in">
+  <meta property="og:type" content="website">
+  <meta property="twitter:card" content="summary_large_image">
+
+  <!-- Fonts & Styles -->
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/explore.css" />
+  <link rel="stylesheet" href="/css/enrollment.css" />
+
+  <style>
+    body {
+      background-color: #f6f9fb;
+      font-family: 'Inter', 'Noto Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .payment-failed-card {
+      max-width: 700px;
+      margin: 120px auto;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    .payment-failed-card img {
+      width: 90px;
+      margin-bottom: 20px;
+    }
+
+    .payment-failed-card h1 {
+      color: #cc3333;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .payment-failed-card p {
+      color: #444;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+
+    .payment-failed-card button {
+      background-color: #3399cc;
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .payment-failed-card button:hover {
+      background-color: #287aa6;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .payment-failed-card {
+        margin: 100px 20px;
+        padding: 25px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>⚠️ Payment Failed</h1>
-  <p>Reason: {{reason}}</p>
-  <a href="/home"><button>Go to Home</button></a>
+  <main>
+    <div class="payment-failed-card animate__animated animate__fadeInUp">
+      <img src="/logo/logo192.png" alt="Artender Logo">
+      <h1>⚠️ Payment Failed</h1>
+      <p>Reason: {{reason}}</p>
+      <a href="/home"><button>Go to Home</button></a>
+    </div>
+  </main>
 </body>
+
 </html>
