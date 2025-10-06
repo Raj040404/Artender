@@ -1,10 +1,130 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>Payment Failed</title>
+  <title>Payment Pending</title>
+
+  <!-- Character Set & Viewport -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Web App Capabilities -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Manifest & Favicon -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="/logo/logo32.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/logo/logo192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/logo/logo512.png">
+
+  <!-- SEO & Social -->
+  <meta name="theme-color" content="#3399cc">
+  <meta property="og:title" content="Payment Pending - Artender">
+  <meta property="og:description" content="Your payment is still processing. Please check back later.">
+  <meta property="og:image" content="/logo/WhatsApp%20Image%202025-02-23%20at%2000.10.41_0364758d.jpg">
+  <meta property="og:url" content="http://www.artender.in">
+  <meta property="og:type" content="website">
+  <meta property="twitter:card" content="summary_large_image">
+
+  <!-- Fonts & Styles -->
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f4f8fb;
+      color: #222;
+    }
+
+    .payment-pending-card {
+      max-width: 700px;
+      margin: 100px auto;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    .payment-pending-card h1 {
+      color: #d4a017;
+      font-size: 1.9rem;
+      margin-bottom: 25px;
+    }
+
+    .payment-pending-card button {
+      background-color: #3399cc;
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .payment-pending-card button:hover {
+      background-color: #287aa6;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 10px;
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 80px;
+    }
+
+    footer img {
+      width: 70px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .payment-pending-card {
+        margin: 80px 20px;
+        padding: 25px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>⚠️ Payment pending plzz Rechck after sometime</h1>
-  <a href="/home"><button>Go to Home</button></a>
+  <main>
+    <div class="payment-pending-card">
+      <h1>⚠️ Payment pending — please check again after sometime</h1>
+      <a href="/home"><button>Go to Home</button></a>
+    </div>
+  </main>
+
+  <footer>
+    <img src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg" alt="Artender Logo">
+    <p>© 2025 Artender. All Rights Reserved.</p>
+  </footer>
 </body>
+
 </html>
