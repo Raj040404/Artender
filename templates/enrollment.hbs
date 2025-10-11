@@ -188,6 +188,60 @@
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/explore.css" />
   <link rel="stylesheet" href="/css/enrollment.css" />
+  <style>
+    /* Loading spinner styles */
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #3498db;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      color: white;
+      font-size: 18px;
+    }
+
+    .loading-content {
+      text-align: center;
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      color: #333;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .loading-spinner-large {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #3498db;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 
 <body>
@@ -318,7 +372,10 @@
       <label for="file">Upload File (Image/Video):</label>
       <input type="file" id="file" name="file" accept="image/*,video/*" required />
 
-      <button id="enrollButton" type="button">Pay and enroll</button>
+      <button id="enrollButton" type="button">
+        <span id="buttonText">Pay and enroll</span>
+        <div id="buttonSpinner" class="spinner" style="display: none;"></div>
+      </button>
     </form>
     <p>Amount to pay: ₹{{contest.price}}</p>
 
@@ -405,6 +462,16 @@
   </div>
 </div>
 
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay" style="display: none;">
+  <div class="loading-content">
+    <div class="loading-spinner-large"></div>
+    <h3>Please wait...</h3>
+    <p>You are being navigated to the payment gateway.</p>
+    <p>Do not refresh or close this page.</p>
+  </div>
+</div>
+
 <!-- JavaScript for Modal Control -->
 <script>
   function openRefundPolicy() {
@@ -456,7 +523,7 @@
       if (alreadyEnrolled) {
         document.getElementById('enrollButton').disabled = true;
         document.getElementById('popupMessage').style.display = 'block';
-        document.getElementById('enrollButton').textContent = 'Already Enrolled';
+        document.getElementById('buttonText').textContent = 'Already Enrolled';
       }
 
       document.getElementById('enrollButton').onclick = async function (e) {
@@ -473,6 +540,18 @@
           return;
         }
 
+        // Show loading state on button
+        const button = document.getElementById('enrollButton');
+        const buttonText = document.getElementById('buttonText');
+        const buttonSpinner = document.getElementById('buttonSpinner');
+        
+        button.disabled = true;
+        buttonText.textContent = 'Processing...';
+        buttonSpinner.style.display = 'inline-block';
+
+        // Show loading overlay
+        document.getElementById('loadingOverlay').style.display = 'flex';
+
         // 1. Create FormData to send file and other details
         const form = document.getElementById('enrollmentForm');
         const formData = new FormData(form);
@@ -481,27 +560,32 @@
         formData.set('phone', phone);
         formData.set('contestId', contestId);
 
-        // 2. Create PhonePe payment order (which also handles enrollment)
-        let orderData;
         try {
+          // 2. Create PhonePe payment order (which also handles enrollment)
           const orderRes = await fetch('/api/create-phonepe-order?contestId={{contest.contestId}}', {
             method: 'POST',
             body: formData // Send as FormData, not JSON
           });
-          orderData = await orderRes.json();
+          
+          const orderData = await orderRes.json();
           console.log("Order data from backend:", orderData);
 
           if (!orderRes.ok) {
-            alert('Failed to create payment order: ' + (orderData.error || 'Unknown error from server.'));
-            return;
+            throw new Error(orderData.error || 'Unknown error from server.');
           }
-        } catch (err) {
-          alert('Network error during payment order creation: ' + err.message);
-          return;
-        }
 
-        // Redirect to PhonePe payment page
-        window.location.href = orderData.redirectUrl;
+          // Redirect to PhonePe payment page
+          window.location.href = orderData.redirectUrl;
+          
+        } catch (err) {
+          // Hide loading states
+          button.disabled = false;
+          buttonText.textContent = 'Pay and enroll';
+          buttonSpinner.style.display = 'none';
+          document.getElementById('loadingOverlay').style.display = 'none';
+          
+          alert('Error: ' + err.message);
+        }
       };
     });
   </script>
