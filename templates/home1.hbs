@@ -31,7 +31,8 @@
   <meta property="twitter:card" content="summary_large_image">
 
   <!-- CSS Reset -->
-  <style data-tag="reset-style-sheet">
+<!-- CSS Reset -->
+<style data-tag="reset-style-sheet">
     html { line-height: 1.15; scroll-behavior: smooth; }
     body { margin: 0; font-family: Inter, sans-serif; font-weight: 400; color: var(--dl-color-theme-neutral-dark); background: var(--dl-color-theme-neutral-light); }
     * { box-sizing: border-box; border-width: 0; border-style: solid; -webkit-font-smoothing: antialiased; }
@@ -448,136 +449,186 @@
       </footer4-wrapper>
     </div>
   </div>
-  <style>
-  /* Artistic menu button styles */
-  .navbar-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-  }
-  
-  .navbar-toggle:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  }
-  
-  .artistic-menu-icon {
-    position: relative;
-    width: 30px;
-    height: 24px;
-  }
-  
-  .brush-stroke {
-    position: absolute;
-    height: 4px;
-    background: linear-gradient(90deg, #3399cc, #9966cc);
-    border-radius: 2px;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-  
-  .brush-stroke-1 {
-    top: 0;
-    width: 100%;
-    transform-origin: center;
-  }
-  
-  .brush-stroke-2 {
-    top: 10px;
-    width: 80%;
-    right: 0;
-    transform-origin: right;
-  }
-  
-  .brush-stroke-3 {
-    top: 20px;
-    width: 60%;
-    transform-origin: center;
-  }
-  
-  /* Animation when menu is open */
-  .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-1 {
-    transform: rotate(45deg) translate(6px, 6px);
-    width: 100%;
-  }
-  
-  .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-2 {
-    opacity: 0;
-    transform: translateX(10px);
-  }
-  
-  .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-3 {
-    transform: rotate(-45deg) translate(6px, -6px);
-    width: 100%;
-  }
-  
-  /* Mobile responsive adjustments */
-  @media (max-width: 768px) {
+ <style>
+/* Hide mobile menu button by default (for desktop) */
+.navbar-toggle {
+    display: none;
+}
+
+/* Show mobile menu button only on tablets and mobile devices */
+@media (max-width: 991px) {
     .navbar-toggle {
-      width: 50px;
-      height: 50px;
-      top: 15px;
-      right: 15px;
+        display: flex;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-toggle:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
     
     .artistic-menu-icon {
-      width: 24px;
-      height: 20px;
+        position: relative;
+        width: 30px;
+        height: 24px;
     }
     
     .brush-stroke {
-      height: 3px;
+        position: absolute;
+        height: 4px;
+        background: linear-gradient(90deg, #3399cc, #9966cc);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .brush-stroke-1 {
+        top: 0;
+        width: 100%;
+        transform-origin: center;
     }
     
     .brush-stroke-2 {
-      top: 8px;
+        top: 10px;
+        width: 80%;
+        right: 0;
+        transform-origin: right;
     }
     
     .brush-stroke-3 {
-      top: 16px;
+        top: 20px;
+        width: 60%;
+        transform-origin: center;
     }
-  }
+    
+    /* Animation when menu is open */
+    .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-1 {
+        transform: rotate(45deg) translate(6px, 6px);
+        width: 100%;
+    }
+    
+    .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-2 {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    
+    .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-3 {
+        transform: rotate(-45deg) translate(6px, -6px);
+        width: 100%;
+    }
+    
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+        .navbar-toggle {
+            width: 50px;
+            height: 50px;
+            top: 15px;
+            right: 15px;
+        }
+        
+        .artistic-menu-icon {
+            width: 24px;
+            height: 20px;
+        }
+        
+        .brush-stroke {
+            height: 3px;
+        }
+        
+        .brush-stroke-2 {
+            top: 8px;
+        }
+        
+        .brush-stroke-3 {
+            top: 16px;
+        }
+    }
+}
+
+/* Also hide the desktop navbar on mobile and show mobile menu */
+@media (max-width: 991px) {
+    .navbar8-desktop-menu {
+        display: none !important;
+    }
+    
+    .navbar-menu {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.98);
+        z-index: 999;
+        flex-direction: column;
+        padding: 80px 20px 20px;
+        backdrop-filter: blur(10px);
+    }
+}
+
+/* Show desktop navbar on larger screens */
+@media (min-width: 992px) {
+    .navbar8-desktop-menu {
+        display: flex !important;
+    }
+    
+    .navbar-menu {
+        display: none !important;
+    }
+}
 </style>
 
-  <script defer src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
-  <script>
+<script defer src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
+<script>
     function toggleNavbar() {
-      const navbarMenu = document.getElementById("navbarMenu");
-      navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
+        const navbarMenu = document.getElementById("navbarMenu");
+        const isMobile = window.innerWidth <= 991; // Match your CSS breakpoint
+        
+        if (isMobile) {
+            navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
+        }
     }
 
-    // Remove the scrollToFooter function as it's no longer needed
+    // Close mobile menu when switching to desktop view
+    window.addEventListener('resize', function() {
+        const navbarMenu = document.getElementById("navbarMenu");
+        if (window.innerWidth > 991) {
+            navbarMenu.style.display = "none";
+        }
+    });
 
     document.body.addEventListener("click", function (event) {
-      let target = event.target.closest("a");
-      if (target && target.href && !target.href.includes("login") && !target.href.includes("signup")) {
-        event.preventDefault();
-        let messageBox = document.createElement("div");
-        messageBox.innerText = "You need to log in first";
-        messageBox.style.position = "absolute";
-        messageBox.style.left = event.pageX + "px";
-        messageBox.style.top = event.pageY + "px";
-        messageBox.style.background = "#333";
-        messageBox.style.color = "#fff";
-        messageBox.style.padding = "8px 12px";
-        messageBox.style.borderRadius = "5px";
-        messageBox.style.zIndex = "1000";
-        messageBox.style.fontSize = "14px";
-        document.body.appendChild(messageBox);
-        setTimeout(() => messageBox.remove(), 2000);
-      }
+        let target = event.target.closest("a");
+        if (target && target.href && !target.href.includes("login") && !target.href.includes("signup")) {
+            event.preventDefault();
+            let messageBox = document.createElement("div");
+            messageBox.innerText = "You need to log in first";
+            messageBox.style.position = "absolute";
+            messageBox.style.left = event.pageX + "px";
+            messageBox.style.top = event.pageY + "px";
+            messageBox.style.background = "#333";
+            messageBox.style.color = "#fff";
+            messageBox.style.padding = "8px 12px";
+            messageBox.style.borderRadius = "5px";
+            messageBox.style.zIndex = "1000";
+            messageBox.style.fontSize = "14px";
+            document.body.appendChild(messageBox);
+            setTimeout(() => messageBox.remove(), 2000);
+        }
     });
-  </script>
+</script>
+  
 </body>
 </html>
