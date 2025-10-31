@@ -696,14 +696,10 @@
 
 <script defer src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
 <script>
-  function toggleNavbar() {
-    const navbarMenu = document.getElementById("navbarMenu");
-    const isMobile = window.innerWidth <= 991;
-    
-    if (isMobile) {
+ function toggleNavbar() {
+      const navbarMenu = document.getElementById("navbarMenu");
       navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
     }
-  }
 
   // Close mobile menu when switching to desktop view
   window.addEventListener('resize', function() {
