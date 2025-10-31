@@ -449,185 +449,309 @@
       </footer4-wrapper>
     </div>
   </div>
- <style>
-/* Hide mobile menu button by default (for desktop) */
-.navbar-toggle {
+<style>
+  /* Hide mobile menu button by default (for desktop) */
+  .navbar-toggle {
     display: none;
-}
+  }
 
-/* Show mobile menu button only on tablets and mobile devices */
-@media (max-width: 991px) {
+  /* Mobile Menu Styles */
+  .navbar-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 999;
+    flex-direction: column;
+    padding: 80px 20px 20px;
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
+  }
+
+  .navbar-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 30px;
+  }
+
+  .navbar-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    font-weight: 500;
+    color: #333;
+    text-decoration: none;
+  }
+
+  .navbar-menu-link:hover {
+    background: rgba(51, 153, 204, 0.1);
+    transform: translateX(5px);
+    border-color: #3399cc;
+  }
+
+  .navbar-menu-link svg {
+    flex-shrink: 0;
+  }
+
+  .navbar-menu-auth-section {
+    margin-top: auto;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 20px;
+  }
+
+  .navbar-menu-auth-divider {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .navbar-menu-auth-divider span {
+    background: white;
+    padding: 0 12px;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .navbar-menu-buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .navbar-menu-button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .login-button {
+    background: linear-gradient(135deg, #3399cc, #9966cc);
+    color: white;
+  }
+
+  .signup-button {
+    background: transparent;
+    color: #3399cc;
+    border: 2px solid #3399cc !important;
+  }
+
+  .login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(51, 153, 204, 0.3);
+  }
+
+  .signup-button:hover {
+    background: #3399cc;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* Artistic menu button styles - ONLY ON MOBILE */
+  @media (max-width: 991px) {
     .navbar-toggle {
-        display: flex;
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
+      display: flex;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
     }
     
     .navbar-toggle:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
     
     .artistic-menu-icon {
-        position: relative;
-        width: 30px;
-        height: 24px;
+      position: relative;
+      width: 30px;
+      height: 24px;
     }
     
     .brush-stroke {
-        position: absolute;
-        height: 4px;
-        background: linear-gradient(90deg, #3399cc, #9966cc);
-        border-radius: 2px;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      position: absolute;
+      height: 4px;
+      background: linear-gradient(90deg, #3399cc, #9966cc);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     
     .brush-stroke-1 {
-        top: 0;
-        width: 100%;
-        transform-origin: center;
+      top: 0;
+      width: 100%;
+      transform-origin: center;
     }
     
     .brush-stroke-2 {
-        top: 10px;
-        width: 80%;
-        right: 0;
-        transform-origin: right;
+      top: 10px;
+      width: 80%;
+      right: 0;
+      transform-origin: right;
     }
     
     .brush-stroke-3 {
-        top: 20px;
-        width: 60%;
-        transform-origin: center;
+      top: 20px;
+      width: 60%;
+      transform-origin: center;
     }
     
     /* Animation when menu is open */
     .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-1 {
-        transform: rotate(45deg) translate(6px, 6px);
-        width: 100%;
+      transform: rotate(45deg) translate(6px, 6px);
+      width: 100%;
     }
     
     .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-2 {
-        opacity: 0;
-        transform: translateX(10px);
+      opacity: 0;
+      transform: translateX(10px);
     }
     
     .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-3 {
-        transform: rotate(-45deg) translate(6px, -6px);
-        width: 100%;
+      transform: rotate(-45deg) translate(6px, -6px);
+      width: 100%;
     }
     
-    /* Mobile responsive adjustments */
-    @media (max-width: 768px) {
-        .navbar-toggle {
-            width: 50px;
-            height: 50px;
-            top: 15px;
-            right: 15px;
-        }
-        
-        .artistic-menu-icon {
-            width: 24px;
-            height: 20px;
-        }
-        
-        .brush-stroke {
-            height: 3px;
-        }
-        
-        .brush-stroke-2 {
-            top: 8px;
-        }
-        
-        .brush-stroke-3 {
-            top: 16px;
-        }
-    }
-}
-
-/* Also hide the desktop navbar on mobile and show mobile menu */
-@media (max-width: 991px) {
+    /* Hide desktop navbar on mobile */
     .navbar8-desktop-menu {
-        display: none !important;
+      display: none !important;
+    }
+  }
+
+  /* Show desktop navbar on larger screens */
+  @media (min-width: 992px) {
+    .navbar8-desktop-menu {
+      display: flex !important;
     }
     
     .navbar-menu {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.98);
-        z-index: 999;
-        flex-direction: column;
-        padding: 80px 20px 20px;
-        backdrop-filter: blur(10px);
+      display: none !important;
     }
-}
+  }
 
-/* Show desktop navbar on larger screens */
-@media (min-width: 992px) {
-    .navbar8-desktop-menu {
-        display: flex !important;
+  /* Mobile responsive adjustments */
+  @media (max-width: 768px) {
+    .navbar-toggle {
+      width: 50px;
+      height: 50px;
+      top: 15px;
+      right: 15px;
+    }
+    
+    .artistic-menu-icon {
+      width: 24px;
+      height: 20px;
+    }
+    
+    .brush-stroke {
+      height: 3px;
+    }
+    
+    .brush-stroke-2 {
+      top: 8px;
+    }
+    
+    .brush-stroke-3 {
+      top: 16px;
     }
     
     .navbar-menu {
-        display: none !important;
+      padding: 70px 16px 16px;
     }
-}
+    
+    .navbar-menu-buttons {
+      flex-direction: column;
+    }
+    
+    .navbar-menu-link {
+      padding: 14px 16px;
+    }
+  }
 </style>
 
 <script defer src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
 <script>
-    function toggleNavbar() {
-        const navbarMenu = document.getElementById("navbarMenu");
-        const isMobile = window.innerWidth <= 991; // Match your CSS breakpoint
-        
-        if (isMobile) {
-            navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
-        }
+  function toggleNavbar() {
+    const navbarMenu = document.getElementById("navbarMenu");
+    const isMobile = window.innerWidth <= 991;
+    
+    if (isMobile) {
+      navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
     }
+  }
 
-    // Close mobile menu when switching to desktop view
-    window.addEventListener('resize', function() {
-        const navbarMenu = document.getElementById("navbarMenu");
-        if (window.innerWidth > 991) {
-            navbarMenu.style.display = "none";
-        }
-    });
+  // Close mobile menu when switching to desktop view
+  window.addEventListener('resize', function() {
+    const navbarMenu = document.getElementById("navbarMenu");
+    if (window.innerWidth > 991) {
+      navbarMenu.style.display = "none";
+    }
+  });
 
-    document.body.addEventListener("click", function (event) {
-        let target = event.target.closest("a");
-        if (target && target.href && !target.href.includes("login") && !target.href.includes("signup")) {
-            event.preventDefault();
-            let messageBox = document.createElement("div");
-            messageBox.innerText = "You need to log in first";
-            messageBox.style.position = "absolute";
-            messageBox.style.left = event.pageX + "px";
-            messageBox.style.top = event.pageY + "px";
-            messageBox.style.background = "#333";
-            messageBox.style.color = "#fff";
-            messageBox.style.padding = "8px 12px";
-            messageBox.style.borderRadius = "5px";
-            messageBox.style.zIndex = "1000";
-            messageBox.style.fontSize = "14px";
-            document.body.appendChild(messageBox);
-            setTimeout(() => messageBox.remove(), 2000);
-        }
-    });
+  // Close menu when clicking on links or outside
+  document.addEventListener('click', function(event) {
+    const navbarMenu = document.getElementById('navbarMenu');
+    const navbarToggle = document.querySelector('.navbar-toggle');
+    
+    // Close menu when clicking on a link
+    if (event.target.closest('.navbar-menu-link') || event.target.closest('.navbar-menu-button')) {
+      if (window.innerWidth <= 991) {
+        setTimeout(() => {
+          navbarMenu.style.display = 'none';
+        }, 300);
+      }
+    }
+    
+    // Close menu when clicking outside
+    if (!event.target.closest('.navbar-menu') && !event.target.closest('.navbar-toggle') && navbarMenu.style.display === 'flex') {
+      navbarMenu.style.display = 'none';
+    }
+  });
+
+  document.body.addEventListener("click", function (event) {
+    let target = event.target.closest("a");
+    if (target && target.href && !target.href.includes("login") && !target.href.includes("signup")) {
+      event.preventDefault();
+      let messageBox = document.createElement("div");
+      messageBox.innerText = "You need to log in first";
+      messageBox.style.position = "absolute";
+      messageBox.style.left = event.pageX + "px";
+      messageBox.style.top = event.pageY + "px";
+      messageBox.style.background = "#333";
+      messageBox.style.color = "#fff";
+      messageBox.style.padding = "8px 12px";
+      messageBox.style.borderRadius = "5px";
+      messageBox.style.zIndex = "1000";
+      messageBox.style.fontSize = "14px";
+      document.body.appendChild(messageBox);
+      setTimeout(() => messageBox.remove(), 2000);
+    }
+  });
 </script>
   
 </body>
