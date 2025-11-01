@@ -346,7 +346,10 @@
   </footer4-wrapper>
     <style>
   /* Artistic menu button styles */
-  .navbar-toggle {
+/* Artistic menu button styles */
+.navbar-toggle {
+    /* Existing styles remain the same, but we add initial display: none */
+    display: none; /* ⬅️ Hides the button by default on large screens */
     position: fixed;
     top: 20px;
     right: 20px;
@@ -355,95 +358,96 @@
     border-radius: 50%;
     width: 60px;
     height: 60px;
-    display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-  }
-  
-  .navbar-toggle:hover {
+}
+
+.navbar-toggle:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  }
-  
-  .artistic-menu-icon {
+}
+
+.artistic-menu-icon {
     position: relative;
     width: 30px;
     height: 24px;
-  }
-  
-  .brush-stroke {
+}
+
+.brush-stroke {
     position: absolute;
     height: 4px;
     background: linear-gradient(90deg, #3399cc, #9966cc);
     border-radius: 2px;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-  
-  .brush-stroke-1 {
+}
+
+.brush-stroke-1 {
     top: 0;
     width: 100%;
     transform-origin: center;
-  }
-  
-  .brush-stroke-2 {
+}
+
+.brush-stroke-2 {
     top: 10px;
     width: 80%;
     right: 0;
     transform-origin: right;
-  }
-  
-  .brush-stroke-3 {
+}
+
+.brush-stroke-3 {
     top: 20px;
     width: 60%;
     transform-origin: center;
-  }
-  
-  /* Animation when menu is open */
-  .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-1 {
+}
+
+/* Animation when menu is open */
+.navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-1 {
     transform: rotate(45deg) translate(6px, 6px);
     width: 100%;
-  }
-  
-  .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-2 {
+}
+
+.navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-2 {
     opacity: 0;
     transform: translateX(10px);
-  }
-  
-  .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-3 {
+}
+
+.navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-3 {
     transform: rotate(-45deg) translate(6px, -6px);
     width: 100%;
-  }
-  
-  /* Mobile responsive adjustments */
-  @media (max-width: 768px) {
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    /* ⬅️ Only display the button on screens 768px wide or less */
     .navbar-toggle {
-      width: 50px;
-      height: 50px;
-      top: 15px;
-      right: 15px;
+        display: flex; /* ⬅️ Shows the button on mobiles and tablets */
+        width: 50px;
+        height: 50px;
+        top: 15px;
+        right: 15px;
     }
-    
+
     .artistic-menu-icon {
-      width: 24px;
-      height: 20px;
+        width: 24px;
+        height: 20px;
     }
-    
+
     .brush-stroke {
-      height: 3px;
+        height: 3px;
     }
-    
+
     .brush-stroke-2 {
-      top: 8px;
+        top: 8px;
     }
-    
+
     .brush-stroke-3 {
-      top: 16px;
+        top: 16px;
     }
-  }
+}
 </style>
 
 </body>
