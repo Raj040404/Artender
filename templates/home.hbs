@@ -588,12 +588,50 @@
     </div>
   </div>
   <script defer="" src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
-  <script>
+<script defer="" src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
+<script>
     function toggleNavbar() {
       const navbarMenu = document.getElementById("navbarMenu");
       navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
     }
-  </script>
+
+    // Simple check - if logout button is visible, user is logged in
+    function isUserLoggedIn() {
+      const logoutButton = document.querySelector('a[href="/logout"]');
+      return logoutButton && logoutButton.offsetParent !== null;
+    }
+
+    document.body.addEventListener("click", function (event) {
+      let target = event.target.closest("a");
+      if (target && target.href && !isUserLoggedIn() && 
+          !target.href.includes("login") && !target.href.includes("signup")) {
+        event.preventDefault();
+        let messageBox = document.createElement("div");
+        messageBox.innerText = "You need to log in first";
+        messageBox.style.position = "absolute";
+        messageBox.style.left = event.pageX + "px";
+        messageBox.style.top = event.pageY + "px";
+        messageBox.style.background = "#333";
+        messageBox.style.color = "#fff";
+        messageBox.style.padding = "8px 12px";
+        messageBox.style.borderRadius = "5px";
+        messageBox.style.zIndex = "1000";
+        messageBox.style.fontSize = "14px";
+        document.body.appendChild(messageBox);
+        setTimeout(() => {
+          messageBox.remove();
+          window.location.href = "/login";
+        }, 2000);
+      }
+    });
+
+    // Redirect to login if not logged in and accessing protected page
+    window.addEventListener('DOMContentLoaded', function() {
+      if (!isUserLoggedIn() && !window.location.pathname.includes('login') && !window.location.pathname.includes('signup')) {
+        window.location.href = "/login";
+      }
+    });
+</script>
 
   <style>
     /* Artistic menu button styles */
