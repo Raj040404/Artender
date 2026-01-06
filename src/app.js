@@ -114,6 +114,8 @@ function requireLogin(req, res, next) {
   if (req.session && req.session.userId) {
     next();
   } else {
+    // Save the intended destination URL before redirecting to login
+    req.session.returnTo = req.originalUrl;
     res.redirect("/login");
   }
 }
@@ -206,14 +208,17 @@ app.post("/verify-otp", async (req, res) => {
     const newUser = new LogInCollection({ name, email, password });
     await newUser.save();
 
-    // Set session and redirect to home
+    // Set session and redirect to intended destination or default to /home
     req.session.userId = newUser._id;
     req.session.username = newUser.name;
 
     delete otpStorage[email]; // Clear OTP after verification
     delete req.session.tempUser; // Clear temporary session data
 
-    return res.redirect("/home");
+    // Redirect to the intended destination or default to /home
+    const returnTo = req.session.returnTo || "/home";
+    delete req.session.returnTo; // Clear the saved URL
+    return res.redirect(returnTo);
   } else {
     return res.render("verifyOTP", { email, error: "Invalid OTP. Please try again." });
   }
@@ -268,7 +273,11 @@ app.post("/login", async (req, res) => {
       req.session.userId = user._id;
       req.session.username = user.name;
       req.session.email = user.email; // <-- ADD THIS LINE
-      res.redirect("/home");
+      
+      // Redirect to the intended destination or default to /home
+      const returnTo = req.session.returnTo || "/home";
+      delete req.session.returnTo; // Clear the saved URL
+      res.redirect(returnTo);
     } else {
       res.render("login", { error: "Incorrect password." });
     }

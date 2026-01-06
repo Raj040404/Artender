@@ -275,7 +275,7 @@
               <img alt="feature 1" src="https://images.unsplash.com/photo-1552250575-e508473b090f?ixid=M3w5MTMyMXwwfDF8c2VhcmNofDE1Mnx8YWJzdHJhY3R8ZW58MHx8fHwxNzE2MjAxNjAyfDA&ixlib=rb-4.0.3&w=1400" class="features241-image1 thq-img-ratio-16-9" />
             </div>
             <div class="features241-tabs-menu">
-              <div class="features241-tab-horizontal1">
+              <a href="/explorecompetitions" class="features241-tab-horizontal1" style="text-decoration: none; color: inherit; display: block; cursor: pointer;">
                 <div class="features241-divider-container1">
                   <div class="features241-container3"></div>
                 </div>
@@ -293,8 +293,8 @@
                     </fragment>
                   </span>
                 </div>
-              </div>
-              <div class="features241-tab-horizontal2">
+              </a>
+              <a href="/competitions" class="features241-tab-horizontal2" style="text-decoration: none; color: inherit; display: block; cursor: pointer;">
                 <div class="features241-divider-container2">
                   <div class="features241-container4"></div>
                 </div>
@@ -312,8 +312,8 @@
                     </fragment>
                   </span>
                 </div>
-              </div>
-              <div class="features241-tab-horizontal3">
+              </a>
+              <a href="/profile" class="features241-tab-horizontal3" style="text-decoration: none; color: inherit; display: block; cursor: pointer;">
                 <div class="features241-divider-container3">
                   <div class="features241-container5"></div>
                 </div>
@@ -332,7 +332,7 @@
                     </fragment>
                   </span>
                 </div>
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -569,34 +569,27 @@
 }
     </style>
 
+  <style>
+    /* Make the feature sections look clickable */
+    .features241-tab-horizontal1,
+    .features241-tab-horizontal2,
+    .features241-tab-horizontal3 {
+      transition: all 0.3s ease;
+    }
+    
+    .features241-tab-horizontal1:hover,
+    .features241-tab-horizontal2:hover,
+    .features241-tab-horizontal3:hover {
+      transform: translateY(-5px);
+    }
+  </style>
+
   <script defer src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
   <script>
     function toggleNavbar() {
       const navbarMenu = document.getElementById("navbarMenu");
       navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
     }
-
-    // Remove the scrollToFooter function as it's no longer needed
-
-    document.body.addEventListener("click", function (event) {
-      let target = event.target.closest("a");
-      if (target && target.href && !target.href.includes("login") && !target.href.includes("signup")) {
-        event.preventDefault();
-        let messageBox = document.createElement("div");
-        messageBox.innerText = "You need to log in first";
-        messageBox.style.position = "absolute";
-        messageBox.style.left = event.pageX + "px";
-        messageBox.style.top = event.pageY + "px";
-        messageBox.style.background = "#333";
-        messageBox.style.color = "#fff";
-        messageBox.style.padding = "8px 12px";
-        messageBox.style.borderRadius = "5px";
-        messageBox.style.zIndex = "1000";
-        messageBox.style.fontSize = "14px";
-        document.body.appendChild(messageBox);
-        setTimeout(() => messageBox.remove(), 2000);
-      }
-    });
   </script>
 </body>
 </html>
