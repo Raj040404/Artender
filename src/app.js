@@ -78,10 +78,11 @@ app.use(
     secret: process.env.secret,
     resave: false,
     saveUninitialized: false,
+    name: "artender_sid", // Add a custom name to track it easily
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      secure: process.env.NODE_ENV === "production",
+      secure: false, // process.env.NODE_ENV === "production", // Forced false for localhost debugging
       sameSite: "lax"
     }
   })
@@ -111,9 +112,11 @@ app.set("views", templatePath);
 
 // Authentication middleware
 function requireLogin(req, res, next) {
+  console.log(`[requireLogin] Checking access for ${req.originalUrl}. Session ID: ${req.sessionID}, User ID: ${req.session ? req.session.userId : 'No Session'}`);
   if (req.session && req.session.userId) {
     next();
   } else {
+    console.log("[requireLogin] Access denied. Redirecting to /login");
     // Save the intended destination URL before redirecting to login
     req.session.returnTo = req.originalUrl;
     res.redirect("/login");
@@ -273,11 +276,22 @@ app.post("/login", async (req, res) => {
       req.session.userId = user._id;
       req.session.username = user.name;
       req.session.email = user.email; // <-- ADD THIS LINE
-      
-      // Redirect to the intended destination or default to /home
-      const returnTo = req.session.returnTo || "/home";
+
+      // Determine the destination: either the original requested URL or /home
+      const destination = req.session.returnTo || "/home";
       delete req.session.returnTo; // Clear the saved URL
-      res.redirect(returnTo);
+
+      console.log("Login successful for user:", user.email, "Session ID:", req.sessionID);
+
+      // Force save session before redirect to prevent race conditions
+      req.session.save((err) => {
+        if (err) {
+          console.error("Session save error:", err);
+          return res.status(500).send("Session save error");
+        }
+        console.log(`Session saved. Redirecting to ${destination}...`);
+        res.redirect(destination);
+      });
     } else {
       res.render("login", { error: "Incorrect password." });
     }
@@ -301,7 +315,7 @@ app.get("/paymentfailed", (req, res) => {
   res.render("paymentfailed", { reason });
 });
 app.get("/paymentpending", (req, res) => {
-  const reason =  "Unknown error";
+  const reason = "Unknown error";
   res.render("paymentpending", { reason });
 });
 
