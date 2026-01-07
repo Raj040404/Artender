@@ -82,7 +82,7 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      secure: false, // process.env.NODE_ENV === "production", // Forced false for localhost debugging
+      secure: process.env.NODE_ENV === "production", // Secure cookies in production
       sameSite: "lax"
     }
   })
