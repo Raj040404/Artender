@@ -350,57 +350,97 @@
         <button type="button" onclick="closeTermsModal()">Close</button>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const passwordInput = document.getElementById('password');
-            const passwordStrength = document.getElementById('passwordStrength');
-            const errorBox = document.getElementById('errorBox');
-            const acceptTerms = document.getElementById('acceptTerms');
-            const submitBtn = document.getElementById('submitBtn');
-            const viewTerms = document.getElementById('viewTerms');
-            const termsModal = document.getElementById('termsModal');
-            const modalOverlay = document.getElementById('modalOverlay');
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('password');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const errorBox = document.getElementById('errorBox');
+        const acceptTerms = document.getElementById('acceptTerms');
+        const submitBtn = document.getElementById('submitBtn');
+        const viewTerms = document.getElementById('viewTerms');
+        const termsModal = document.getElementById('termsModal');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const signupForm = document.getElementById('signupForm');
 
-            // Hide error message after 3 seconds
-            if (errorBox) {
-                setTimeout(() => {
-                    errorBox.style.opacity = "0";
-                    setTimeout(() => errorBox.style.display = "none", 500);
-                }, 3000);
+        // Hide error message after 3 seconds
+        if (errorBox) {
+            setTimeout(() => {
+                errorBox.style.opacity = "0";
+                setTimeout(() => errorBox.style.display = "none", 500);
+            }, 3000);
+        }
+
+        // Password strength checker
+        passwordInput.addEventListener('input', function () {
+            const password = passwordInput.value;
+            if (password.length < 8) {
+                passwordStrength.textContent = "Weak Password ❌";
+                passwordStrength.style.color = "red";
+            } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
+                passwordStrength.textContent = "Strong Password ✅";
+                passwordStrength.style.color = "green";
+            } else {
+                passwordStrength.textContent = "Medium Strength Password ⚠️";
+                passwordStrength.style.color = "orange";
             }
-
-            // Password strength checker
-            passwordInput.addEventListener('input', function () {
-                const password = passwordInput.value;
-                if (password.length < 8) {
-                    passwordStrength.textContent = "Weak Password ❌";
-                    passwordStrength.style.color = "red";
-                } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-                    passwordStrength.textContent = "Strong Password ✅";
-                    passwordStrength.style.color = "green";
-                } else {
-                    passwordStrength.textContent = "Medium Strength Password ⚠️";
-                    passwordStrength.style.color = "orange";
-                }
-            });
-
-            viewTerms.addEventListener('click', function (e) {
-                e.preventDefault();
-                termsModal.style.display = "block";
-                modalOverlay.style.display = "block";
-            });
-
-            window.closeTermsModal = function () {
-                termsModal.style.display = "none";
-                modalOverlay.style.display = "none";
-            };
-
-            // Show/hide submit button based on checkbox
-            acceptTerms.addEventListener('change', function () {
-                submitBtn.style.display = this.checked ? "inline-block" : "none";
-            });
         });
-    </script>
+
+        viewTerms.addEventListener('click', function (e) {
+            e.preventDefault();
+            termsModal.style.display = "block";
+            modalOverlay.style.display = "block";
+        });
+
+        window.closeTermsModal = function () {
+            termsModal.style.display = "none";
+            modalOverlay.style.display = "none";
+        };
+
+        // Show/hide submit button based on checkbox
+        acceptTerms.addEventListener('change', function () {
+            submitBtn.style.display = this.checked ? "inline-block" : "none";
+        });
+
+        // Lock signup button for 12 seconds after click
+        signupForm.addEventListener('submit', function (e) {
+            // Check if terms are accepted
+            if (!acceptTerms.checked) {
+                e.preventDefault();
+                alert("Please accept the Terms and Conditions first.");
+                return;
+            }
+            
+            // Disable the submit button
+            submitBtn.disabled = true;
+            submitBtn.value = "Please wait 12 seconds...";
+            submitBtn.style.opacity = "0.7";
+            submitBtn.style.cursor = "not-allowed";
+            
+            // Start countdown timer
+            let secondsLeft = 12;
+            const countdownInterval = setInterval(() => {
+                secondsLeft--;
+                submitBtn.value = `Please wait ${secondsLeft} seconds...`;
+                
+                if (secondsLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    
+                    // Re-enable the button
+                    submitBtn.disabled = false;
+                    submitBtn.value = "Sign Up";
+                    submitBtn.style.opacity = "1";
+                    submitBtn.style.cursor = "pointer";
+                    
+                    // Resubmit the form
+                    signupForm.submit();
+                }
+            }, 1000);
+            
+            // Prevent immediate form submission
+            e.preventDefault();
+        });
+    });
+</script>
 </body>
 
 </html>
