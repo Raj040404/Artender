@@ -68,12 +68,22 @@ const EnrollmentSchema = new mongoose.Schema({
   phonepeOrderId: { type: String },
   phonepeRedirectUrl: { type: String },
 }, { timestamps: true });
-
+const SellerRegistrationSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  age: { type: Number, required: true },
+  address: { type: String, required: true },
+  mobileNumber: { type: String, required: true },
+  artworkCategory: { type: String, required: true },
+}, { timestamps: true });
 // Models
 const LogInCollection = mongoose.model("LogInCollection", LogInSchema);
 const CompetitionPostCollection = mongoose.model("CompetitionPostCollection", CompetitionPostSchema);
 const ProfileCollection = mongoose.model("ProfileCollection", ProfileSchema);
 const EnrollmentCollection = mongoose.model("EnrollmentCollection", EnrollmentSchema);
+const SellerRegistrationCollection = mongoose.model(
+  "SellerRegistrationCollection",
+  SellerRegistrationSchema
+);
 
 // If you want to use a separate DB for contests
 const conn = mongoose.connection.useDb("test");
@@ -85,4 +95,5 @@ module.exports = {
   ProfileCollection,
   ContestCollection,
   EnrollmentCollection,
+  SellerRegistrationCollection,
 };
