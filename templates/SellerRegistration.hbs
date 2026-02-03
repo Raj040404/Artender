@@ -4,40 +4,334 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seller Registration - Coming Soon</title>
+    <!-- Character Set & Viewport -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo/logo32.png">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="192x192" href="/logo/logo192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/logo/logo512.png">
+    
+    <!-- Social Media & SEO Meta Tags -->
+    <meta name="theme-color" content="#3399cc">
+    <meta property="og:title" content="Artender - Seller Registration">
+    <meta property="og:description" content="Join Artender as a seller to showcase your products and reach millions of customers.">
+    <meta property="og:image" content="/logo/WhatsApp%20Image%202025-02-23%20at%2000.10.41_0364758d.jpg">
+    <meta property="og:url" content="http://www.artender.in/sellerregistration">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card for Social Sharing -->
+    <meta property="twitter:card" content="summary_large_image">
+    
+    <!-- Fonts from reference -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" data-tag="font" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap" data-tag="font" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" data-tag="font" />
+    
+    <!-- Reset styles from reference -->
+    <style data-tag="reset-style-sheet">
+        html { line-height: 1.15; }
+        body { margin: 0; }
+        * { box-sizing: border-box; border-width: 0; border-style: solid; -webkit-font-smoothing: antialiased; }
+        p, li, ul, pre, div, h1, h2, h3, h4, h5, h6, figure, blockquote, figcaption { margin: 0; padding: 0; }
+        button { background-color: transparent; }
+        button, input, optgroup, select, textarea { font-family: inherit; font-size: 100%; line-height: 1.15; margin: 0; }
+        button, select { text-transform: none; }
+        button, [type="button"], [type="reset"], [type="submit"] { -webkit-appearance: button; color: inherit; }
+        button::-moz-focus-inner, [type="button"]::-moz-focus-inner, [type="reset"]::-moz-focus-inner, [type="submit"]::-moz-focus-inner { border-style: none; padding: 0; }
+        button:-moz-focus, [type="button"]:-moz-focus, [type="reset"]:-moz-focus, [type="submit"]:-moz-focus { outline: 1px dotted ButtonText; }
+        a { color: inherit; text-decoration: inherit; }
+        input { padding: 2px 4px; }
+        img { display: block; }
+        details { display: block; margin: 0; padding: 0; }
+        summary::-webkit-details-marker { display: none; }
+        [data-thq="accordion"] [data-thq="accordion-content"] { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-in-out; padding: 0; }
+        [data-thq="accordion"] details[data-thq="accordion-trigger"][open]+[data-thq="accordion-content"] { max-height: 1000vh; }
+        details[data-thq="accordion-trigger"][open] summary [data-thq="accordion-icon"] { transform: rotate(180deg); }
+        html { scroll-behavior: smooth }
+    </style>
+    
+    <style data-tag="default-style-sheet">
+        html { font-family: Inter; font-size: 16px; }
+        body { font-weight: 400; font-style: normal; text-decoration: none; text-transform: none; letter-spacing: normal; line-height: 1.15; color: var(--dl-color-theme-neutral-dark); background: var(--dl-color-theme-neutral-light); fill: var(--dl-color-theme-neutral-dark); }
+    </style>
+    
+    <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css" />
+    
     <style>
+        /* Import navbar styles from reference */
+        .navbar8-wrapper {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar8-container1 {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .navbar8-navbar-interactive {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+        }
+        
+        .navbar8-image1 {
+            height: 50px;
+            width: auto;
+            border-radius: 4px;
+        }
+        
+        .navbar8-desktop-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .navbar8-links1 {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .thq-link {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .thq-link:hover {
+            color: #3399cc;
+        }
+        
+        .thq-body-small {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        
+        .navbar8-buttons1 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .navbar8-action11 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .thq-button-animated {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .thq-button-filled {
+            background-color: #3399cc;
+            color: white;
+        }
+        
+        .thq-button-filled:hover {
+            background-color: #2a80aa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(51, 153, 204, 0.3);
+        }
+        
+        /* Mobile menu styles from reference */
+        .navbar-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .artistic-menu-icon {
+            position: relative;
+            width: 30px;
+            height: 24px;
+        }
+        
+        .brush-stroke {
+            position: absolute;
+            height: 4px;
+            background: linear-gradient(90deg, #3399cc, #9966cc);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .brush-stroke-1 {
+            top: 0;
+            width: 100%;
+            transform-origin: center;
+        }
+        
+        .brush-stroke-2 {
+            top: 10px;
+            width: 80%;
+            right: 0;
+            transform-origin: right;
+        }
+        
+        .brush-stroke-3 {
+            top: 20px;
+            width: 60%;
+            transform-origin: center;
+        }
+        
+        .navbar-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            padding: 20px;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .navbar-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .navbar-menu-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: #333;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-menu-link:hover {
+            background-color: #f5f5f5;
+            color: #3399cc;
+        }
+        
+        .seller-zone-mobile {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: #FF9800;
+            font-weight: 600;
+        }
+        
+        .seller-badge {
+            background: #FF9800;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: auto;
+        }
+        
+        .navbar-menu-auth-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Animation when menu is open */
+        .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-1 {
+            transform: rotate(45deg) translate(6px, 6px);
+            width: 100%;
+        }
+        
+        .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-2 {
+            opacity: 0;
+            transform: translateX(10px);
+        }
+        
+        .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-3 {
+            transform: rotate(-45deg) translate(6px, -6px);
+            width: 100%;
+        }
+        
+        /* Original seller registration styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
             background: linear-gradient(135deg, #FFFEF0 0%, #FFF9E6 100%);
             font-family: 'Raleway', sans-serif;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
+            padding-top: 80px;
         }
-
+        
         .container {
             text-align: center;
             position: relative;
             z-index: 10;
             padding: 60px 40px;
             max-width: 1200px;
+            width: 100%;
+            flex: 1;
         }
-
+        
         /* Artistic background visuals */
         .art-bg {
             position: absolute;
             z-index: 1;
             pointer-events: none;
         }
-
+        
         /* Watercolor splashes */
         .splash-1 {
             width: 400px;
@@ -49,7 +343,7 @@
             border-radius: 50%;
             animation: gentle-pulse 8s infinite alternate;
         }
-
+        
         .splash-2 {
             width: 350px;
             height: 350px;
@@ -60,7 +354,7 @@
             border-radius: 50%;
             animation: gentle-pulse 10s infinite alternate-reverse;
         }
-
+        
         .splash-3 {
             width: 250px;
             height: 250px;
@@ -71,19 +365,19 @@
             border-radius: 50%;
             animation: gentle-pulse 12s infinite alternate;
         }
-
+        
         @keyframes gentle-pulse {
             0% { transform: scale(1); opacity: 0.5; }
             100% { transform: scale(1.2); opacity: 0.8; }
         }
-
+        
         /* Geometric patterns */
         .geometric {
             position: absolute;
             opacity: 0.03;
             z-index: 1;
         }
-
+        
         .geo-1 {
             width: 200px;
             height: 200px;
@@ -92,7 +386,7 @@
             background: linear-gradient(45deg, transparent 49.5%, #FF9800 49.5%, #FF9800 50.5%, transparent 50.5%);
             animation: rotate-slow 60s infinite linear;
         }
-
+        
         .geo-2 {
             width: 150px;
             height: 150px;
@@ -101,7 +395,7 @@
             background: linear-gradient(45deg, transparent 49.5%, #2E7D32 49.5%, #2E7D32 50.5%, transparent 50.5%);
             animation: rotate-slow 40s infinite linear reverse;
         }
-
+        
         .geo-3 {
             width: 100px;
             height: 100px;
@@ -110,21 +404,21 @@
             background: repeating-linear-gradient(45deg, transparent, transparent 5px, #FF9800 5px, #FF9800 10px);
             animation: rotate-slow 30s infinite linear;
         }
-
+        
         @keyframes rotate-slow {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
+        
         /* Brush stroke elements */
-        .brush-stroke {
+        .brush-stroke-bg {
             position: absolute;
             background: linear-gradient(90deg, transparent, rgba(255, 152, 0, 0.1), transparent);
             z-index: 1;
             opacity: 0.4;
             filter: blur(1px);
         }
-
+        
         .stroke-1 {
             width: 300px;
             height: 10px;
@@ -133,7 +427,7 @@
             transform: rotate(45deg);
             animation: stroke-move 25s infinite linear;
         }
-
+        
         .stroke-2 {
             width: 250px;
             height: 8px;
@@ -143,12 +437,12 @@
             background: linear-gradient(90deg, transparent, rgba(46, 125, 50, 0.1), transparent);
             animation: stroke-move 20s infinite linear reverse;
         }
-
+        
         @keyframes stroke-move {
             0% { transform: translateX(-100px) rotate(45deg); }
             100% { transform: translateX(calc(100vw + 200px)) rotate(45deg); }
         }
-
+        
         /* Decorative corner leaves */
         .leaf {
             position: absolute;
@@ -156,35 +450,35 @@
             z-index: 2;
             opacity: 0.3;
         }
-
+        
         .leaf-tl {
             top: 30px;
             left: 30px;
             transform: rotate(-45deg);
             color: #FF9800;
         }
-
+        
         .leaf-tr {
             top: 30px;
             right: 30px;
             transform: rotate(45deg);
             color: #2E7D32;
         }
-
+        
         .leaf-bl {
             bottom: 30px;
             left: 30px;
             transform: rotate(-135deg);
             color: #FF9800;
         }
-
+        
         .leaf-br {
             bottom: 30px;
             right: 30px;
             transform: rotate(135deg);
             color: #2E7D32;
         }
-
+        
         /* Main text styling */
         .main-title {
             font-family: 'Playfair Display', serif;
@@ -195,7 +489,7 @@
             position: relative;
             display: inline-block;
         }
-
+        
         .coming-text {
             color: #FF9800;
             text-shadow: 4px 4px 0px rgba(255, 152, 0, 0.15);
@@ -203,7 +497,7 @@
             position: relative;
             display: inline-block;
         }
-
+        
         .soon-text {
             color: #2E7D32;
             text-shadow: 4px 4px 0px rgba(46, 125, 50, 0.15);
@@ -211,7 +505,7 @@
             position: relative;
             display: inline-block;
         }
-
+        
         /* Animated underline */
         .title-underline {
             width: 250px;
@@ -222,7 +516,7 @@
             overflow: hidden;
             border-radius: 3px;
         }
-
+        
         .title-underline::before {
             content: '';
             position: absolute;
@@ -233,12 +527,12 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
             animation: underline-shine 3s infinite;
         }
-
+        
         @keyframes underline-shine {
             0% { left: -100%; }
             100% { left: 100%; }
         }
-
+        
         /* Message box styling */
         .message-box {
             background: rgba(255, 255, 255, 0.9);
@@ -247,16 +541,13 @@
             padding: 55px 65px;
             max-width: 900px;
             margin: 0 auto;
-            box-shadow: 
-                0 20px 40px rgba(255, 152, 0, 0.08),
-                0 8px 20px rgba(46, 125, 50, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px rgba(255, 152, 0, 0.08), 0 8px 20px rgba(46, 125, 50, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
             border: 2px solid rgba(255, 152, 0, 0.1);
             position: relative;
             overflow: hidden;
             transition: transform 0.3s ease;
         }
-
+        
         .message-box::before {
             content: '';
             position: absolute;
@@ -266,7 +557,7 @@
             height: 4px;
             background: linear-gradient(90deg, #FF9800, #2E7D32);
         }
-
+        
         .message-text {
             font-size: 1.45rem;
             line-height: 1.85;
@@ -276,12 +567,12 @@
             position: relative;
             z-index: 2;
         }
-
+        
         .message-text strong {
             color: #2E7D32;
             font-weight: 500;
         }
-
+        
         /* Decorative message corners - orange and green */
         .message-corner {
             position: absolute;
@@ -289,35 +580,35 @@
             height: 35px;
             z-index: 1;
         }
-
+        
         .msg-corner-tl {
             top: 15px;
             left: 15px;
             border-top: 3px solid rgba(255, 152, 0, 0.4);
             border-left: 3px solid rgba(255, 152, 0, 0.4);
         }
-
+        
         .msg-corner-tr {
             top: 15px;
             right: 15px;
             border-top: 3px solid rgba(46, 125, 50, 0.4);
             border-right: 3px solid rgba(46, 125, 50, 0.4);
         }
-
+        
         .msg-corner-bl {
             bottom: 15px;
             left: 15px;
             border-bottom: 3px solid rgba(46, 125, 50, 0.4);
             border-left: 3px solid rgba(46, 125, 50, 0.4);
         }
-
+        
         .msg-corner-br {
             bottom: 15px;
             right: 15px;
             border-bottom: 3px solid rgba(255, 152, 0, 0.4);
             border-right: 3px solid rgba(255, 152, 0, 0.4);
         }
-
+        
         /* Decorative dots around the page */
         .decorative-dot {
             position: absolute;
@@ -325,7 +616,7 @@
             z-index: 2;
             animation: dot-pulse 4s infinite;
         }
-
+        
         .dot-orange {
             background: #FF9800;
             width: 8px;
@@ -334,7 +625,7 @@
             left: 5%;
             animation-delay: 0s;
         }
-
+        
         .dot-green {
             background: #2E7D32;
             width: 10px;
@@ -343,7 +634,7 @@
             right: 10%;
             animation-delay: 0.5s;
         }
-
+        
         .dot-orange-large {
             background: rgba(255, 152, 0, 0.6);
             width: 12px;
@@ -352,7 +643,7 @@
             left: 15%;
             animation-delay: 1s;
         }
-
+        
         .dot-green-large {
             background: rgba(46, 125, 50, 0.6);
             width: 14px;
@@ -361,89 +652,183 @@
             right: 5%;
             animation-delay: 1.5s;
         }
-
+        
         @keyframes dot-pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 0.7;
-            }
-            50% {
-                transform: scale(1.3);
-                opacity: 1;
-            }
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.3); opacity: 1; }
         }
-
+        
+        /* Footer styles from reference */
+        .footer {
+            width: 100%;
+            padding: 2rem;
+            text-align: center;
+            background: white;
+            border-top: 1px solid #eee;
+            margin-top: auto;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 1024px) {
-            .main-title {
-                font-size: 6rem;
-            }
-            
-            .message-box {
-                padding: 45px 55px;
-                max-width: 800px;
-            }
-            
-            .message-text {
-                font-size: 1.35rem;
-            }
+            .main-title { font-size: 6rem; }
+            .message-box { padding: 45px 55px; max-width: 800px; }
+            .message-text { font-size: 1.35rem; }
         }
-
+        
         @media (max-width: 768px) {
-            .main-title {
-                font-size: 4.5rem;
-            }
-            
-            .message-box {
-                padding: 35px 45px;
-                max-width: 90%;
-            }
-            
-            .message-text {
-                font-size: 1.2rem;
-                line-height: 1.7;
-            }
-            
-            .splash-1, .splash-2, .splash-3 {
+            .navbar8-desktop-menu {
                 display: none;
             }
+            
+            .navbar-toggle {
+                display: flex;
+                width: 50px;
+                height: 50px;
+                top: 15px;
+                right: 15px;
+            }
+            
+            .navbar8-navbar-interactive {
+                padding: 1rem;
+            }
+            
+            .navbar8-image1 {
+                height: 40px;
+            }
+            
+            .artistic-menu-icon {
+                width: 24px;
+                height: 20px;
+            }
+            
+            .brush-stroke {
+                height: 3px;
+            }
+            
+            .brush-stroke-2 { top: 8px; }
+            .brush-stroke-3 { top: 16px; }
+            
+            .navbar-menu {
+                top: 70px;
+                right: 15px;
+                width: 280px;
+            }
+            
+            .main-title { font-size: 4.5rem; }
+            .message-box { padding: 35px 45px; max-width: 90%; }
+            .message-text { font-size: 1.2rem; line-height: 1.7; }
+            .splash-1, .splash-2, .splash-3 { display: none; }
         }
-
+        
         @media (max-width: 480px) {
-            .main-title {
-                font-size: 3.2rem;
-            }
-            
-            .container {
-                padding: 30px 20px;
-            }
-            
-            .message-box {
-                padding: 30px 35px;
-            }
-            
-            .message-text {
-                font-size: 1.1rem;
-            }
-            
-            .leaf {
-                font-size: 2rem;
-            }
+            .main-title { font-size: 3.2rem; }
+            .container { padding: 30px 20px; }
+            .message-box { padding: 30px 35px; }
+            .message-text { font-size: 1.1rem; }
+            .leaf { font-size: 2rem; }
+            .navbar-menu { width: calc(100% - 30px); right: 15px; }
         }
     </style>
 </head>
 <body>
+    <!-- Navigation Bar (Same as reference) -->
+    <navbar8-wrapper class="navbar8-wrapper">
+        <header class="navbar8-container1">
+            <header data-thq="thq-navbar" class="navbar8-navbar-interactive">
+                <img alt="logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg" class="navbar8-image1" />
+                <div data-thq="thq-navbar-nav" class="navbar8-desktop-menu">
+                    <nav class="navbar8-links1">
+                        <a href="/competitions" class="thq-link thq-body-small">
+                            <span>Participate in Competitions</span>
+                        </a>
+                        <a href="/sellerregistration" class="navbar8-link31 thq-link thq-body-small" style="background-color: #FF9800; color: white; padding: 8px 16px; border-radius: 4px; margin: 0 10px; font-weight: 600;">
+                            <span>Seller's Zone</span>
+                        </a>
+                        <a href="/profile" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
+                            <span>Profile</span>
+                        </a>
+                        <a href="/about" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
+                            <span>About us</span>
+                        </a>
+                        <a href="/help" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
+                            <span>Help</span>
+                        </a>
+                    </nav>
+                    <div class="navbar8-buttons1">
+                        <a href="/logout">
+                            <button class="navbar8-action11 thq-button-animated thq-button-filled">
+                                <span>Logout</span>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+                <!-- Mobile Menu Toggle -->
+                <div class="navbar-toggle" onclick="toggleNavbar()">
+                    <div class="artistic-menu-icon">
+                        <div class="brush-stroke brush-stroke-1"></div>
+                        <div class="brush-stroke brush-stroke-2"></div>
+                        <div class="brush-stroke brush-stroke-3"></div>
+                    </div>
+                </div>
+            </header>
+        </header>
+    </navbar8-wrapper>
+
+    <!-- Mobile Menu -->
+    <div id="navbarMenu" class="navbar-menu">
+        <nav class="navbar-menu-links">
+            <a href="/competitions" class="navbar-menu-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z" />
+                </svg>
+                <span>Participate in Competitions</span>
+            </a>
+            <a href="/sellerregistration" class="navbar-menu-link seller-zone-mobile" onclick="return checkLoginForSellerZone(event)">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/>
+                    <path d="M9.5 15.5l4-4-4-4L8 9.5l2.5 2.5L8 14.5z"/>
+                </svg>
+                <span>Seller's Zone</span>
+                <span class="seller-badge">(NEW)</span>
+            </a>
+            <a href="/profile" class="navbar-menu-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+                <span>Profile</span>
+            </a>
+            <a href="/about" class="navbar-menu-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
+                </svg>
+                <span>About Us</span>
+            </a>
+            <a href="/help" class="navbar-menu-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
+                </svg>
+                <span>Help</span>
+            </a>
+            <div class="navbar-menu-auth-section">
+                <a href="/logout">
+                    <button class="navbar8-action11 thq-button-animated thq-button-filled" style="width: 100%;">
+                        Logout
+                    </button>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Original content -->
     <!-- Artistic background elements -->
     <div class="art-bg splash-1"></div>
     <div class="art-bg splash-2"></div>
     <div class="art-bg splash-3"></div>
-    
     <div class="geometric geo-1"></div>
     <div class="geometric geo-2"></div>
     <div class="geometric geo-3"></div>
-    
-    <div class="brush-stroke stroke-1"></div>
-    <div class="brush-stroke stroke-2"></div>
+    <div class="brush-stroke-bg stroke-1"></div>
+    <div class="brush-stroke-bg stroke-2"></div>
     
     <!-- Decorative leaves -->
     <div class="leaf leaf-tl">❧</div>
@@ -462,42 +847,61 @@
             <span class="coming-text">COMING</span><br>
             <span class="soon-text">SOON</span>
         </h1>
-        
         <div class="title-underline"></div>
-        
         <div class="message-box">
             <div class="message-corner msg-corner-tl"></div>
             <div class="message-corner msg-corner-tr"></div>
             <div class="message-corner msg-corner-bl"></div>
             <div class="message-corner msg-corner-br"></div>
-            
             <p class="message-text">
-                <strong>We're building an incredible platform for sellers</strong> to showcase their products, reach millions of customers, 
-                and grow their business like never before. Get ready for a seamless selling experience with powerful tools 
-                designed to help you succeed.
+                <strong>We're building an incredible platform for sellers</strong> to showcase their products, reach millions of customers, and grow their business like never before. Get ready for a seamless selling experience with powerful tools designed to help you succeed.
             </p>
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="navbar8-buttons1">
+            <a href="/logout">
+                <button class="navbar8-action11 thq-button-animated thq-button-filled">
+                    <span>Logout</span>
+                </button>
+            </a>
+        </div>
+    </footer>
+
     <script>
-        // Add subtle hover effects without floating
-        document.querySelector('.main-title').addEventListener('mouseenter', function() {
+        // Mobile menu toggle function
+        function toggleNavbar() {
+            const navbarMenu = document.getElementById("navbarMenu");
+            navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
+        }
+        
+        // Check login for seller zone (placeholder)
+        function checkLoginForSellerZone(event) {
+            // Add your login check logic here
+            console.log("Checking login status...");
+            return true;
+        }
+        
+        // Add subtle hover effects
+        document.querySelector('.main-title')?.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-5px)';
             this.style.transition = 'transform 0.3s ease';
         });
         
-        document.querySelector('.main-title').addEventListener('mouseleave', function() {
+        document.querySelector('.main-title')?.addEventListener('mouseleave', function() {
             this.style.transform = 'translateY(0)';
         });
         
         // Add subtle message box hover effect
-        document.querySelector('.message-box').addEventListener('mouseenter', function() {
+        document.querySelector('.message-box')?.addEventListener('mouseenter', function() {
             this.style.transform = 'scale(1.01)';
             this.style.boxShadow = '0 25px 50px rgba(255, 152, 0, 0.12), 0 10px 25px rgba(46, 125, 50, 0.12)';
             this.style.transition = 'all 0.3s ease';
         });
         
-        document.querySelector('.message-box').addEventListener('mouseleave', function() {
+        document.querySelector('.message-box')?.addEventListener('mouseleave', function() {
             this.style.transform = 'scale(1)';
             this.style.boxShadow = '0 20px 40px rgba(255, 152, 0, 0.08), 0 8px 20px rgba(46, 125, 50, 0.08)';
         });
@@ -506,10 +910,24 @@
         const comingText = document.querySelector('.coming-text');
         const soonText = document.querySelector('.soon-text');
         
-        setInterval(() => {
-            comingText.style.textShadow = `4px 4px 0px rgba(255, 152, 0, ${0.1 + Math.random() * 0.15})`;
-            soonText.style.textShadow = `4px 4px 0px rgba(46, 125, 50, ${0.1 + Math.random() * 0.15})`;
-        }, 2000);
+        if (comingText && soonText) {
+            setInterval(() => {
+                comingText.style.textShadow = `4px 4px 0px rgba(255, 152, 0, ${0.1 + Math.random() * 0.15})`;
+                soonText.style.textShadow = `4px 4px 0px rgba(46, 125, 50, ${0.1 + Math.random() * 0.15})`;
+            }, 2000);
+        }
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navbarMenu = document.getElementById('navbarMenu');
+            const navbarToggle = document.querySelector('.navbar-toggle');
+            
+            if (navbarMenu.style.display === 'flex' && 
+                !navbarMenu.contains(event.target) && 
+                !navbarToggle.contains(event.target)) {
+                navbarMenu.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
