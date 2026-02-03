@@ -310,6 +310,10 @@ app.get("/completeenrollment", requireLogin, (req, res) => {
   res.render("completeenrollment", { contestId });
 });
 
+app.get("/sellerregistration", requireLogin, (req, res) => {
+  res.render("SellerRegistration");
+});
+
 app.get("/paymentfailed", (req, res) => {
   const reason = req.query.reason || "Unknown error";
   res.render("paymentfailed", { reason });
