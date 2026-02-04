@@ -23,7 +23,8 @@
     <link rel="apple-touch-icon" sizes="512x512" href="/logo/logo512.png">
 
     <!-- Social Media & SEO Meta Tags -->
-    <meta name="theme-color" content="#3399cc">
+  <meta name="theme-color" content="#f97316">
+
     <meta property="og:title" content="Seller's Registration - Artender">
     <meta property="og:description" content="Register as a seller on Artender and start showcasing your artwork to buyers across India.">
     <meta property="og:image" content="/logo/WhatsApp%20Image%202025-02-23%20at%2000.10.41_0364758d.jpg">
@@ -314,122 +315,225 @@
 
 <main class="comingsoon-main">
     <div class="comingsoon-wrapper">
-        <!-- Artistic blobs -->
-        <div class="paint-blob blob1"></div>
-        <div class="paint-blob blob2"></div>
-        <div class="paint-blob blob3"></div>
 
-        <h1 class="comingsoon-title">Coming Soon</h1>
+        <h1 class="comingsoon-title">Seller Registration</h1>
         <p class="comingsoon-subtitle">
-            We are crafting something beautiful for you.<br>
-            Stay tuned for an artistic experience on Artender.
+            Complete your profile to start selling your artwork on Artender.
         </p>
 
-        <div class="brush-line"></div>
+        <form id="sellerRegistrationForm" class="seller-registration-form">
+
+            <!-- Name -->
+            <div class="form-group">
+                <label for="name" class="form-label">Full Name *</label>
+                <input type="text" id="name" class="form-input" required>
+                <div class="form-error" id="nameError"></div>
+            </div>
+
+            <!-- Age -->
+            <div class="form-group">
+                <label for="age" class="form-label">Age *</label>
+                <input type="number" id="age" class="form-input" min="18" max="120" required>
+                <div class="form-error" id="ageError"></div>
+            </div>
+
+            <!-- Address -->
+            <div class="form-group">
+                <label for="address" class="form-label">Address *</label>
+                <textarea id="address" class="form-textarea" rows="3" required></textarea>
+                <div class="form-error" id="addressError"></div>
+            </div>
+
+            <!-- Mobile -->
+            <div class="form-group">
+                <label for="mobile" class="form-label">Mobile Number *</label>
+                <input type="tel" id="mobile" class="form-input" maxlength="10" required>
+                <div class="form-error" id="mobileError"></div>
+            </div>
+
+            <!-- Artwork Categories (Checkboxes) -->
+            <div class="form-group">
+                <label class="form-label">Artwork Categories *</label>
+                <div class="checkbox-grid" id="category">
+                    <label class="checkbox-item"><input type="checkbox" value="Painting"> Painting</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Digital Art"> Digital Art</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Sculpture"> Sculpture</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Photography"> Photography</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Traditional Art"> Traditional Art</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Mixed Media"> Mixed Media</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Illustration"> Illustration</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Craft"> Craft</label>
+                    <label class="checkbox-item"><input type="checkbox" value="Other"> Other</label>
+                </div>
+                <div class="form-error" id="categoryError"></div>
+            </div>
+
+            <button type="submit" class="seller-submit-btn">
+                Complete Registration
+            </button>
+        </form>
     </div>
 </main>
 
 <style>
-.comingsoon-main {
-    min-height: 70vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 16px;
-    background: linear-gradient(135deg, #fff7ed, #f0fff4);
-    position: relative;
-    overflow: hidden;
+/* Artender Theme Card */
+.comingsoon-wrapper{
+    background:#ffffff;
+    max-width:700px;
+    margin:auto;
+    padding:42px;
+    border-radius:20px;
+    box-shadow:0 12px 45px rgba(249,115,22,0.15);
+    font-family:'Noto Sans',sans-serif;
+    border:1px solid #ffedd5;
 }
 
-/* Card */
-.comingsoon-wrapper {
-    text-align: center;
-    position: relative;
-    z-index: 2;
-    padding: 50px 35px;
-    border-radius: 24px;
-    background: white;
-    box-shadow: 0 12px 45px rgba(0, 0, 0, 0.08);
-    max-width: 720px;
-    width: 100%;
-    overflow: hidden;
+/* Titles */
+.comingsoon-title{
+    color:#1f2937;
+    font-weight:700;
 }
 
-/* Title */
-.comingsoon-title {
-    font-family: 'STIX Two Text', serif;
-    font-size: 60px;
-    margin-bottom: 18px;
-    letter-spacing: 1px;
-    background: linear-gradient(90deg, #ff7a00, #14532d);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.comingsoon-subtitle{
+    color:#6b7280;
+    margin-bottom:25px;
 }
 
-/* Subtitle */
-.comingsoon-subtitle {
-    font-family: 'Noto Sans', sans-serif;
-    font-size: 19px;
-    color: #14532d;
-    line-height: 1.8;
+/* Form */
+.form-group{margin-bottom:22px}
+
+.form-label{
+    font-weight:600;
+    margin-bottom:8px;
+    display:block;
+    color:#1f2937;
 }
 
-/* Artistic paint blobs */
-.paint-blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.35;
-    z-index: 1;
+.form-input,.form-textarea{
+    width:100%;
+    padding:14px;
+    border:2px solid #fed7aa;
+    border-radius:14px;
+    background:#fff7ed;
+    font-size:15px;
+    transition:all .25s ease;
 }
 
-.blob1 {
-    width: 220px;
-    height: 220px;
-    background: #ff7a00;
-    top: -60px;
-    left: -60px;
+.form-input:focus,.form-textarea:focus{
+    outline:none;
+    border-color:#f97316;
+    background:#ffffff;
+    box-shadow:0 0 0 4px rgba(249,115,22,0.15);
 }
 
-.blob2 {
-    width: 200px;
-    height: 200px;
-    background: #14532d;
-    bottom: -70px;
-    right: -60px;
+.form-error{
+    color:#dc2626;
+    font-size:14px;
+    margin-top:5px;
 }
 
-.blob3 {
-    width: 160px;
-    height: 160px;
-    background: #ffb347;
-    top: 50%;
-    left: 80%;
-    transform: translate(-50%, -50%);
+/* Checkbox UI */
+.checkbox-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;
+    margin-top:10px;
 }
 
-/* Brush underline */
-.brush-line {
-    margin: 28px auto 0;
-    width: 140px;
-    height: 6px;
-    background: linear-gradient(90deg, #ff7a00, #14532d);
-    border-radius: 10px;
+.checkbox-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:1.5px solid #fed7aa;
+    padding:10px 12px;
+    border-radius:12px;
+    background:#fff7ed;
+    cursor:pointer;
+    transition:all .25s ease;
+    font-size:14px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .comingsoon-title {
-        font-size: 40px;
-    }
+.checkbox-item:hover{
+    border-color:#f97316;
+    background:#ffffff;
+}
 
-    .comingsoon-wrapper {
-        padding: 35px 20px;
-    }
+.checkbox-item input{
+    accent-color:#f97316;
+    transform:scale(1.2);
+}
+
+/* Orange Artender Button */
+.seller-submit-btn{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:14px;
+    background:#f97316;
+    color:#ffffff;
+    font-size:17px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:14px;
+    transition:all .3s ease;
+    box-shadow:0 8px 20px rgba(249,115,22,0.35);
+}
+
+.seller-submit-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 28px rgba(249,115,22,0.45);
 }
 </style>
 
+<script>
+document.getElementById('sellerRegistrationForm').addEventListener('submit', function(e){
+    e.preventDefault();
 
+    let valid = true;
+
+    const name = document.getElementById('name');
+    const age = document.getElementById('age');
+    const address = document.getElementById('address');
+    const mobile = document.getElementById('mobile');
+
+    const setError = (id,msg)=>{
+        document.getElementById(id).innerText = msg;
+        if(msg) valid = false;
+    }
+
+    // Name
+    setError('nameError', name.value.trim().length<2 ? 'Enter valid name':'');
+
+    // Age
+    setError('ageError', (age.value<18||age.value>120)?'Age must be 18-120':'');
+
+    // Address
+    setError('addressError', address.value.trim().length<10?'Enter full address':'');
+
+    // Mobile
+    setError('mobileError', /^[0-9]{10}$/.test(mobile.value)?'':'Enter valid 10 digit mobile');
+
+    // Categories
+    const selectedCategories = Array.from(
+        document.querySelectorAll('#category input:checked')
+    ).map(cb=>cb.value);
+
+    setError('categoryError', selectedCategories.length==0?'Select at least one category':'');
+
+    if(!valid) return;
+
+    console.log({
+        name:name.value,
+        age:age.value,
+        address:address.value,
+        mobile:mobile.value,
+        categories:selectedCategories
+    });
+
+    alert('Registration Successful!');
+    this.reset();
+});
+</script>
 
     <style>
     .aboutus-container {
