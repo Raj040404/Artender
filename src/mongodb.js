@@ -74,6 +74,7 @@ const SellerRegistrationSchema = new mongoose.Schema({
   address: { type: String, required: true },
   mobileNumber: { type: String, required: true },
   artworkCategory: { type: String, required: true },
+  paid: { type: Boolean, default: false },
 }, { timestamps: true });
 // Models
 const LogInCollection = mongoose.model("LogInCollection", LogInSchema);
