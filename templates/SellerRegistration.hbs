@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Profile</title>
+    <title>Seller's Registration</title>
     <!-- Character Set & Viewport -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,8 +24,8 @@
 
     <!-- Social Media & SEO Meta Tags -->
     <meta name="theme-color" content="#3399cc">
-    <meta property="og:title" content="Artender">
-    <meta property="og:description" content="manage your profile">
+    <meta property="og:title" content="Seller's Registration - Artender">
+    <meta property="og:description" content="Register as a seller on Artender and start showcasing your artwork to buyers across India.">
     <meta property="og:image" content="/logo/WhatsApp%20Image%202025-02-23%20at%2000.10.41_0364758d.jpg">
     <meta property="og:url" content="http://www.artender.in">
     <meta property="og:type" content="website">
@@ -195,6 +195,7 @@
 <body>
     <div>
         <div class="landing-container">
+
             <navbar8-wrapper class="navbar8-wrapper">
                 <!--Navbar8 component-->
                 <header class="navbar8-container1">
@@ -245,7 +246,8 @@
                                     </button>
                                 </a>
                             </div>
-                            <div class="navbar8-container7 thq-box-shadow">
+                            <div class="navbar8-container7 thq-box-shadow"></div>
+                        </div>
                     </header>
                 </header>
             </navbar8-wrapper>
@@ -294,7 +296,7 @@
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
       </svg>
       <span>About Us</span> -->
-    </a>
+    
     <a href="/help" class="navbar-menu-link">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
@@ -492,18 +494,20 @@
     </script>
 
     <style>
-        .navbar-menu {
-            display: none;
-            flex-direction: column;
-            background-color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            position: absolute;
-            top: 60px;
-            right: 16px;
-            border-radius: 8px;
-            padding: 12px;
-            z-index: 999;
-        }
+       .navbar-menu {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    width: 260px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    padding: 16px;
+    z-index: 999;
+}
+
 
         .navbar-menu.open {
             display: flex;
@@ -521,13 +525,7 @@
             border-radius: 6px;
         }
 
-        .navbar-toggle {
-            display: none;
-            position: absolute;
-            top: 18px;
-            right: 16px;
-            cursor: pointer;
-        }
+  
 
         .navbar-toggle-icon {
             width: 28px;
@@ -605,20 +603,21 @@
 }
 
 /* Animation when menu is open */
-.navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-1 {
+.navbar-menu.open + .navbar-toggle .brush-stroke-1 {
     transform: rotate(45deg) translate(6px, 6px);
     width: 100%;
 }
 
-.navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-2 {
+.navbar-menu.open + .navbar-toggle .brush-stroke-2 {
     opacity: 0;
     transform: translateX(10px);
 }
 
-.navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-3 {
+.navbar-menu.open + .navbar-toggle .brush-stroke-3 {
     transform: rotate(-45deg) translate(6px, -6px);
     width: 100%;
 }
+
 
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
@@ -649,6 +648,8 @@
     }
 }
 </style>
+            </div>
+
 
 </body>
 
