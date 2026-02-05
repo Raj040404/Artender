@@ -73,7 +73,7 @@ const SellerRegistrationSchema = new mongoose.Schema({
   age: { type: Number, required: true },
   address: { type: String, required: true },
   mobileNumber: { type: String, required: true },
-  artworkCategory: { type: String, required: true },
+  artworkCategory: [{ type: String, required: true }],
   paid: { type: Boolean, default: false },
   paymentId: { type: String },
   merchantOrderId: { type: String },
