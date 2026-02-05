@@ -90,7 +90,6 @@ const SellerRegistrationSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-SellerRegistrationSchema.index({ userId: 1 }, { unique: true });
 
 // Models
 const LogInCollection = mongoose.model("LogInCollection", LogInSchema);
