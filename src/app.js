@@ -365,6 +365,10 @@ app.get("/explorecompetitions", requireLogin, async (req, res) => {
     res.status(500).send("Error loading competitions. Please try again later.");
   }
 });
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // Seller Registration POST Route - Add this after the GET route
 app.post("/sellerregistration", requireLogin, async (req, res) => {
   console.log("=== SELLER REGISTRATION FORM SUBMITTED ===");
@@ -394,7 +398,8 @@ app.post("/sellerregistration", requireLogin, async (req, res) => {
     
     // Check if already registered
  const existingRegistration = await SellerRegistrationCollection.findOne({
-  userId: req.session.user._id
+  userId: req.session.userId
+
 });
 
     
@@ -407,7 +412,7 @@ app.post("/sellerregistration", requireLogin, async (req, res) => {
     
     // Create new seller registration
  const newSeller = new SellerRegistrationCollection({
-  userId: req.session.user._id,
+  userId:req.session.userId
   name,
   age: parseInt(age),
   address,
