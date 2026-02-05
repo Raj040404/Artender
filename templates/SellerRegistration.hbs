@@ -321,7 +321,7 @@
             Complete your profile to start selling your artwork on Artender.
         </p>
 
-        <form id="sellerRegistrationForm" class="seller-registration-form">
+        <form id="sellerRegistrationForm" class="seller-registration-form" action="/sellerregistration" method="POST">
 
             <!-- Name -->
             <div class="form-group">
@@ -352,10 +352,12 @@
             </div>
 
             <!-- Artwork Categories (Checkboxes) -->
-            <div class="form-group">
-                <label class="form-label">Artwork Categories *</label>
-                <div class="checkbox-grid" id="category">
-                    <label class="checkbox-item"><input type="checkbox" value="Painting"> Painting</label>
+          <div class="form-group">
+    <label class="form-label">Artwork Categories *</label>
+    <div class="checkbox-grid">
+        <label class="checkbox-item">
+            <input type="checkbox" name="artworkCategory" value="Painting"> Painting
+        </label>
                     <label class="checkbox-item"><input type="checkbox" value="Digital Art"> Digital Art</label>
                     <label class="checkbox-item"><input type="checkbox" value="Sculpture"> Sculpture</label>
                     <label class="checkbox-item"><input type="checkbox" value="Photography"> Photography</label>
@@ -364,13 +366,13 @@
                     <label class="checkbox-item"><input type="checkbox" value="Illustration"> Illustration</label>
                     <label class="checkbox-item"><input type="checkbox" value="Craft"> Craft</label>
                     <label class="checkbox-item"><input type="checkbox" value="Other"> Other</label>
-                </div>
-                <div class="form-error" id="categoryError"></div>
-            </div>
+               </div>
+    <input type="hidden" id="categoryInput" name="artworkCategory">
+</div>
 
-            <button type="submit" class="seller-submit-btn">
-                Complete Registration
-            </button>
+           <button type="submit" class="seller-submit-btn">
+    Complete Registration & Pay ₹149
+</button>
         </form>
     </div>
 </main>
@@ -484,7 +486,6 @@
     box-shadow:0 12px 28px rgba(249,115,22,0.45);
 }
 </style>
-
 <script>
 document.getElementById('sellerRegistrationForm').addEventListener('submit', function(e){
     e.preventDefault();
@@ -501,37 +502,50 @@ document.getElementById('sellerRegistrationForm').addEventListener('submit', fun
         if(msg) valid = false;
     }
 
-    // Name
+    // Clear previous errors
+    document.querySelectorAll('.form-error').forEach(el => el.innerText = '');
+
+    // Name validation
     setError('nameError', name.value.trim().length<2 ? 'Enter valid name':'');
 
-    // Age
+    // Age validation
     setError('ageError', (age.value<18||age.value>120)?'Age must be 18-120':'');
 
-    // Address
+    // Address validation
     setError('addressError', address.value.trim().length<10?'Enter full address':'');
 
-    // Mobile
+    // Mobile validation
     setError('mobileError', /^[0-9]{10}$/.test(mobile.value)?'':'Enter valid 10 digit mobile');
 
-    // Categories
+    // Categories validation
     const selectedCategories = Array.from(
-        document.querySelectorAll('#category input:checked')
-    ).map(cb=>cb.value);
+        document.querySelectorAll('#category input[type="checkbox"]:checked')
+    ).map(cb => cb.value);
 
     setError('categoryError', selectedCategories.length==0?'Select at least one category':'');
 
+    // If validation fails, stop here
     if(!valid) return;
 
-    console.log({
-        name:name.value,
-        age:age.value,
-        address:address.value,
-        mobile:mobile.value,
-        categories:selectedCategories
-    });
-
-    alert('Registration Successful!');
-    this.reset();
+    // Create hidden input for categories if it doesn't exist
+    let categoryInput = document.getElementById('categoryInput');
+    if (!categoryInput) {
+        categoryInput = document.createElement('input');
+        categoryInput.type = 'hidden';
+        categoryInput.name = 'artworkCategory';
+        categoryInput.id = 'categoryInput';
+        this.appendChild(categoryInput);
+    }
+    
+    // Join categories with comma for single string storage
+    categoryInput.value = selectedCategories.join(', ');
+    
+    // Change button text to indicate processing
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.textContent = 'Processing...';
+    
+    // Submit the form normally (will redirect to /seller-payment on success)
+    this.submit();
 });
 </script>
 
