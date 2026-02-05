@@ -345,7 +345,18 @@
             <!-- Mobile -->
             <div class="form-group">
                 <label for="mobile" class="form-label">Mobile Number *</label>
-                <input type="tel" id="mobile" name="mobileNumber" class="form-input" maxlength="10" required>
+              <input
+  type="tel"
+  id="mobile"
+  name="mobileNumber"
+  class="form-input"
+  pattern="[0-9]{10}"
+  inputmode="numeric"
+  maxlength="10"
+  placeholder="Enter 10 digit mobile number"
+  required
+>
+
                 <div class="form-error" id="mobileError"></div>
             </div>
 
@@ -354,34 +365,34 @@
                 <label class="form-label">Artwork Categories *</label>
                 <div class="checkbox-grid">
                     <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory" value="Painting"> Painting
+                        <input type="checkbox" name="artworkCategory[]" value="Painting">Painting
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory" value="Digital Art"> Digital Art
+                        <input type="checkbox" name="artworkCategory[]" value="Digital Art"> Digital Art
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory" value="Sculpture"> Sculpture
+                        <input type="checkbox" name="artworkCategory[]" value="Sculpture"> Sculpture
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory" value="Photography"> Photography
+                        <input type="checkbox" name="artworkCategory[]" value="Photography"> Photography
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory" value="Traditional Art"> Traditional Art
+                        <input type="checkbox" name="artworkCategory[]" value="Traditional Art"> Traditional Art
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory" value="Mixed Media"> Mixed Media
+                        <input type="checkbox" name="artworkCategory[]" value="Mixed Media"> Mixed Media
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory" value="Illustration"> Illustration
+                        <input type="checkbox" name="artworkCategory[]" value="Illustration"> Illustration
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory" value="Craft"> Craft
+                        <input type="checkbox" name="artworkCategory[]" value="Craft"> Craft
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory" value="Other"> Other
+                        <input type="checkbox" name="artworkCategory[]" value="Other"> Other
                     </label>
                 </div>
-                <input type="hidden" id="categoryInput" name="artworkCategory">
+                
                 <div class="form-error" id="categoryError"></div>
             </div>
 
@@ -501,67 +512,7 @@
     box-shadow:0 12px 28px rgba(249,115,22,0.45);
 }
 </style>
-<script>
-document.getElementById('sellerRegistrationForm').addEventListener('submit', function(e){
-    e.preventDefault();
 
-    let valid = true;
-    const name = document.getElementById('name');
-    const age = document.getElementById('age');
-    const address = document.getElementById('address');
-    const mobile = document.getElementById('mobile');
-
-    // Clear previous errors
-    document.querySelectorAll('.form-error').forEach(el => el.innerText = '');
-
-    // Validation functions
-    const setError = (id,msg)=>{
-        document.getElementById(id).innerText = msg;
-        if(msg) valid = false;
-    }
-
-    // Name validation
-    if(name.value.trim().length<2) setError('nameError', 'Enter valid name');
-
-    // Age validation
-    if(age.value<18||age.value>120) setError('ageError', 'Age must be 18-120');
-
-    // Address validation
-    if(address.value.trim().length<10) setError('addressError', 'Enter full address');
-
-    // Mobile validation
-    if(!/^[0-9]{10}$/.test(mobile.value)) setError('mobileError', 'Enter valid 10 digit mobile');
-
-    // Categories validation
-    const selectedCategories = Array.from(
-        document.querySelectorAll('input[name="artworkCategory"]:checked')
-    ).map(cb => cb.value);
-    
-    if(selectedCategories.length==0) setError('categoryError', 'Select at least one category');
-
-    // If validation fails, stop here
-    if(!valid) return;
-
-    // Create/update hidden input for categories
-    let categoryInput = document.getElementById('categoryInput');
-    if (!categoryInput) {
-        categoryInput = document.createElement('input');
-        categoryInput.type = 'hidden';
-        categoryInput.name = 'artworkCategory';
-        categoryInput.id = 'categoryInput';
-        this.appendChild(categoryInput);
-    }
-    categoryInput.value = selectedCategories.join(', ');
-    
-    // Change button text to indicate processing
-    const submitBtn = this.querySelector('button[type="submit"]');
-    submitBtn.textContent = 'Processing...';
-    submitBtn.disabled = true;
-    
-    // Submit the form normally
-    this.submit();
-});
-</script>
 
     <style>
     .aboutus-container {
