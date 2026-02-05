@@ -4,7 +4,7 @@ const path = require("path");
 const hbs = require("hbs");
 const multer = require("multer");
 const session = require("express-session");
-const { LogInCollection, CompetitionPostCollection, ProfileCollection, ContestCollection, EnrollmentCollection } = require("./mongodb");
+const { LogInCollection, CompetitionPostCollection, ProfileCollection, ContestCollection, EnrollmentCollection, SellerRegistrationCollection } = require("./mongodb");
 const handlebars = require("hbs");
 const MongoStore = require("connect-mongo");
 const nodemailer = require("nodemailer");
@@ -364,6 +364,247 @@ app.get("/explorecompetitions", requireLogin, async (req, res) => {
     console.error("Error fetching competition posts:", err);
     res.status(500).send("Error loading competitions. Please try again later.");
   }
+});
+
+// Add this near other POST routes (after other app.post() routes)
+
+// Seller Registration Form Submission
+app.post("/sellerregistration", requireLogin, async (req, res) => {
+  const userId = req.session.userId;
+  
+  if (!userId) {
+    return res.redirect("/login");
+  }
+
+  try {
+    const user = await LogInCollection.findById(userId);
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+
+    const { name, age, address, mobileNumber, artworkCategory } = req.body;
+    
+    // Validate required fields
+    if (!name || !age || !address || !mobileNumber || !artworkCategory) {
+      return res.status(400).send("All fields are required.");
+    }
+
+    // Check if already registered as seller
+    const existingRegistration = await SellerRegistrationCollection.findOne({
+      $or: [{ name }, { mobileNumber }]
+    });
+
+    if (existingRegistration) {
+      return res.render("SellerRegistration", { 
+        error: "You have already registered as a seller or this mobile number is already in use." 
+      });
+    }
+
+    // Create seller registration (payment pending)
+    const newSeller = new SellerRegistrationCollection({
+      name,
+      age: parseInt(age),
+      address,
+      mobileNumber,
+      artworkCategory,
+      paid: false // Will be updated after successful payment
+    });
+
+    await newSeller.save();
+
+    // Store seller registration ID in session for payment
+    req.session.sellerRegistrationId = newSeller._id;
+    req.session.sellerAmount = 14900; // Amount in paise (149 * 100)
+
+    // Redirect to payment page
+    res.redirect("/seller-payment");
+  } catch (err) {
+    console.error("Error in seller registration:", err);
+    res.status(500).send("Error processing registration. Please try again.");
+  }
+});
+
+// Seller Payment Page
+app.get("/seller-payment", requireLogin, (req, res) => {
+  if (!req.session.sellerRegistrationId) {
+    return res.redirect("/sellerregistration");
+  }
+  
+  res.render("sellerPayment", {
+    amount: 149,
+    registrationId: req.session.sellerRegistrationId
+  });
+});
+
+// PhonePe Payment for Seller Registration
+app.post("/api/create-seller-payment", requireLogin, async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    const registrationId = req.session.sellerRegistrationId;
+    
+    if (!userId || !registrationId) {
+      return res.status(400).json({ error: "Session expired. Please restart registration." });
+    }
+
+    const user = await LogInCollection.findById(userId);
+    const sellerReg = await SellerRegistrationCollection.findById(registrationId);
+    
+    if (!user || !sellerReg) {
+      return res.status(404).json({ error: "Registration details not found." });
+    }
+
+    // Generate unique merchant order ID for seller registration
+    const merchantOrderId = `ARTENDER_SELLER_${registrationId}_${Date.now()}`;
+    
+    // Update seller registration with payment ID
+    sellerReg.paymentId = merchantOrderId;
+    await sellerReg.save();
+
+    // Get PhonePe access token
+    const accessToken = await getPhonePeAccessToken();
+    const payUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`;
+
+    const requestHeaders = {
+      "Content-Type": "application/json",
+      Authorization: `O-Bearer ${accessToken}`,
+    };
+
+    const requestBody = {
+      amount: 14900, // 149 rupees in paise
+      expireAfter: 1200, // 20 minutes
+      metaInfo: {
+        udf1: user.name,
+        udf2: registrationId.toString(),
+        udf3: sellerReg.mobileNumber,
+        udf4: "Seller Registration",
+        udf5: "Artender",
+      },
+      paymentFlow: {
+        type: "PG_CHECKOUT",
+        message: "Seller Registration Fee - Artender",
+        merchantUrls: {
+          redirectUrl: process.env.PHONEPE_SELLER_CALLBACK_URL || 
+                     "https://www.artender.in/seller-payment-callback",
+        },
+      },
+      merchantOrderId,
+    };
+
+    const response = await axios.post(payUrl, requestBody, { headers: requestHeaders });
+    const data = response.data;
+
+    // Save PhonePe order details
+    sellerReg.merchantOrderId = merchantOrderId;
+    sellerReg.phonepeOrderId = data?.orderId || null;
+    sellerReg.phonepeRedirectUrl = data?.redirectUrl || null;
+    await sellerReg.save();
+
+    if (data?.redirectUrl) {
+      return res.json({ 
+        redirectUrl: data.redirectUrl, 
+        orderId: merchantOrderId 
+      });
+    } else {
+      return res.status(500).json({ 
+        error: "Failed to create payment order", 
+        details: data 
+      });
+    }
+  } catch (err) {
+    console.error("[create-seller-payment] Error:", err.response?.data || err.message);
+    res.status(500).json({ 
+      error: "Failed to create payment", 
+      details: err.response?.data || err.message 
+    });
+  }
+});
+
+// Seller Payment Callback
+app.get("/seller-payment-callback", async (req, res) => {
+  let { orderId, merchantOrderId } = req.query;
+  
+  try {
+    const accessToken = await getPhonePeAccessToken();
+    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${merchantOrderId || orderId}/status?details=false`;
+
+    async function checkStatus() {
+      const response = await axios.get(statusUrl, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `O-Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    }
+
+    let statusResponse = await checkStatus();
+    
+    // Normalize payment state (same logic as contest enrollment)
+    function resolveState(resp) {
+      const nested = resp?.paymentDetails?.[0]?.state;
+      const top = resp?.state;
+      if (nested === "SUCCESS" || nested === "COMPLETED") return "SUCCESS";
+      if (top === "SUCCESS" || top === "COMPLETED") return "SUCCESS";
+      if (nested === "PENDING" || top === "PENDING") return "PENDING";
+      return "FAILED";
+    }
+
+    let paymentState = resolveState(statusResponse);
+
+    // Retry once if pending
+    if (paymentState === "PENDING") {
+      await new Promise(r => setTimeout(r, 2000));
+      statusResponse = await checkStatus();
+      paymentState = resolveState(statusResponse);
+    }
+
+    // Find seller registration by merchantOrderId
+    const sellerReg = await SellerRegistrationCollection.findOne({
+      $or: [
+        { merchantOrderId: merchantOrderId || orderId },
+        { paymentId: merchantOrderId || orderId }
+      ]
+    });
+
+    if (paymentState === "SUCCESS") {
+      // Update seller registration as paid
+      if (sellerReg) {
+        sellerReg.paid = true;
+        await sellerReg.save();
+      }
+      
+      // Clear session
+      delete req.session.sellerRegistrationId;
+      delete req.session.sellerAmount;
+      
+      return res.render("paymentSuccess", { 
+        message: "Seller registration successful! You can now start selling on Artender.",
+        redirectUrl: "/home",
+        redirectText: "Go to Home"
+      });
+    } else if (paymentState === "PENDING") {
+      return res.redirect(`/paymentpending?orderId=${merchantOrderId}&type=seller`);
+    } else {
+      const reason = statusResponse?.message || "Payment failed";
+      return res.redirect(`/paymentfailed?reason=${encodeURIComponent(reason)}&type=seller`);
+    }
+  } catch (err) {
+    console.error("[seller-payment-callback] Error:", err);
+    return res.redirect(`/paymentfailed?reason=${encodeURIComponent(err.message)}`);
+  }
+});
+
+// Seller Registration Success Page
+app.get("/seller-registration-success", requireLogin, (req, res) => {
+  res.render("sellerSuccess", {
+    message: "Congratulations! You are now registered as a seller on Artender.",
+    nextSteps: [
+      "Complete your seller profile",
+      "Upload your artwork portfolio",
+      "Set up your pricing",
+      "Start receiving orders"
+    ]
+  });
 });
 
 // Publish Post Route
