@@ -69,18 +69,29 @@ const EnrollmentSchema = new mongoose.Schema({
   phonepeRedirectUrl: { type: String },
 }, { timestamps: true });
 const SellerRegistrationSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "LogInCollection", required: true, unique: true },
   name: { type: String, required: true },
   age: { type: Number, required: true },
   address: { type: String, required: true },
-  mobileNumber: { type: String, required: true },
+  mobileNumber: { type: String, required: true, unique: true },
   artworkCategory: [{ type: String, required: true }],
   paid: { type: Boolean, default: false },
+
+  status: {
+    type: String,
+    enum: ["pending", "paid", "rejected"],
+    default: "pending"
+  },
+
   paymentId: { type: String },
   merchantOrderId: { type: String },
   phonepeOrderId: { type: String },
   phonepeRedirectUrl: { type: String },
+
 }, { timestamps: true });
+
+SellerRegistrationSchema.index({ userId: 1 }, { unique: true });
+
 // Models
 const LogInCollection = mongoose.model("LogInCollection", LogInSchema);
 const CompetitionPostCollection = mongoose.model("CompetitionPostCollection", CompetitionPostSchema);
