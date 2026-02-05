@@ -315,64 +315,79 @@
 
 <main class="comingsoon-main">
     <div class="comingsoon-wrapper">
-
         <h1 class="comingsoon-title">Seller Registration</h1>
         <p class="comingsoon-subtitle">
             Complete your profile to start selling your artwork on Artender.
         </p>
 
         <form id="sellerRegistrationForm" class="seller-registration-form" action="/sellerregistration" method="POST">
-
             <!-- Name -->
             <div class="form-group">
                 <label for="name" class="form-label">Full Name *</label>
-                <input type="text" id="name" class="form-input" required>
+                <input type="text" id="name" name="name" class="form-input" required>
                 <div class="form-error" id="nameError"></div>
             </div>
 
             <!-- Age -->
             <div class="form-group">
                 <label for="age" class="form-label">Age *</label>
-                <input type="number" id="age" class="form-input" min="18" max="120" required>
+                <input type="number" id="age" name="age" class="form-input" min="18" max="120" required>
                 <div class="form-error" id="ageError"></div>
             </div>
 
             <!-- Address -->
             <div class="form-group">
                 <label for="address" class="form-label">Address *</label>
-                <textarea id="address" class="form-textarea" rows="3" required></textarea>
+                <textarea id="address" name="address" class="form-textarea" rows="3" required></textarea>
                 <div class="form-error" id="addressError"></div>
             </div>
 
             <!-- Mobile -->
             <div class="form-group">
                 <label for="mobile" class="form-label">Mobile Number *</label>
-                <input type="tel" id="mobile" class="form-input" maxlength="10" required>
+                <input type="tel" id="mobile" name="mobileNumber" class="form-input" maxlength="10" required>
                 <div class="form-error" id="mobileError"></div>
             </div>
 
-            <!-- Artwork Categories (Checkboxes) -->
-          <div class="form-group">
-    <label class="form-label">Artwork Categories *</label>
-    <div class="checkbox-grid">
-        <label class="checkbox-item">
-            <input type="checkbox" name="artworkCategory" value="Painting"> Painting
-        </label>
-                    <label class="checkbox-item"><input type="checkbox" value="Digital Art"> Digital Art</label>
-                    <label class="checkbox-item"><input type="checkbox" value="Sculpture"> Sculpture</label>
-                    <label class="checkbox-item"><input type="checkbox" value="Photography"> Photography</label>
-                    <label class="checkbox-item"><input type="checkbox" value="Traditional Art"> Traditional Art</label>
-                    <label class="checkbox-item"><input type="checkbox" value="Mixed Media"> Mixed Media</label>
-                    <label class="checkbox-item"><input type="checkbox" value="Illustration"> Illustration</label>
-                    <label class="checkbox-item"><input type="checkbox" value="Craft"> Craft</label>
-                    <label class="checkbox-item"><input type="checkbox" value="Other"> Other</label>
-               </div>
-    <input type="hidden" id="categoryInput" name="artworkCategory">
-</div>
+            <!-- Artwork Categories -->
+            <div class="form-group">
+                <label class="form-label">Artwork Categories *</label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="artworkCategory" value="Painting"> Painting
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="artworkCategory" value="Digital Art"> Digital Art
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="artworkCategory" value="Sculpture"> Sculpture
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="artworkCategory" value="Photography"> Photography
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="artworkCategory" value="Traditional Art"> Traditional Art
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="artworkCategory" value="Mixed Media"> Mixed Media
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="artworkCategory" value="Illustration"> Illustration
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="artworkCategory" value="Craft"> Craft
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="artworkCategory" value="Other"> Other
+                    </label>
+                </div>
+                <input type="hidden" id="categoryInput" name="artworkCategory">
+                <div class="form-error" id="categoryError"></div>
+            </div>
 
-           <button type="submit" class="seller-submit-btn">
-    Complete Registration & Pay ₹149
-</button>
+            <button type="submit" class="seller-submit-btn">
+                Complete Registration
+            </button>
         </form>
     </div>
 </main>
@@ -491,43 +506,43 @@ document.getElementById('sellerRegistrationForm').addEventListener('submit', fun
     e.preventDefault();
 
     let valid = true;
-
     const name = document.getElementById('name');
     const age = document.getElementById('age');
     const address = document.getElementById('address');
     const mobile = document.getElementById('mobile');
 
+    // Clear previous errors
+    document.querySelectorAll('.form-error').forEach(el => el.innerText = '');
+
+    // Validation functions
     const setError = (id,msg)=>{
         document.getElementById(id).innerText = msg;
         if(msg) valid = false;
     }
 
-    // Clear previous errors
-    document.querySelectorAll('.form-error').forEach(el => el.innerText = '');
-
     // Name validation
-    setError('nameError', name.value.trim().length<2 ? 'Enter valid name':'');
+    if(name.value.trim().length<2) setError('nameError', 'Enter valid name');
 
     // Age validation
-    setError('ageError', (age.value<18||age.value>120)?'Age must be 18-120':'');
+    if(age.value<18||age.value>120) setError('ageError', 'Age must be 18-120');
 
     // Address validation
-    setError('addressError', address.value.trim().length<10?'Enter full address':'');
+    if(address.value.trim().length<10) setError('addressError', 'Enter full address');
 
     // Mobile validation
-    setError('mobileError', /^[0-9]{10}$/.test(mobile.value)?'':'Enter valid 10 digit mobile');
+    if(!/^[0-9]{10}$/.test(mobile.value)) setError('mobileError', 'Enter valid 10 digit mobile');
 
     // Categories validation
     const selectedCategories = Array.from(
-        document.querySelectorAll('#category input[type="checkbox"]:checked')
+        document.querySelectorAll('input[name="artworkCategory"]:checked')
     ).map(cb => cb.value);
-
-    setError('categoryError', selectedCategories.length==0?'Select at least one category':'');
+    
+    if(selectedCategories.length==0) setError('categoryError', 'Select at least one category');
 
     // If validation fails, stop here
     if(!valid) return;
 
-    // Create hidden input for categories if it doesn't exist
+    // Create/update hidden input for categories
     let categoryInput = document.getElementById('categoryInput');
     if (!categoryInput) {
         categoryInput = document.createElement('input');
@@ -536,15 +551,14 @@ document.getElementById('sellerRegistrationForm').addEventListener('submit', fun
         categoryInput.id = 'categoryInput';
         this.appendChild(categoryInput);
     }
-    
-    // Join categories with comma for single string storage
     categoryInput.value = selectedCategories.join(', ');
     
     // Change button text to indicate processing
     const submitBtn = this.querySelector('button[type="submit"]');
     submitBtn.textContent = 'Processing...';
+    submitBtn.disabled = true;
     
-    // Submit the form normally (will redirect to /seller-payment on success)
+    // Submit the form normally
     this.submit();
 });
 </script>
