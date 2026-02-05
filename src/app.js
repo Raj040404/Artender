@@ -365,6 +365,78 @@ app.get("/explorecompetitions", requireLogin, async (req, res) => {
     res.status(500).send("Error loading competitions. Please try again later.");
   }
 });
+// Seller Registration POST Route - Add this after the GET route
+app.post("/sellerregistration", requireLogin, async (req, res) => {
+  console.log("=== SELLER REGISTRATION FORM SUBMITTED ===");
+  console.log("Received form data:", req.body);
+  
+  try {
+    // Get form data
+    const { name, age, address, mobileNumber, artworkCategory } = req.body;
+    
+    // Debug log everything
+    console.log("Name:", name);
+    console.log("Age:", age);
+    console.log("Address:", address);
+    console.log("Mobile:", mobileNumber);
+    console.log("Categories:", artworkCategory);
+    
+    // Validate required fields
+    if (!name || !age || !address || !mobileNumber || !artworkCategory) {
+      console.log("❌ Missing required fields");
+      return res.render("SellerRegistration", {
+        error: "All fields are required. Please fill in all information."
+      });
+    }
+    
+    // Check if already registered
+    const existingRegistration = await SellerRegistrationCollection.findOne({
+      $or: [{ name }, { mobileNumber }]
+    });
+    
+    if (existingRegistration) {
+      console.log("❌ Already registered:", existingRegistration);
+      return res.render("SellerRegistration", {
+        error: "You have already registered as a seller or this mobile number is already in use."
+      });
+    }
+    
+    // Create new seller registration
+    const newSeller = new SellerRegistrationCollection({
+      name: name,
+      age: parseInt(age),
+      address: address,
+      mobileNumber: mobileNumber,
+      artworkCategory: artworkCategory,
+      paid: false
+    });
+    
+    // Save to database
+    await newSeller.save();
+    console.log("✅ Successfully saved to database:", newSeller);
+    
+    // Redirect to success page
+    res.redirect("/seller-success");
+    
+  } catch (error) {
+    console.error("❌ Error saving seller registration:", error);
+    res.render("SellerRegistration", {
+      error: "Error processing registration: " + error.message
+    });
+  }
+});
+// Seller Success Page
+app.get("/seller-success", requireLogin, (req, res) => {
+  res.render("sellerSuccess", {
+    message: "Congratulations! You are now registered as a seller on Artender.",
+    nextSteps: [
+      "Complete your seller profile",
+      "Upload your artwork portfolio",
+      "Set up your pricing",
+      "Start receiving orders"
+    ]
+  });
+});
 
 
 // Publish Post Route
