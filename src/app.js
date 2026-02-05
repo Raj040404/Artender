@@ -372,7 +372,9 @@ app.post("/sellerregistration", requireLogin, async (req, res) => {
   
   try {
     // Get form data
-    const { name, age, address, mobileNumber, artworkCategory } = req.body;
+    const { name, age, address, mobileNumber } = req.body;
+    const artworkCategory = req.body.artworkCategory || [];
+
     
     // Debug log everything
     console.log("Name:", name);
@@ -382,7 +384,8 @@ app.post("/sellerregistration", requireLogin, async (req, res) => {
     console.log("Categories:", artworkCategory);
     
     // Validate required fields
-    if (!name || !age || !address || !mobileNumber || !artworkCategory) {
+   if (!name || !age || !address || !mobileNumber || artworkCategory.length === 0)
+ {
       console.log("❌ Missing required fields");
       return res.render("SellerRegistration", {
         error: "All fields are required. Please fill in all information."
@@ -390,9 +393,10 @@ app.post("/sellerregistration", requireLogin, async (req, res) => {
     }
     
     // Check if already registered
-    const existingRegistration = await SellerRegistrationCollection.findOne({
-      $or: [{ name }, { mobileNumber }]
-    });
+ const existingRegistration = await SellerRegistrationCollection.findOne({
+  mobileNumber
+});
+
     
     if (existingRegistration) {
       console.log("❌ Already registered:", existingRegistration);
@@ -402,14 +406,15 @@ app.post("/sellerregistration", requireLogin, async (req, res) => {
     }
     
     // Create new seller registration
-    const newSeller = new SellerRegistrationCollection({
-      name: name,
-      age: parseInt(age),
-      address: address,
-      mobileNumber: mobileNumber,
-      artworkCategory: artworkCategory,
-      paid: false
-    });
+   const newSeller = new SellerRegistrationCollection({
+  name,
+  age: parseInt(age),
+  address,
+  mobileNumber,
+  artworkCategory,  // <-- array now
+  paid: false
+});
+
     
     // Save to database
     await newSeller.save();
