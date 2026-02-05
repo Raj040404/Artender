@@ -412,7 +412,7 @@ app.post("/sellerregistration", requireLogin, async (req, res) => {
     
     // Create new seller registration
  const newSeller = new SellerRegistrationCollection({
-  userId:req.session.userId
+  userId:req.session.userId,
   name,
   age: parseInt(age),
   address,
