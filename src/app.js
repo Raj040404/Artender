@@ -394,7 +394,7 @@ app.post("/sellerregistration", requireLogin, async (req, res) => {
     
     // Check if already registered
  const existingRegistration = await SellerRegistrationCollection.findOne({
-  mobileNumber
+  userId: req.session.user._id
 });
 
     
@@ -406,14 +406,16 @@ app.post("/sellerregistration", requireLogin, async (req, res) => {
     }
     
     // Create new seller registration
-   const newSeller = new SellerRegistrationCollection({
+ const newSeller = new SellerRegistrationCollection({
+  userId: req.session.user._id,
   name,
   age: parseInt(age),
   address,
   mobileNumber,
-  artworkCategory,  // <-- array now
+  artworkCategory,
   paid: false
 });
+
 
     
     // Save to database
