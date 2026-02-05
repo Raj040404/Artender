@@ -75,6 +75,10 @@ const SellerRegistrationSchema = new mongoose.Schema({
   mobileNumber: { type: String, required: true },
   artworkCategory: { type: String, required: true },
   paid: { type: Boolean, default: false },
+  paymentId: { type: String },
+  merchantOrderId: { type: String },
+  phonepeOrderId: { type: String },
+  phonepeRedirectUrl: { type: String },
 }, { timestamps: true });
 // Models
 const LogInCollection = mongoose.model("LogInCollection", LogInSchema);
