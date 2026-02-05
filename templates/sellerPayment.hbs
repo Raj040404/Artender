@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complete Seller Registration - Payment</title>
+    <style>
+        .payment-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .amount-display {
+            font-size: 48px;
+            color: #f97316;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .payment-btn {
+            background: #f97316;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            font-weight: bold;
+        }
+        .payment-btn:hover {
+            background: #ea580c;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <h1>Complete Your Seller Registration</h1>
+        <p>One-time registration fee to start selling on Artender</p>
+        
+        <div class="amount-display">₹149</div>
+        
+        <p>Benefits include:</p>
+        <ul style="text-align: left; margin: 20px 0;">
+            <li>Seller dashboard access</li>
+            <li>Artwork listing capabilities</li>
+            <li>Customer management tools</li>
+            <li>Secure payment processing</li>
+        </ul>
+        
+        <button id="payButton" class="payment-btn">Proceed to Pay ₹149</button>
+    </div>
+
+    <script>
+        document.getElementById('payButton').addEventListener('click', async function() {
+            this.disabled = true;
+            this.textContent = 'Processing...';
+            
+            try {
+                const response = await fetch('/api/create-seller-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                const data = await response.json();
+                
+                if (data.redirectUrl) {
+                    window.location.href = data.redirectUrl;
+                } else {
+                    alert('Payment initiation failed: ' + (data.error || 'Unknown error'));
+                    this.disabled = false;
+                    this.textContent = 'Proceed to Pay ₹149';
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+                this.disabled = false;
+                this.textContent = 'Proceed to Pay ₹149';
+            }
+        });
+    </script>
+</body>
+</html>
