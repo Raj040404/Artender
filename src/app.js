@@ -310,9 +310,24 @@ app.get("/completeenrollment", requireLogin, (req, res) => {
   res.render("completeenrollment", { contestId });
 });
 
-app.get("/sellerregistration", requireLogin, (req, res) => {
-  res.render("SellerRegistration");
+app.get("/sellerregistration", requireLogin, async (req, res) => {
+  try {
+    const existingRegistration = await SellerRegistrationCollection.findOne({
+      userId: req.session.userId
+    });
+
+    res.render("SellerRegistration", {
+      alreadyRegistered: !!existingRegistration
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.render("SellerRegistration", {
+      alreadyRegistered: false
+    });
+  }
 });
+
 
 app.get("/paymentfailed", (req, res) => {
   const reason = req.query.reason || "Unknown error";
