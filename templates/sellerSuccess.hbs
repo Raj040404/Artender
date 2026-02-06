@@ -1,61 +1,126 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Registration Successful!</title>
+    <title>Registration Successful - Artender</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans:wght@400;600&display=swap">
+
     <style>
-        .success-container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 40px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
+        body{
+            margin:0;
+            font-family:'Noto Sans',sans-serif;
+            background:#fff7ed;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            min-height:100vh;
         }
-        .success-icon {
-            font-size: 60px;
-            color: #10b981;
-            margin-bottom: 20px;
+
+        .success-wrapper{
+            background:#ffffff;
+            max-width:700px;
+            width:90%;
+            padding:48px;
+            border-radius:22px;
+            box-shadow:0 12px 45px rgba(249,115,22,0.18);
+            border:1px solid #fed7aa;
+            text-align:center;
         }
-        .next-steps {
-            text-align: left;
-            margin: 30px 0;
-            padding: 20px;
-            background: #f0fdf4;
-            border-radius: 10px;
+
+        .success-icon{
+            width:80px;
+            height:80px;
+            margin:0 auto 20px;
+            border-radius:50%;
+            background:#ecfdf5;
+            color:#10b981;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:40px;
+            font-weight:700;
         }
-        .next-steps li {
-            margin: 10px 0;
-            padding-left: 20px;
+
+        h1{
+            margin:10px 0;
+            font-size:28px;
+            color:#1f2937;
+            font-weight:700;
         }
-        .home-btn {
-            background: #f97316;
-            color: white;
-            padding: 12px 30px;
-            text-decoration: none;
-            border-radius: 8px;
-            display: inline-block;
-            margin-top: 20px;
-            font-weight: bold;
+
+        .success-text{
+            color:#6b7280;
+            margin-bottom:30px;
+            font-size:16px;
+        }
+
+        .next-steps{
+            text-align:left;
+            margin:30px 0;
+            padding:22px;
+            background:#fff7ed;
+            border-radius:16px;
+            border:1px solid #fed7aa;
+        }
+
+        .next-steps h3{
+            margin-bottom:12px;
+            color:#f97316;
+        }
+
+        .next-steps ul{
+            padding-left:20px;
+        }
+
+        .next-steps li{
+            margin:10px 0;
+            color:#374151;
+        }
+
+        /* Artender Orange Button */
+        .home-btn{
+            display:inline-block;
+            margin-top:25px;
+            padding:15px 36px;
+            border-radius:14px;
+            background:#f97316;
+            color:white;
+            font-weight:600;
+            font-size:16px;
+            text-decoration:none;
+            box-shadow:0 8px 22px rgba(249,115,22,0.35);
+            transition:all .3s ease;
+        }
+
+        .home-btn:hover{
+            transform:translateY(-2px);
+            box-shadow:0 12px 30px rgba(249,115,22,0.45);
         }
     </style>
 </head>
+
 <body>
-    <div class="success-container">
+    <div class="success-wrapper">
         <div class="success-icon">✓</div>
+
         <h1>Welcome to Artender Sellers!</h1>
-        <p>Your registration is complete and payment has been processed successfully.</p>
-        
+        <p class="success-text">
+            Your registration is complete and payment has been processed successfully.
+        </p>
+
         <div class="next-steps">
-            <h3>Next Steps:</h3>
+            <h3>What happens next?</h3>
             <ul>
                 {{#each nextSteps}}
                 <li>{{this}}</li>
                 {{/each}}
             </ul>
         </div>
-        
-        <a href="{{redirectUrl}}" class="home-btn">{{redirectText}}</a>
+
+        <a href="/home" class="home-btn">Go to Home</a>
     </div>
 </body>
 </html>
