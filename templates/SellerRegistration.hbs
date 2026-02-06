@@ -396,9 +396,18 @@
                 <div class="form-error" id="categoryError"></div>
             </div>
 
-            <button type="submit" class="seller-submit-btn">
-                Complete Registration
-            </button>
+           <button 
+    type="submit" 
+    class="seller-submit-btn"
+    {{#if alreadyRegistered}}disabled style="opacity:0.6;cursor:not-allowed;"{{/if}}
+>
+    {{#if alreadyRegistered}}
+        Already Enrolled
+    {{else}}
+        Complete Registration
+    {{/if}}
+</button>
+
         </form>
     </div>
 </main>
