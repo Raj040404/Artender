@@ -367,40 +367,49 @@
             </div>
 
             <!-- Artwork Categories -->
-            <div class="form-group">
-                <label class="form-label">Artwork Categories *</label>
-                <div class="checkbox-grid">
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory[]" value="Painting">Painting
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory[]" value="Digital Art"> Digital Art
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory[]" value="Sculpture"> Sculpture
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory[]" value="Photography"> Photography
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory[]" value="Traditional Art"> Traditional Art
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory[]" value="Mixed Media"> Mixed Media
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory[]" value="Illustration"> Illustration
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory[]" value="Craft"> Craft
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="artworkCategory[]" value="Other"> Other
-                    </label>
-                </div>
-                
-                <div class="form-error" id="categoryError"></div>
-            </div>
+          <!-- Artwork Categories -->
+<div class="form-group">
+    <label class="form-label">Artwork Categories *</label>
+
+    <div class="multi-select-dropdown" id="categoryDropdown">
+        <div class="dropdown-header" onclick="toggleCategoryDropdown()">
+            <span id="selectedCategoriesText">Select Artwork Categories</span>
+            <span class="dropdown-arrow">▼</span>
+        </div>
+
+        <div class="dropdown-options" id="categoryOptions">
+            <label class="dropdown-option">
+                <input type="checkbox" name="artworkCategory[]" value="Painting" onchange="updateSelectedCategories()"> Painting
+            </label>
+            <label class="dropdown-option">
+                <input type="checkbox" name="artworkCategory[]" value="Digital Art" onchange="updateSelectedCategories()"> Digital Art
+            </label>
+            <label class="dropdown-option">
+                <input type="checkbox" name="artworkCategory[]" value="Sculpture" onchange="updateSelectedCategories()"> Sculpture
+            </label>
+            <label class="dropdown-option">
+                <input type="checkbox" name="artworkCategory[]" value="Photography" onchange="updateSelectedCategories()"> Photography
+            </label>
+            <label class="dropdown-option">
+                <input type="checkbox" name="artworkCategory[]" value="Traditional Art" onchange="updateSelectedCategories()"> Traditional Art
+            </label>
+            <label class="dropdown-option">
+                <input type="checkbox" name="artworkCategory[]" value="Mixed Media" onchange="updateSelectedCategories()"> Mixed Media
+            </label>
+            <label class="dropdown-option">
+                <input type="checkbox" name="artworkCategory[]" value="Illustration" onchange="updateSelectedCategories()"> Illustration
+            </label>
+            <label class="dropdown-option">
+                <input type="checkbox" name="artworkCategory[]" value="Craft" onchange="updateSelectedCategories()"> Craft
+            </label>
+            <label class="dropdown-option">
+                <input type="checkbox" name="artworkCategory[]" value="Other" onchange="updateSelectedCategories()"> Other
+            </label>
+        </div>
+    </div>
+
+    <div class="form-error" id="categoryError"></div>
+</div>
 
         <button 
     type="submit" 
@@ -425,6 +434,7 @@
     background:#ffffff;
     max-width:700px;
     margin:auto;
+    overflow: visible;
     padding:42px;
     border-radius:20px;
     box-shadow:0 12px 45px rgba(249,115,22,0.15);
@@ -461,6 +471,76 @@
     background:#fff7ed;
     font-size:15px;
     transition:all .25s ease;
+}
+/* Multi Select Dropdown */
+.multi-select-dropdown {
+    position: relative;
+    width: 100%;
+    user-select: none;
+}
+
+.dropdown-header {
+    padding: 14px;
+    border: 2px solid #fed7aa;
+    border-radius: 14px;
+    background: #fff7ed;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    transition: all .25s ease;
+}
+
+.dropdown-header:hover {
+    border-color: #f97316;
+    background: #ffffff;
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1.5px solid #fed7aa;
+    border-radius: 14px;
+    margin-top: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 9999;   /* 🔥 FIX */
+}
+
+
+.dropdown-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.dropdown-option:hover {
+    background: #fff7ed;
+}
+
+.dropdown-option input {
+    accent-color: #f97316;
+    transform: scale(1.2);
+}
+
+.dropdown-arrow {
+    font-size: 12px;
+    transition: transform .3s ease;
+}
+
+.dropdown-open .dropdown-options {
+    display: block;
+}
+
+.dropdown-open .dropdown-arrow {
+    transform: rotate(180deg);
 }
 
 .form-input:focus,.form-textarea:focus{
@@ -772,6 +852,42 @@
 }
 </style>
             </div>
+<script>
+function toggleCategoryDropdown() {
+    const dropdown = document.getElementById("categoryDropdown");
+    dropdown.classList.toggle("dropdown-open");
+}
+// Prevent submit if no category selected
+document.getElementById("sellerRegistrationForm").addEventListener("submit", function(e){
+    const checked = document.querySelectorAll('input[name="artworkCategory[]"]:checked');
+    if(checked.length === 0){
+        e.preventDefault();
+        document.getElementById("categoryError").innerText = "Please select at least one artwork category.";
+        document.getElementById("categoryDropdown").classList.add("dropdown-open");
+    } else {
+        document.getElementById("categoryError").innerText = "";
+    }
+});
+
+function updateSelectedCategories() {
+    const checkboxes = document.querySelectorAll('input[name="artworkCategory[]"]:checked');
+    const text = Array.from(checkboxes).map(cb => cb.value).join(", ");
+    document.getElementById("selectedCategoriesText").innerText =
+        text || "Select Artwork Categories";
+
+    // ✅ auto close after selection (better UX)
+    document.getElementById("categoryDropdown").classList.remove("dropdown-open");
+}
+
+
+// Close dropdown when clicking outside
+document.addEventListener("click", function (e) {
+    const dropdown = document.getElementById("categoryDropdown");
+    if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove("dropdown-open");
+    }
+});
+</script>
 
 
 </body>
