@@ -6,9 +6,6 @@
   <!-- Character Set & Viewport -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  
-
 
   <!-- Web App Capabilities -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -175,29 +172,6 @@
       fill: var(--dl-color-theme-neutral-dark);
     }
   </style>
-  <style>
-:root {
-  --art-primary: #7c3aed;        /* royal purple */
-  --art-secondary: #f97316;      /* warm orange */
-  --art-accent: #06b6d4;         /* teal pop */
-  --art-dark: #0f172a;           /* deep navy */
-  --art-light: #f8fafc;          /* soft background */
-  --art-glass: rgba(255,255,255,0.08);
-}
-    .art-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-}
-
-
-body {
-  background: linear-gradient(135deg, #0f172a, #1e293b) !important;
-  color: white !important;
-}
-
-</style>
-
   <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
@@ -212,7 +186,6 @@ body {
 </head>
 
 <body>
-     <div class="art-bg"></div>
   <link rel="stylesheet" href="/css/style.css" />
   <div>
     <link href="/css/home1.css" rel="stylesheet" />
@@ -235,8 +208,7 @@ body {
                     <span class="landing-text102">Participate in Competitions</span>
                   </fragment>
                 </a>
-                <a href="/sellerregistration" class="navbar8-link31 thq-link thq-body-small thq-button-filled">
-
+                 <a href="/sellerregistration" class="navbar8-link31 thq-link thq-body-small" style="background-color: #FF9800; color: white; padding: 8px 16px; border-radius: 4px; margin: 0 10px; font-weight: 600;">
               <fragment class="landing-fragment111">
                 <span class="landing-text111">Seller's Zone</span>
               </fragment>
@@ -531,8 +503,7 @@ body {
                 </h2>
               </div>
               <div class="steps21-container3">
-             <div class="steps21-container4 thq-card" data-aos="fade-up" data-aos-delay="0">
-
+                <div class="steps21-container4 thq-card">
                   <h2 class="thq-heading-2">
                     <fragment class="landing-fragment188">
                       <span class="landing-text188">Step 1</span>
@@ -547,8 +518,7 @@ body {
                   </span>
                   <label class="steps21-text15 thq-heading-3">01</label>
                 </div>
-             <div class="steps21-container5 thq-card" data-aos="fade-up" data-aos-delay="150">
-
+                <div class="steps21-container5 thq-card">
                   <h2 class="thq-heading-2">
                     <fragment class="landing-fragment186">
                       <span class="landing-text186">Step 2</span>
@@ -563,8 +533,7 @@ body {
                   </span>
                   <label class="steps21-text18 thq-heading-3">02</label>
                 </div>
-             <div class="steps21-container6 thq-card" data-aos="fade-up" data-aos-delay="300">
-
+                <div class="steps21-container6 thq-card">
                   <h2 class="thq-heading-2">
                     <fragment class="landing-fragment189">
                       <span class="landing-text189">Step 3</span>
@@ -579,8 +548,7 @@ body {
                   </span>
                   <label class="steps21-text21 thq-heading-3">03</label>
                 </div>
-           <div class="steps21-container7 thq-card" data-aos="fade-up" data-aos-delay="450">
-
+                <div class="steps21-container7 thq-card">
                   <h2 class="thq-heading-2">
                     <fragment class="landing-fragment191">
                       <span class="landing-text191">Step 4</span>
@@ -763,136 +731,7 @@ body {
       font-size: 1.1rem;
       border-radius: 8px;
     }
-    /* ===== Premium Glass Navbar ===== */
-.navbar8-navbar-interactive {
-  backdrop-filter: blur(16px);
-  background: var(--art-glass);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  position: sticky;
-  top: 0;
-  z-index: 999;
-}
-
-.navbar8-image1 {
-  height: 48px;
-}
-    /* ===== Hero Artistic Effects ===== */
-
-.hero171-text1,
-.hero171-text1 * {
-  background: linear-gradient(90deg, var(--art-secondary), var(--art-accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 4rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-}
-
-/* Smooth fade edges for scrolling images */
-.thq-mask-image-horizontal {
-  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-}
-
-/* Image hover elegance */
-.thq-animated-group-horizontal img,
-.thq-animated-group-horizontal-reverse img {
-  transition: transform 0.6s ease, filter 0.6s ease;
-  filter: brightness(0.8);
-}
-
-.thq-animated-group-horizontal img:hover {
-  transform: scale(1.08);
-  filter: brightness(1);
-}
-.thq-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
-  border-radius: 18px;
-  transition: all 0.3s ease;
-}
-.thq-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-}
-/* ===== Premium Artistic Buttons ===== */
-
-.thq-button-filled {
-  background: linear-gradient(90deg, var(--art-secondary), var(--art-primary));
-  border-radius: 30px;
-  padding: 12px 28px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-}
-
-.thq-button-filled:hover {
-  transform: scale(1.08);
-  box-shadow: 0 10px 25px rgba(249,115,22,0.4);
-  box-shadow:
-    0 8px 20px rgba(0,0,0,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.25);
-}
-    .art-bg::before,
-.art-bg::after {
-  content: '';
-  position: fixed;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  filter: blur(120px);
-  z-index: -1;
-}
-.art-bg::before {
-  background: #7c3aed;
-  top: -100px;
-  left: -100px;
-}
-.art-bg::after {
-  background: #06b6d4;
-  bottom: -100px;
-  right: -100px;
-}
-h1, h2, h3 {
-  font-family: 'STIX Two Text', serif;
-  letter-spacing: 1px;
-}
-p, span, a {
-  font-family: 'Inter', sans-serif;
-  opacity: 0.9;
-}
- .footer4-footer7 {
-  background: rgba(255,255,255,0.04);
-  border-top: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-}
-    a:hover {
-  color: var(--art-secondary);
-  transition: 0.3s;
-}
-img {
-  border-radius: 14px;
-}
-    /* ===== REMOVE TELEPORTHQ WHITE NAVBAR BACKGROUND ===== */
-.navbar8-wrapper,
-.navbar8-container1 {
-  background: transparent !important;
-}
-
-
-
-
-
-
   </style>
-  
-   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-
-              <script>
-  AOS.init({ duration: 1200, once: true });
-</script>
-
-
 </body>
 
 </html>
