@@ -198,8 +198,9 @@
         <div class="landing-container">
             <navbar8-wrapper class="navbar8-wrapper">
                 <!--Navbar8 component-->
-                <header class="navbar8-container1">
-                    <header data-thq="thq-navbar" class="navbar8-navbar-interactive">
+               <header class="navbar8-container1">
+    <div data-thq="thq-navbar" class="navbar8-navbar-interactive">
+ 
                         <img alt="logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg"
                             class="navbar8-image1" />
                         <div data-thq="thq-navbar-nav" class="navbar8-desktop-menu">
@@ -297,7 +298,7 @@
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
       </svg>
       <span>About Us</span> -->
-    </a>
+  
     <a href="/help" class="navbar-menu-link">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
@@ -313,41 +314,96 @@
   
 </div>
 
-  <main class="about-main">
+<main class="about-main">
+
+    <!-- Hero -->
     <div class="about-hero">
-        <h1>About Artender</h1>
-        <p>Empowering artists across India through creativity, competitions, and community.</p>
+        <h1>Artender</h1>
+        <p>
+            Artender is a creative ecosystem built to celebrate artists, showcase originality,
+            and connect art lovers with authentic talent across India.
+        </p>
     </div>
 
+    <!-- Vision / Mission / Goal -->
     <div class="aboutus-container">
         <div class="aboutus-card">
-           
             <h2>Our Vision</h2>
             <p>
-                To create a vibrant and inclusive platform that empowers artists of all backgrounds to showcase their
-                talent, connect with a broader audience, and transform their passion into recognition and rewards.
+                To create India’s most inspiring digital space where artists of every age and background
+                can confidently present their work, gain recognition, and grow through meaningful opportunities.
             </p>
         </div>
 
         <div class="aboutus-card">
-            
             <h2>Our Mission</h2>
             <p>
-                We aim to organize engaging online competitions, exhibitions, and challenges that encourage creativity,
-                foster community, and provide real opportunities for growth and visibility in the art world.
+                We conduct engaging competitions, curated exhibitions, and creative challenges that
+                encourage artistic expression while providing real exposure and credibility to creators.
             </p>
         </div>
 
         <div class="aboutus-card">
-            
             <h2>Our Goal</h2>
             <p>
-                To become India’s most trusted online art platform where both budding and professional artists feel
-                valued, supported, and inspired to push boundaries in their artistic journey.
+                To become a trusted bridge between artists and audiences by enabling discovery,
+                appreciation, and opportunities in the evolving art landscape.
             </p>
         </div>
     </div>
+
+    <!-- Story Section -->
+    <section class="about-story">
+        <h2>The Story Behind Artender</h2>
+        <p>
+            Artender was born from a simple idea — many talented artists lack a stage to present their work.
+            Traditional galleries are limited, competitions are inaccessible, and recognition often depends
+            on networks rather than talent. Artender changes that.
+        </p>
+        <p>
+            We created a platform where creativity speaks louder than connections. A place where
+            artists can participate, exhibit, compete, and grow in a supportive digital environment.
+        </p>
+    </section>
+
+    <!-- What We Offer -->
+    <section class="about-features">
+        <h2>What Artender Offers</h2>
+
+        <div class="features-grid">
+            <div class="feature-item">
+                <h3> Online Art Competitions</h3>
+                <p>Participate in themed competitions judged fairly to gain recognition and awards.</p>
+            </div>
+
+            <div class="feature-item">
+                <h3> Artist Showcases</h3>
+                <p>Display your artwork to a growing audience that appreciates original creativity.</p>
+            </div>
+
+            <div class="feature-item">
+                <h3> Community of Creators</h3>
+                <p>Connect with fellow artists, share ideas, and be part of a supportive creative network.</p>
+            </div>
+
+            <div class="feature-item">
+                <h3> Recognition & Growth</h3>
+                <p>Earn certificates, visibility, and credibility that help you progress in your art journey.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Closing Section -->
+    <section class="about-closing">
+        <h2>For Artists. By People Who Value Art.</h2>
+        <p>
+            Artender is not just a platform — it is a movement to uplift creativity,
+            encourage participation, and celebrate the true spirit of art across the country.
+        </p>
+    </section>
+
 </main>
+
 <style>
   /* ===== About Page — Clean Artender Theme ===== */
 
@@ -415,6 +471,73 @@
     line-height:1.7;
     color:#374151;
 }
+    /* ===== Additional About Sections ===== */
+
+.about-story,
+.about-features,
+.about-closing{
+    max-width:900px;
+    margin:70px auto 0;
+    text-align:center;
+}
+
+.about-story h2,
+.about-features h2,
+.about-closing h2{
+    font-size:28px;
+    color:#1f2937;
+    margin-bottom:18px;
+}
+
+.about-story p,
+.about-closing p{
+    color:#4b5563;
+    line-height:1.8;
+    font-size:16px;
+    margin-bottom:14px;
+}
+
+/* Features Grid */
+.features-grid{
+    display:flex;
+    gap:24px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-top:30px;
+}
+
+.feature-item{
+    width:240px;
+    background:#fff7ed;
+    border:1px solid #fed7aa;
+    padding:22px 18px;
+    border-radius:16px;
+    transition:all .3s ease;
+}
+
+.feature-item:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 35px rgba(249,115,22,0.18);
+}
+
+.feature-item h3{
+    font-size:18px;
+    color:#ea580c;
+    margin-bottom:10px;
+}
+
+.feature-item p{
+    font-size:14px;
+    color:#374151;
+    line-height:1.6;
+}
+
+@media(max-width:768px){
+    .feature-item{
+        width:100%;
+    }
+}
+
 
 /* Responsive */
 @media (max-width:768px){
@@ -550,17 +673,17 @@
 }
 
 /* Animation when menu is open */
-.navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-1 {
+.navbar-menu.open ~ .navbar-toggle .brush-stroke-1 {
     transform: rotate(45deg) translate(6px, 6px);
     width: 100%;
 }
 
-.navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-2 {
+.navbar-menu.open ~ .navbar-toggle .brush-stroke-2 {
     opacity: 0;
     transform: translateX(10px);
 }
 
-.navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-3 {
+.navbar-menu.open ~ .navbar-toggle .brush-stroke-3 {
     transform: rotate(-45deg) translate(6px, -6px);
     width: 100%;
 }
