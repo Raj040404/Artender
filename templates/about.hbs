@@ -313,32 +313,41 @@
   
 </div>
 
-    <main>
-        <h1 style="text-align: center; margin-top: 40px;">About Artender</h1>
-        <div class="aboutus-container">
-            <div class="aboutus-card">
-                <h2>Our Vision</h2>
-                <p>
-                    To create a vibrant and inclusive platform that empowers artists of all backgrounds to showcase their
-                    talent, connect with a broader audience, and transform their passion into recognition and rewards.
-                </p>
-            </div>
-            <div class="aboutus-card">
-                <h2>Our Mission</h2>
-                <p>
-                    We aim to organize engaging online competitions, exhibitions, and challenges that encourage creativity,
-                    foster community, and provide real opportunities for growth and visibility in the art world.
-                </p>
-            </div>
-            <div class="aboutus-card">
-                <h2>Our Goal</h2>
-                <p>
-                    To become India’s most trusted online art platform where both budding and professional artists feel
-                    valued, supported, and inspired to push boundaries in their artistic journey.
-                </p>
-            </div>
+  <main class="about-main">
+    <div class="about-hero">
+        <h1>About Artender</h1>
+        <p>Empowering artists across India through creativity, competitions, and community.</p>
+    </div>
+
+    <div class="aboutus-container">
+        <div class="aboutus-card">
+           
+            <h2>Our Vision</h2>
+            <p>
+                To create a vibrant and inclusive platform that empowers artists of all backgrounds to showcase their
+                talent, connect with a broader audience, and transform their passion into recognition and rewards.
+            </p>
         </div>
-    </main>
+
+        <div class="aboutus-card">
+            
+            <h2>Our Mission</h2>
+            <p>
+                We aim to organize engaging online competitions, exhibitions, and challenges that encourage creativity,
+                foster community, and provide real opportunities for growth and visibility in the art world.
+            </p>
+        </div>
+
+        <div class="aboutus-card">
+            
+            <h2>Our Goal</h2>
+            <p>
+                To become India’s most trusted online art platform where both budding and professional artists feel
+                valued, supported, and inspired to push boundaries in their artistic journey.
+            </p>
+        </div>
+    </div>
+</main>
 
     <style>
     .aboutus-container {
@@ -350,6 +359,86 @@
         margin: 40px auto;
         padding: 0 16px;
     }
+        /* ===== About Page Artender Theme ===== */
+
+.about-main{
+    max-width:1100px;
+    margin:60px auto;
+    padding:0 20px 60px;
+    font-family:'Noto Sans',sans-serif;
+}
+
+.about-hero{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.about-hero h1{
+    font-size:42px;
+    font-weight:700;
+    color:#1f2937;
+    margin-bottom:10px;
+}
+
+.about-hero p{
+    font-size:18px;
+    color:#6b7280;
+}
+
+/* Cards Layout */
+.aboutus-container{
+    display:flex;
+    gap:28px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+/* Artender Styled Cards */
+.aboutus-card{
+    background:#ffffff;
+    width:320px;
+    padding:30px 26px;
+    border-radius:20px;
+    border:1px solid #ffedd5;
+    box-shadow:0 12px 45px rgba(249,115,22,0.12);
+    transition:all .35s ease;
+    text-align:center;
+    position:relative;
+}
+
+.aboutus-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 18px 60px rgba(249,115,22,0.25);
+}
+
+
+
+/* Titles */
+.aboutus-card h2{
+    font-size:22px;
+    font-weight:700;
+    color:#f97316;
+    margin-bottom:14px;
+    margin-top:6px;
+}
+
+/* Text */
+.aboutus-card p{
+    font-size:15px;
+    line-height:1.7;
+    color:#374151;
+}
+
+/* Responsive */
+@media (max-width:768px){
+    .about-hero h1{
+        font-size:30px;
+    }
+    .aboutus-card{
+        width:100%;
+    }
+}
+
 
     .aboutus-card {
         background: white;
