@@ -443,7 +443,9 @@ app.post("/sellerregistration", requireLogin, async (req, res) => {
     console.log("✅ Successfully saved to database:", newSeller);
     
     // Redirect to success page
-    res.redirect("/seller-success");
+   return res.render("sellerPayment", {
+  sellerId: newSeller._id
+});
     
   } catch (error) {
     console.error("❌ Error saving seller registration:", error);
@@ -487,8 +489,18 @@ app.post("/api/create-seller-phonepe-order", requireLogin, async (req, res) => {
   try {
     const { sellerId, phone } = req.body;
 
-    const seller = await SellerRegistrationCollection.findById(sellerId);
-    if (!seller) return res.status(404).json({ error: "Seller not found" });
+    const seller = await SellerRegistrationCollection.findOne({
+  _id: sellerId,
+  userId: req.session.userId
+});
+
+if (!seller) {
+  return res.status(403).json({ error: "Unauthorized seller access" });
+}
+
+ if (seller.paid && seller.status === "paid") {
+  return res.status(400).json({ error: "Seller already paid" });
+}
 
     const merchantOrderId = `SELLER_${sellerId}_${Date.now()}`;
 
@@ -501,24 +513,34 @@ app.post("/api/create-seller-phonepe-order", requireLogin, async (req, res) => {
     const accessToken = await getPhonePeAccessToken();
 
     const response = await axios.post(
-      `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`,
-      {
-        amount: 499 * 100,
-        merchantOrderId,
-        paymentFlow: {
-          type: "PG_CHECKOUT",
-          merchantUrls: {
-            redirectUrl: "https://www.artender.in/seller/phonepe-callback",
-          },
-        },
+  `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`,
+  {
+    amount: 1 * 100,
+    expireAfter: 1200,
+    metaInfo: {
+      udf1: seller.name,
+      udf2: seller.mobileNumber,
+      udf3: "SellerRegistration",
+      udf4: req.session.email,
+      udf5: "Artender",
+    },
+    merchantOrderId,
+    paymentFlow: {
+      type: "PG_CHECKOUT",
+      message: "Seller Registration Payment",
+      merchantUrls: {
+        redirectUrl: "https://www.artender.in/seller/phonepe-callback",
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `O-Bearer ${accessToken}`,
-        },
-      }
-    );
+    },
+  },
+  {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `O-Bearer ${accessToken}`,
+    },
+  }
+);
+
 
     // Save redirect + orderId
     seller.phonepeOrderId = response.data.orderId;
@@ -534,43 +556,56 @@ app.post("/api/create-seller-phonepe-order", requireLogin, async (req, res) => {
 app.get("/seller/phonepe-callback", async (req, res) => {
   const { merchantOrderId } = req.query;
 
+  if (!merchantOrderId) {
+    return res.redirect("/paymentfailed?reason=Invalid+Order");
+  }
+
   try {
     const accessToken = await getPhonePeAccessToken();
-
     const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${merchantOrderId}/status`;
 
-    const response = await axios.get(statusUrl, {
-      headers: { Authorization: `O-Bearer ${accessToken}` },
-    });
+    async function check() {
+      const r = await axios.get(statusUrl, {
+        headers: { Authorization: `O-Bearer ${accessToken}` },
+      });
+      return r.data;
+    }
 
-    const state = response.data.state;
+    // ✅ Normalize PhonePe response (important)
+    function resolveState(resp) {
+      const nested = resp?.paymentDetails?.[0]?.state;
+      const top = resp?.state;
+
+      if (nested === "SUCCESS" || nested === "COMPLETED") return "SUCCESS";
+      if (top === "SUCCESS" || top === "COMPLETED") return "SUCCESS";
+      if (nested === "PENDING" || top === "PENDING") return "PENDING";
+      return "FAILED";
+    }
+
+    let resp = await check();
+    let state = resolveState(resp);
+
+    // ✅ Handle PhonePe race condition
+    if (state === "PENDING") {
+      await new Promise(r => setTimeout(r, 2000));
+      resp = await check();
+      state = resolveState(resp);
+    }
 
     if (state === "SUCCESS") {
       await SellerRegistrationCollection.findOneAndUpdate(
         { merchantOrderId },
-        {
-          paid: true,
-          status: "paid"
-        }
+        { paid: true, status: "paid" }
       );
-
       return res.redirect("/seller-success");
-    } else {
-      return res.redirect("/paymentfailed?reason=Seller+Payment+Failed");
     }
+
+    return res.redirect("/paymentfailed?reason=Seller+Payment+Failed");
+
   } catch (err) {
-    res.redirect("/paymentfailed?reason=Error");
+    console.error("Seller PhonePe callback error:", err.message);
+    return res.redirect("/paymentfailed?reason=Server+Error");
   }
-});
-app.get("/seller-success", requireLogin, async (req, res) => {
-  const seller = await SellerRegistrationCollection.findOne({
-    userId: req.session.userId,
-    paid: true
-  });
-
-  if (!seller) return res.redirect("/sellerregistration");
-
-  res.render("sellerSuccess");
 });
 
 
