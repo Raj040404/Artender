@@ -554,19 +554,39 @@ if (!seller) {
   }
 });
 app.get("/seller/phonepe-callback", async (req, res) => {
-  const { orderId } = req.query;
+  let { orderId, merchantOrderId } = req.query;
 
-  if (!orderId) {
-    return res.redirect("/paymentfailed?reason=Invalid+Order");
-  }
+  console.log("[seller-callback] incoming:", req.query);
 
   try {
-    const accessToken = await getPhonePeAccessToken();
-    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${orderId}/status`;
+    // ✅ Recover last unpaid seller if IDs missing
+    if (!merchantOrderId && !orderId) {
+      const seller = await SellerRegistrationCollection.findOne({ paid: false })
+        .sort({ createdAt: -1 })
+        .lean();
 
-    async function check() {
+      if (seller) {
+        merchantOrderId = seller.merchantOrderId;
+        orderId = seller.phonepeOrderId;
+        console.log("[seller-callback] fallback seller found:", merchantOrderId);
+      }
+    }
+
+    if (!merchantOrderId && !orderId) {
+      return res.redirect("/paymentfailed?reason=Missing+OrderId");
+    }
+
+    const accessToken = await getPhonePeAccessToken();
+
+    // ✅ IMPORTANT — use merchantOrderId
+    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${merchantOrderId || orderId}/status?details=false`;
+
+    async function checkStatus() {
       const r = await axios.get(statusUrl, {
-        headers: { Authorization: `O-Bearer ${accessToken}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `O-Bearer ${accessToken}`,
+        },
       });
       return r.data;
     }
@@ -581,27 +601,39 @@ app.get("/seller/phonepe-callback", async (req, res) => {
       return "FAILED";
     }
 
-    let resp = await check();
+    let resp = await checkStatus();
     let state = resolveState(resp);
+
+    console.log("[seller-callback] PhonePe response:", resp);
+    console.log("[seller-callback] state:", state);
 
     if (state === "PENDING") {
       await new Promise(r => setTimeout(r, 2000));
-      resp = await check();
+      resp = await checkStatus();
       state = resolveState(resp);
     }
 
     if (state === "SUCCESS") {
       await SellerRegistrationCollection.findOneAndUpdate(
-        { phonepeOrderId: orderId },
-        { paid: true, status: "paid" }
+        { merchantOrderId: resp?.merchantOrderId || merchantOrderId },
+        {
+          $set: {
+            paid: true,
+            status: "paid",
+            phonepeOrderId: orderId || resp?.orderId,
+          },
+        }
       );
+
+      console.log("[seller-callback] PAYMENT SUCCESS:", merchantOrderId);
       return res.redirect("/seller-success");
     }
 
+    console.log("[seller-callback] PAYMENT FAILED:", merchantOrderId);
     return res.redirect("/paymentfailed?reason=Seller+Payment+Failed");
 
   } catch (err) {
-    console.error("Callback error:", err.message);
+    console.error("[seller-callback] Error:", err.response?.data || err.message);
     return res.redirect("/paymentfailed?reason=Server+Error");
   }
 });
