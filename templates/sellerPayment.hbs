@@ -1,87 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Complete Seller Registration - Payment</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Seller Registration Payment | Artender</title>
+
     <style>
-        .payment-container {
-            max-width: 500px;
-            margin: 50px auto;
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background: #ffffff;
+            width: 95%;
+            max-width: 420px;
             padding: 30px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             text-align: center;
         }
-        .amount-display {
-            font-size: 48px;
-            color: #f97316;
-            font-weight: bold;
-            margin: 20px 0;
+
+        h2 {
+            margin-bottom: 10px;
         }
-        .payment-btn {
-            background: #f97316;
-            color: white;
-            border: none;
-            padding: 15px 30px;
+
+        .price {
             font-size: 18px;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-            font-weight: bold;
+            margin-bottom: 25px;
+            color: #444;
         }
-        .payment-btn:hover {
-            background: #ea580c;
-            transform: translateY(-2px);
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .loader {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #555;
         }
     </style>
 </head>
 <body>
-    <div class="payment-container">
-        <h1>Complete Your Seller Registration</h1>
-        <p>One-time registration fee to start selling on Artender</p>
-        
-        <div class="amount-display">₹149</div>
-        
-        <p>Benefits include:</p>
-        <ul style="text-align: left; margin: 20px 0;">
-            <li>Seller dashboard access</li>
-            <li>Artwork listing capabilities</li>
-            <li>Customer management tools</li>
-            <li>Secure payment processing</li>
-        </ul>
-        
-        <button id="payButton" class="payment-btn">Proceed to Pay ₹149</button>
-    </div>
 
-    <script>
-        document.getElementById('payButton').addEventListener('click', async function() {
-            this.disabled = true;
-            this.textContent = 'Processing...';
-            
-            try {
-                const response = await fetch('/api/create-seller-payment', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                
-                const data = await response.json();
-                
-                if (data.redirectUrl) {
-                    window.location.href = data.redirectUrl;
-                } else {
-                    alert('Payment initiation failed: ' + (data.error || 'Unknown error'));
-                    this.disabled = false;
-                    this.textContent = 'Proceed to Pay ₹149';
-                }
-            } catch (error) {
-                alert('Network error. Please try again.');
-                this.disabled = false;
-                this.textContent = 'Proceed to Pay ₹149';
-            }
+<div class="card">
+    <h2>Complete Seller Registration</h2>
+    <p class="price">Registration Fee: ₹1</p>
+
+    <div id="error" class="error"></div>
+
+    <input 
+        type="tel" 
+        id="phone" 
+        placeholder="Enter 10-digit phone number" 
+        maxlength="10"
+    />
+
+    <button id="payBtn" onclick="pay()">Proceed to Pay</button>
+
+    <div id="loader" class="loader"></div>
+</div>
+
+<script>
+async function pay() {
+    const phoneInput = document.getElementById("phone");
+    const errorDiv = document.getElementById("error");
+    const loader = document.getElementById("loader");
+    const btn = document.getElementById("payBtn");
+
+    const phone = phoneInput.value.trim();
+
+    // Reset states
+    errorDiv.innerText = "";
+    loader.innerText = "";
+
+    // Basic validation
+    if (!/^[6-9]\d{9}$/.test(phone)) {
+        errorDiv.innerText = "Please enter a valid 10-digit mobile number.";
+        return;
+    }
+
+    try {
+        btn.disabled = true;
+        loader.innerText = "Redirecting to secure payment...";
+
+        const res = await fetch("/api/create-seller-phonepe-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                sellerId: "{{sellerId}}",
+                phone: phone
+            })
         });
-    </script>
+
+        const data = await res.json();
+
+        if (!data.redirectUrl) {
+            throw new Error("Payment initialization failed.");
+        }
+
+        window.location.href = data.redirectUrl;
+
+    } catch (err) {
+        errorDiv.innerText = "Something went wrong. Please try again.";
+        btn.disabled = false;
+        loader.innerText = "";
+        console.error(err);
+    }
+}
+</script>
+
 </body>
 </html>
