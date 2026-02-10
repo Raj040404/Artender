@@ -453,17 +453,127 @@ app.post("/sellerregistration", requireLogin, async (req, res) => {
   }
 });
 // Seller Success Page
-app.get("/seller-success", requireLogin, (req, res) => {
-  res.render("sellerSuccess", {
-    message: "Congratulations! You are now registered as a seller on Artender.",
-    nextSteps: [
-      "Complete your seller profile",
-      "Upload your artwork portfolio",
-      "Set up your pricing",
-      "Start receiving orders"
-    ]
-  });
+app.get("/seller-success", requireLogin, async (req, res) => {
+  try {
+    const seller = await SellerRegistrationCollection.findOne({
+      userId: req.session.userId,
+      paid: true,
+      status: "paid"
+    });
+
+    //  If payment not completed, block access
+    if (!seller) {
+      return res.redirect("/sellerregistration");
+    }
+
+    //  Only paid sellers can reach here
+    res.render("sellerSuccess", {
+      message: "Congratulations! You are now registered as a seller on Artender.",
+      nextSteps: [
+        "Complete your seller profile",
+        "Upload your artwork portfolio",
+        "Set up your pricing",
+        "Start receiving orders"
+      ]
+    });
+
+  } catch (err) {
+    console.error("Error loading seller success page:", err);
+    res.redirect("/sellerregistration");
+  }
 });
+
+app.post("/api/create-seller-phonepe-order", requireLogin, async (req, res) => {
+  try {
+    const { sellerId, phone } = req.body;
+
+    const seller = await SellerRegistrationCollection.findById(sellerId);
+    if (!seller) return res.status(404).json({ error: "Seller not found" });
+
+    const merchantOrderId = `SELLER_${sellerId}_${Date.now()}`;
+
+    // Save order info in YOUR fields
+    seller.merchantOrderId = merchantOrderId;
+    seller.paymentId = merchantOrderId;
+    seller.mobileNumber = phone;
+    await seller.save();
+
+    const accessToken = await getPhonePeAccessToken();
+
+    const response = await axios.post(
+      `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`,
+      {
+        amount: 499 * 100,
+        merchantOrderId,
+        paymentFlow: {
+          type: "PG_CHECKOUT",
+          merchantUrls: {
+            redirectUrl: "https://www.artender.in/seller/phonepe-callback",
+          },
+        },
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `O-Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    // Save redirect + orderId
+    seller.phonepeOrderId = response.data.orderId;
+    seller.phonepeRedirectUrl = response.data.redirectUrl;
+    await seller.save();
+
+    res.json({ redirectUrl: response.data.redirectUrl });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+app.get("/seller/phonepe-callback", async (req, res) => {
+  const { merchantOrderId } = req.query;
+
+  try {
+    const accessToken = await getPhonePeAccessToken();
+
+    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${merchantOrderId}/status`;
+
+    const response = await axios.get(statusUrl, {
+      headers: { Authorization: `O-Bearer ${accessToken}` },
+    });
+
+    const state = response.data.state;
+
+    if (state === "SUCCESS") {
+      await SellerRegistrationCollection.findOneAndUpdate(
+        { merchantOrderId },
+        {
+          paid: true,
+          status: "paid"
+        }
+      );
+
+      return res.redirect("/seller-success");
+    } else {
+      return res.redirect("/paymentfailed?reason=Seller+Payment+Failed");
+    }
+  } catch (err) {
+    res.redirect("/paymentfailed?reason=Error");
+  }
+});
+app.get("/seller-success", requireLogin, async (req, res) => {
+  const seller = await SellerRegistrationCollection.findOne({
+    userId: req.session.userId,
+    paid: true
+  });
+
+  if (!seller) return res.redirect("/sellerregistration");
+
+  res.render("sellerSuccess");
+});
+
+
 
 
 // Publish Post Route
