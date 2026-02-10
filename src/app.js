@@ -554,15 +554,15 @@ if (!seller) {
   }
 });
 app.get("/seller/phonepe-callback", async (req, res) => {
-  const { merchantOrderId } = req.query;
+  const { orderId } = req.query;
 
-  if (!merchantOrderId) {
+  if (!orderId) {
     return res.redirect("/paymentfailed?reason=Invalid+Order");
   }
 
   try {
     const accessToken = await getPhonePeAccessToken();
-    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${merchantOrderId}/status`;
+    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${orderId}/status`;
 
     async function check() {
       const r = await axios.get(statusUrl, {
@@ -571,7 +571,6 @@ app.get("/seller/phonepe-callback", async (req, res) => {
       return r.data;
     }
 
-    // ✅ Normalize PhonePe response (important)
     function resolveState(resp) {
       const nested = resp?.paymentDetails?.[0]?.state;
       const top = resp?.state;
@@ -585,7 +584,6 @@ app.get("/seller/phonepe-callback", async (req, res) => {
     let resp = await check();
     let state = resolveState(resp);
 
-    // ✅ Handle PhonePe race condition
     if (state === "PENDING") {
       await new Promise(r => setTimeout(r, 2000));
       resp = await check();
@@ -594,7 +592,7 @@ app.get("/seller/phonepe-callback", async (req, res) => {
 
     if (state === "SUCCESS") {
       await SellerRegistrationCollection.findOneAndUpdate(
-        { merchantOrderId },
+        { phonepeOrderId: orderId },
         { paid: true, status: "paid" }
       );
       return res.redirect("/seller-success");
@@ -603,7 +601,7 @@ app.get("/seller/phonepe-callback", async (req, res) => {
     return res.redirect("/paymentfailed?reason=Seller+Payment+Failed");
 
   } catch (err) {
-    console.error("Seller PhonePe callback error:", err.message);
+    console.error("Callback error:", err.message);
     return res.redirect("/paymentfailed?reason=Server+Error");
   }
 });
