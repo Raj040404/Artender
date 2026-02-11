@@ -5,137 +5,159 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Seller Registration Payment | Artender</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f3ef, #ffffff);
-            color: #222;
-        }
+  <style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f4f6f8;
+        color: #1a1a1a;
+    }
 
-        .container {
-            max-width: 520px;
-            margin: 40px auto;
-            padding: 20px;
-        }
+    .container {
+        max-width: 520px;
+        margin: 50px auto;
+        padding: 20px;
+    }
 
-        .card {
-            background: #fff;
-            border-radius: 14px;
-            padding: 30px 25px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-        }
+    .card {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 32px 28px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        border: 1px solid #eaeaea;
+    }
 
-        .logo {
-            text-align: center;
-            margin-bottom: 15px;
-        }
+    .logo {
+        text-align: center;
+        margin-bottom: 18px;
+    }
 
-        .logo img {
-            width: 80px;
-        }
+    .logo img {
+        width: 85px;
+    }
 
-        h2 {
-            text-align: center;
-            margin: 10px 0 5px;
-            font-weight: 600;
-        }
+    h2 {
+        text-align: center;
+        margin: 8px 0 6px;
+        font-weight: 700;
+        font-size: 22px;
+    }
 
-        .subtitle {
-            text-align: center;
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 20px;
-        }
+    .subtitle {
+        text-align: center;
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 22px;
+    }
 
-        .price {
-            text-align: center;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
+    .price {
+        text-align: center;
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 22px;
+        color: #ff6a00;
+    }
 
-        input {
-            width: 100%;
-            padding: 13px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            margin-bottom: 15px;
-            font-size: 14px;
-            transition: 0.2s ease;
-        }
+    input {
+        width: 100%;
+        padding: 14px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        margin-bottom: 16px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        background: #fafafa;
+    }
 
-        input:focus {
-            outline: none;
-            border-color: #000;
-        }
+    input:focus {
+        outline: none;
+        border-color: #ff6a00;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.12);
+    }
 
-        button {
-            width: 100%;
-            padding: 13px;
-            background: #000;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: 0.2s ease;
-        }
+    button {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #ff7a1a, #ff5e00);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 6px 18px rgba(255, 94, 0, 0.35);
+    }
 
-        button:hover {
-            opacity: 0.9;
-        }
+    button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 22px rgba(255, 94, 0, 0.45);
+    }
 
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+    button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
 
-        .error {
-            color: red;
-            margin-bottom: 10px;
-            font-size: 13px;
-            text-align: center;
-        }
+    .error {
+        color: #e53935;
+        margin-bottom: 12px;
+        font-size: 13px;
+        text-align: center;
+        font-weight: 500;
+    }
 
-        .loader {
-            margin-top: 10px;
-            font-size: 13px;
-            color: #555;
-            text-align: center;
-        }
+    .loader {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #555;
+        text-align: center;
+    }
 
-        .info-section {
-            margin-top: 25px;
-            background: #fafafa;
-            padding: 18px;
-            border-radius: 10px;
-            border: 1px solid #eee;
-        }
+    .info-section {
+        margin-top: 26px;
+        background: #ffffff;
+        padding: 18px;
+        border-radius: 12px;
+        border: 1px solid #eee;
+        transition: 0.2s ease;
+    }
 
-        .info-section h3 {
-            margin: 0 0 8px;
-            font-size: 15px;
-        }
+    .info-section:hover {
+        border-color: #ff6a00;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
 
-        .info-section p, .info-section li {
-            font-size: 13px;
-            color: #555;
-            line-height: 1.6;
-        }
+    .info-section h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #222;
+    }
 
-        ul {
-            padding-left: 18px;
-            margin: 0;
-        }
+    .info-section p, 
+    .info-section li {
+        font-size: 13px;
+        color: #555;
+        line-height: 1.7;
+    }
 
-        .footer-note {
-            text-align: center;
-            font-size: 12px;
-            color: #777;
-            margin-top: 15px;
-        }
-    </style>
+    ul {
+        padding-left: 18px;
+        margin: 0;
+    }
+
+    .footer-note {
+        text-align: center;
+        font-size: 12px;
+        color: #888;
+        margin-top: 18px;
+    }
+</style>
+
 </head>
 <body>
 
@@ -168,8 +190,8 @@
         <div class="info-section">
             <h3>Why are we charging ₹1?</h3>
             <p>
-                This small verification fee helps us prevent fake registrations, bots, and spam sellers. 
-                It ensures that every seller on Artender is genuine and serious about showcasing their artwork.
+                This small verification fee helps us prevent fake registrations, bots, and spam sellers, 
+                while also helping us maintain a secure, professional, and thoughtfully curated artistic platform for genuine creators.
             </p>
         </div>
 
@@ -195,7 +217,7 @@
         </div>
 
         <div class="footer-note">
-            By continuing, you agree to Artender’s seller guidelines and policies.
+            By continuing, you agree to Artender’s guidelines and policies.
         </div>
 
     </div>
