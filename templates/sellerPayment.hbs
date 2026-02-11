@@ -8,24 +8,22 @@
     <style>
         body {
             margin: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #f5f6f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f3ef, #ffffff);
+            color: #222;
         }
 
         .container {
-            width: 95%;
             max-width: 520px;
+            margin: 40px auto;
+            padding: 20px;
         }
 
         .card {
-            background: #ffffff;
-            padding: 30px;
+            background: #fff;
             border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 30px 25px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
         }
 
         .logo {
@@ -34,7 +32,7 @@
         }
 
         .logo img {
-            height: 60px;
+            width: 80px;
         }
 
         h2 {
@@ -43,25 +41,85 @@
             font-weight: 600;
         }
 
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
         .price {
             text-align: center;
             font-size: 18px;
-            color: #444;
+            font-weight: 600;
             margin-bottom: 20px;
         }
 
-        .section {
-            margin-bottom: 20px;
-        }
-
-        .section h3 {
-            font-size: 15px;
-            margin-bottom: 8px;
-            color: #222;
-        }
-
-        .section p, .section li {
+        input {
+            width: 100%;
+            padding: 13px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
             font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 10px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .loader {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #555;
+            text-align: center;
+        }
+
+        .info-section {
+            margin-top: 25px;
+            background: #fafafa;
+            padding: 18px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+
+        .info-section h3 {
+            margin: 0 0 8px;
+            font-size: 15px;
+        }
+
+        .info-section p, .info-section li {
+            font-size: 13px;
             color: #555;
             line-height: 1.6;
         }
@@ -71,44 +129,11 @@
             margin: 0;
         }
 
-        .cta {
-            margin-top: 25px;
-            text-align: center;
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            border-radius: 8px;
-            border: none;
-            background: #ff6a00; /* Artender orange */
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s ease;
-        }
-
-        button:hover {
-            background: #e55d00;
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .loader {
-            margin-top: 12px;
-            font-size: 13px;
-            color: #555;
-        }
-
-        .secure-note {
+        .footer-note {
             text-align: center;
             font-size: 12px;
-            margin-top: 12px;
             color: #777;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -121,42 +146,56 @@
             <img src="/logo/logo192.png" alt="Artender Logo">
         </div>
 
-        <h2>Complete Seller Registration</h2>
-        <p class="price">One-time Verification Fee: <strong>₹1</strong></p>
+        <h2>Become a Seller on Artender</h2>
+        <div class="subtitle">Showcase and sell your artwork to art lovers across India</div>
 
-        <div class="section">
-            <h3>Why are we taking this registration fee?</h3>
+        <div class="price">One-time Registration Fee: ₹1</div>
+
+        <div id="error" class="error"></div>
+
+        <input 
+            type="tel" 
+            id="phone" 
+            placeholder="Enter 10-digit mobile number" 
+            maxlength="10"
+        />
+
+        <button id="payBtn" onclick="pay()">Proceed to Secure Payment</button>
+
+        <div id="loader" class="loader"></div>
+
+        <!-- Why Fee Section -->
+        <div class="info-section">
+            <h3>Why are we charging ₹1?</h3>
             <p>
-                This ₹1 payment is a secure verification step to ensure genuine sellers join the Artender marketplace.
-                It helps us prevent spam registrations, fake accounts, and keeps the platform safe for artists and buyers.
+                This small verification fee helps us prevent fake registrations, bots, and spam sellers. 
+                It ensures that every seller on Artender is genuine and serious about showcasing their artwork.
             </p>
         </div>
 
-        <div class="section">
-            <h3>Benefits of becoming an Artender Seller</h3>
+        <!-- Benefits Section -->
+        <div class="info-section">
+            <h3>Benefits of becoming a Seller</h3>
             <ul>
-                <li>Sell your artworks directly to buyers</li>
-                <li>Participate in art competitions and exhibitions</li>
-                <li>Get discovered by a growing art community</li>
-                <li>Create your professional artist portfolio</li>
-                <li>Secure payments and order management</li>
+                <li>List and sell your artworks to a wide audience</li>
+                <li>Participate in art competitions and gain recognition</li>
+                <li>Build your artist profile and portfolio</li>
+                <li>Secure and trusted payment processing</li>
+                <li>Promotion through Artender’s platform and campaigns</li>
             </ul>
         </div>
 
-        <div class="section">
-            <h3>Safe & Secure Payment</h3>
+        <!-- Trust Section -->
+        <div class="info-section">
+            <h3>Secure & Trusted Platform</h3>
             <p>
-                Your payment is processed through PhonePe's secure gateway. Artender does not store any of your payment details.
+                Your payment is processed through a secure gateway. We do not store your payment details. 
+                Artender is committed to creating a trusted ecosystem for artists and buyers.
             </p>
         </div>
 
-        <div class="cta">
-            <button id="payBtn" onclick="pay()">Proceed to Secure Payment</button>
-            <div id="loader" class="loader"></div>
-        </div>
-
-        <div class="secure-note">
-            Powered by PhonePe • 100% Secure Transaction
+        <div class="footer-note">
+            By continuing, you agree to Artender’s seller guidelines and policies.
         </div>
 
     </div>
@@ -164,8 +203,20 @@
 
 <script>
 async function pay() {
-    const btn = document.getElementById("payBtn");
+    const phoneInput = document.getElementById("phone");
+    const errorDiv = document.getElementById("error");
     const loader = document.getElementById("loader");
+    const btn = document.getElementById("payBtn");
+
+    const phone = phoneInput.value.trim();
+
+    errorDiv.innerText = "";
+    loader.innerText = "";
+
+    if (!/^[6-9]\d{9}$/.test(phone)) {
+        errorDiv.innerText = "Please enter a valid 10-digit mobile number.";
+        return;
+    }
 
     try {
         btn.disabled = true;
@@ -175,7 +226,8 @@ async function pay() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                sellerId: "{{sellerId}}"
+                sellerId: "{{sellerId}}",
+                phone: phone
             })
         });
 
@@ -188,8 +240,9 @@ async function pay() {
         window.location.href = data.redirectUrl;
 
     } catch (err) {
-        loader.innerText = "Something went wrong. Please try again.";
+        errorDiv.innerText = "Something went wrong. Please try again.";
         btn.disabled = false;
+        loader.innerText = "";
         console.error(err);
     }
 }
@@ -197,3 +250,4 @@ async function pay() {
 
 </body>
 </html>
+
