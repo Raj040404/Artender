@@ -8,52 +8,89 @@
     <style>
         body {
             margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f7f7f7;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f5f6f8;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 520px;
         }
 
         .card {
             background: #ffffff;
-            width: 95%;
-            max-width: 420px;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .logo {
             text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .logo img {
+            height: 60px;
         }
 
         h2 {
-            margin-bottom: 10px;
+            text-align: center;
+            margin: 10px 0 5px;
+            font-weight: 600;
         }
 
         .price {
+            text-align: center;
             font-size: 18px;
-            margin-bottom: 25px;
             color: #444;
+            margin-bottom: 20px;
         }
 
-        input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            margin-bottom: 15px;
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: #222;
+        }
+
+        .section p, .section li {
             font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        ul {
+            padding-left: 18px;
+            margin: 0;
+        }
+
+        .cta {
+            margin-top: 25px;
+            text-align: center;
         }
 
         button {
             width: 100%;
-            padding: 12px;
-            background: #000;
-            color: #fff;
+            padding: 14px;
+            border-radius: 8px;
             border: none;
-            border-radius: 6px;
-            font-size: 15px;
+            background: #ff6a00; /* Artender orange */
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            background: #e55d00;
         }
 
         button:disabled {
@@ -61,57 +98,74 @@
             cursor: not-allowed;
         }
 
-        .error {
-            color: red;
-            margin-bottom: 10px;
-            font-size: 13px;
-        }
-
         .loader {
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 13px;
             color: #555;
+        }
+
+        .secure-note {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 12px;
+            color: #777;
         }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>Complete Seller Registration</h2>
-    <p class="price">Registration Fee: ₹1</p>
+<div class="container">
+    <div class="card">
 
-    <div id="error" class="error"></div>
+        <div class="logo">
+            <img src="/logo/logo192.png" alt="Artender Logo">
+        </div>
 
-    <input 
-        type="tel" 
-        id="phone" 
-        placeholder="Enter 10-digit phone number" 
-        maxlength="10"
-    />
+        <h2>Complete Seller Registration</h2>
+        <p class="price">One-time Verification Fee: <strong>₹1</strong></p>
 
-    <button id="payBtn" onclick="pay()">Proceed to Pay</button>
+        <div class="section">
+            <h3>Why are we taking this registration fee?</h3>
+            <p>
+                This ₹1 payment is a secure verification step to ensure genuine sellers join the Artender marketplace.
+                It helps us prevent spam registrations, fake accounts, and keeps the platform safe for artists and buyers.
+            </p>
+        </div>
 
-    <div id="loader" class="loader"></div>
+        <div class="section">
+            <h3>Benefits of becoming an Artender Seller</h3>
+            <ul>
+                <li>Sell your artworks directly to buyers</li>
+                <li>Participate in art competitions and exhibitions</li>
+                <li>Get discovered by a growing art community</li>
+                <li>Create your professional artist portfolio</li>
+                <li>Secure payments and order management</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>Safe & Secure Payment</h3>
+            <p>
+                Your payment is processed through PhonePe's secure gateway. Artender does not store any of your payment details.
+            </p>
+        </div>
+
+        <div class="cta">
+            <button id="payBtn" onclick="pay()">Proceed to Secure Payment</button>
+            <div id="loader" class="loader"></div>
+        </div>
+
+        <div class="secure-note">
+            Powered by PhonePe • 100% Secure Transaction
+        </div>
+
+    </div>
 </div>
 
 <script>
 async function pay() {
-    const phoneInput = document.getElementById("phone");
-    const errorDiv = document.getElementById("error");
-    const loader = document.getElementById("loader");
     const btn = document.getElementById("payBtn");
-
-    const phone = phoneInput.value.trim();
-
-    // Reset states
-    errorDiv.innerText = "";
-    loader.innerText = "";
-
-    // Basic validation
-    if (!/^[6-9]\d{9}$/.test(phone)) {
-        errorDiv.innerText = "Please enter a valid 10-digit mobile number.";
-        return;
-    }
+    const loader = document.getElementById("loader");
 
     try {
         btn.disabled = true;
@@ -121,8 +175,7 @@ async function pay() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                sellerId: "{{sellerId}}",
-                phone: phone
+                sellerId: "{{sellerId}}"
             })
         });
 
@@ -135,9 +188,8 @@ async function pay() {
         window.location.href = data.redirectUrl;
 
     } catch (err) {
-        errorDiv.innerText = "Something went wrong. Please try again.";
+        loader.innerText = "Something went wrong. Please try again.";
         btn.disabled = false;
-        loader.innerText = "";
         console.error(err);
     }
 }
