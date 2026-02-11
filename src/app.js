@@ -428,25 +428,42 @@ if (existingRegistration) {
 
     
     // Create new seller registration
- const newSeller = new SellerRegistrationCollection({
-  userId:req.session.userId,
-  name,
-  age: parseInt(age),
-  address,
-  mobileNumber,
-  artworkCategory,
-  paid: false
+// Check if any record exists for this user
+let seller = await SellerRegistrationCollection.findOne({
+  userId: req.session.userId
 });
 
+if (seller && seller.paid === false) {
+  // ✅ UPDATE old unpaid record
+  seller.name = name;
+  seller.age = parseInt(age);
+  seller.address = address;
+  seller.mobileNumber = mobileNumber;
+  seller.artworkCategory = artworkCategory;
 
-    
-    // Save to database
-    await newSeller.save();
-    console.log("✅ Successfully saved to database:", newSeller);
-    
+  await seller.save();
+  console.log("♻️ Updated existing unpaid registration:", seller);
+
+} else if (!seller) {
+  // ✅ CREATE new record
+  seller = new SellerRegistrationCollection({
+    userId: req.session.userId,
+    name,
+    age: parseInt(age),
+    address,
+    mobileNumber,
+    artworkCategory,
+    paid: false
+  });
+
+  await seller.save();
+  console.log("✅ Created new registration:", seller);
+}
+
     // Redirect to success page
    return res.render("sellerPayment", {
-  sellerId: newSeller._id
+  sellerId: seller._id
+
 });
     
   } catch (error) {
