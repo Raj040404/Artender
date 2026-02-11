@@ -313,7 +313,8 @@ app.get("/completeenrollment", requireLogin, (req, res) => {
 app.get("/sellerregistration", requireLogin, async (req, res) => {
   try {
     const existingRegistration = await SellerRegistrationCollection.findOne({
-      userId: req.session.userId
+      userId: req.session.userId,
+      paid: true
     });
 
     res.render("SellerRegistration", {
