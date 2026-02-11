@@ -412,18 +412,19 @@ app.post("/sellerregistration", requireLogin, async (req, res) => {
     }
     
     // Check if already registered
- const existingRegistration = await SellerRegistrationCollection.findOne({
-  userId: req.session.userId
-
+const existingRegistration = await SellerRegistrationCollection.findOne({
+  userId: req.session.userId,
+  paid: true
 });
 
-    
-    if (existingRegistration) {
-      console.log("❌ Already registered:", existingRegistration);
-      return res.render("SellerRegistration", {
-        error: "You have already registered as a seller or this mobile number is already in use."
-      });
-    }
+if (existingRegistration) {
+  console.log("❌ Already a paid seller:", existingRegistration);
+
+  return res.render("SellerRegistration", {
+    error: "You are already registered as a seller on Artender."
+  });
+}
+
     
     // Create new seller registration
  const newSeller = new SellerRegistrationCollection({
