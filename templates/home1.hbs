@@ -7,7 +7,7 @@
   <!-- Meta Information -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#8b5cf6">
+  <meta name="theme-color" content="#f97316">
 
   <!-- Progressive Web App (PWA) Configuration -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -96,23 +96,19 @@
       visibility: hidden;
       min-width: 250px;
       margin-left: -125px;
-      background: linear-gradient(145deg, #7f1d1d, #991b1b);
+      background-color: #ff4444;
       color: #fff;
       text-align: center;
-      border-radius: 100px;
-      padding: 16px 24px;
+      border-radius: 4px;
+      padding: 16px;
       position: fixed;
       z-index: 10000;
       left: 50%;
       bottom: 30px;
       font-size: 17px;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      box-shadow: 0 10px 25px -5px rgba(127, 29, 29, 0.5);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       opacity: 0;
-      transition: opacity 0.4s, bottom 0.4s, transform 0.2s;
-      border: 1px solid rgba(254, 202, 202, 0.3);
-      backdrop-filter: blur(4px);
+      transition: opacity 0.5s, bottom 0.5s;
     }
 
     .login-toast.show {
@@ -126,7 +122,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400..700&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Custom Styles -->
   <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css">
@@ -149,365 +144,6 @@
       document.head.appendChild(link);
     };
   </script>
-  
-  <!-- Enhanced Color & Button Styles - Preserving All Layouts/Animations -->
-  <style>
-    /* ===== ENHANCED ARTISTIC COLOR PALETTE ===== */
-    :root {
-      --art-deep-purple: #4c1d95;
-      --art-vibrant-magenta: #b91c7c;
-      --art-electric-blue: #2563eb;
-      --art-golden-amber: #d97706;
-      --art-soft-cream: #fef3c7;
-      --art-charcoal: #18181b;
-      --art-slate: #334155;
-      --art-white: #ffffff;
-      --art-gradient-1: linear-gradient(145deg, #4c1d95, #6d28d9, #b91c7c);
-      --art-gradient-2: linear-gradient(145deg, #b91c7c, #d97706);
-      --art-gradient-3: linear-gradient(145deg, #2563eb, #4c1d95);
-      --art-glass-bg: rgba(255, 255, 255, 0.92);
-      --art-shadow: 0 20px 35px -8px rgba(76, 29, 149, 0.2);
-    }
-
-    body {
-      background: linear-gradient(135deg, #fff9f5 0%, #fef7e9 100%);
-      color: #2d2a3c;
-    }
-
-    /* ===== BUTTON ENHANCEMENTS ===== */
-    .navbar8-action11.thq-button-filled {
-      background: var(--art-gradient-1) !important;
-      border: none !important;
-      color: white !important;
-      padding: 12px 28px !important;
-      border-radius: 40px !important;
-      font-weight: 600 !important;
-      letter-spacing: 0.5px !important;
-      box-shadow: 0 8px 18px -6px rgba(76, 29, 149, 0.4) !important;
-      transition: all 0.3s ease !important;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .navbar8-action11.thq-button-filled:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 18px 28px -8px rgba(76, 29, 149, 0.5) !important;
-    }
-
-    .navbar8-action21.thq-button-outline {
-      background: rgba(255, 255, 255, 0.9) !important;
-      border: 2px solid transparent !important;
-      border-image: var(--art-gradient-1) !important;
-      border-image-slice: 1 !important;
-      color: #4c1d95 !important;
-      padding: 12px 28px !important;
-      border-radius: 40px !important;
-      font-weight: 600 !important;
-      letter-spacing: 0.5px !important;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 4px 12px rgba(76, 29, 149, 0.1) !important;
-      transition: all 0.3s ease !important;
-    }
-
-    .navbar8-action21.thq-button-outline:hover {
-      background: white !important;
-      border-color: #6d28d9 !important;
-      transform: translateY(-3px);
-      box-shadow: 0 12px 22px -8px rgba(76, 29, 149, 0.3) !important;
-    }
-
-    /* Seller's Zone Button - Enhanced */
-    .navbar8-link31[style*="background-color: #FF9800"] {
-      background: linear-gradient(145deg, #b45309, #d97706) !important;
-      border-radius: 40px !important;
-      padding: 10px 22px !important;
-      font-weight: 600 !important;
-      letter-spacing: 0.5px !important;
-      box-shadow: 0 8px 16px -6px rgba(180, 83, 9, 0.4) !important;
-      transition: all 0.3s ease !important;
-      border: 1px solid rgba(255, 237, 213, 0.4) !important;
-    }
-
-    .navbar8-link31[style*="background-color: #FF9800"]:hover {
-      background: linear-gradient(145deg, #92400e, #b45309) !important;
-      transform: translateY(-2px);
-      box-shadow: 0 14px 24px -8px rgba(180, 83, 9, 0.5) !important;
-    }
-
-    /* Desktop Menu Links Enhancement */
-    .navbar8-links1 a {
-      color: #2d2a3c !important;
-      font-weight: 500 !important;
-      transition: all 0.2s ease !important;
-      position: relative;
-    }
-
-    .navbar8-links1 a:after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2.5px;
-      bottom: -4px;
-      left: 0;
-      background: var(--art-gradient-2);
-      transition: width 0.25s ease;
-      border-radius: 2px;
-    }
-
-    .navbar8-links1 a:hover {
-      color: #b91c7c !important;
-    }
-
-    .navbar8-links1 a:hover:after {
-      width: 70%;
-    }
-
-    /* ===== FEATURE SECTION ENHANCEMENTS ===== */
-    .features241-tab-horizontal1,
-    .features241-tab-horizontal2,
-    .features241-tab-horizontal3 {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(8px);
-      border-radius: 24px;
-      padding: 24px;
-      margin-bottom: 16px;
-      border: 1px solid rgba(76, 29, 149, 0.1);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-    }
-
-    .features241-tab-horizontal1:hover,
-    .features241-tab-horizontal2:hover,
-    .features241-tab-horizontal3:hover {
-      background: white;
-      border-color: rgba(185, 28, 124, 0.3);
-      box-shadow: 0 20px 35px -12px rgba(185, 28, 124, 0.15);
-    }
-
-    .features241-tab-horizontal1 .thq-heading-2,
-    .features241-tab-horizontal2 .thq-heading-2,
-    .features241-tab-horizontal3 .thq-heading-2 {
-      background: var(--art-gradient-1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    /* ===== ARTISTIC MENU TOGGLE ===== */
-    .navbar-toggle {
-      background: var(--art-gradient-1) !important;
-      box-shadow: 0 10px 25px -8px rgba(76, 29, 149, 0.5) !important;
-      border: 2px solid rgba(255, 255, 255, 0.5) !important;
-    }
-
-    .brush-stroke {
-      background: white !important;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
-    }
-
-    /* ===== MOBILE MENU ENHANCEMENTS ===== */
-    .navbar-menu {
-      background: rgba(255, 255, 255, 0.95) !important;
-      backdrop-filter: blur(12px) !important;
-      border-left: 4px solid transparent !important;
-      border-image: var(--art-gradient-1) !important;
-      border-image-slice: 1 !important;
-      box-shadow: -8px 0 30px -10px rgba(76, 29, 149, 0.2) !important;
-    }
-
-    .navbar-menu-link {
-      border-radius: 16px !important;
-      transition: all 0.25s ease !important;
-      color: #2d2a3c !important;
-      font-weight: 500 !important;
-      margin: 4px 12px !important;
-    }
-
-    .navbar-menu-link:hover {
-      background: var(--art-gradient-1) !important;
-      color: white !important;
-      transform: translateX(6px);
-      box-shadow: 0 8px 16px -8px #4c1d95 !important;
-    }
-
-    .navbar-menu-link:hover svg {
-      fill: white !important;
-      color: white !important;
-    }
-
-    .navbar-menu-button.login-button,
-    .navbar-menu-button.signup-button {
-      background: var(--art-gradient-1) !important;
-      border-radius: 40px !important;
-      font-weight: 600 !important;
-      letter-spacing: 0.3px !important;
-      box-shadow: 0 8px 18px -6px #4c1d95 !important;
-      transition: all 0.3s ease !important;
-      border: none !important;
-    }
-
-    .navbar-menu-button.signup-button {
-      background: linear-gradient(145deg, #b45309, #d97706) !important;
-    }
-
-    .navbar-menu-button.login-button:hover,
-    .navbar-menu-button.signup-button:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 16px 24px -10px #4c1d95 !important;
-    }
-
-    /* ===== STEPS SECTION ENHANCEMENT ===== */
-    .steps21-container4, 
-    .steps21-container5, 
-    .steps21-container6, 
-    .steps21-container7 {
-      background: white !important;
-      border-radius: 28px !important;
-      border: 1px solid rgba(76, 29, 149, 0.1) !important;
-      box-shadow: 0 8px 20px -6px rgba(0,0,0,0.02) !important;
-      transition: all 0.3s ease !important;
-    }
-
-    .steps21-container4:hover,
-    .steps21-container5:hover,
-    .steps21-container6:hover,
-    .steps21-container7:hover {
-      border-color: #b91c7c !important;
-      box-shadow: 0 25px 35px -14px rgba(185, 28, 124, 0.12) !important;
-      transform: translateY(-8px);
-    }
-
-    .steps21-container4 .thq-heading-2,
-    .steps21-container5 .thq-heading-2,
-    .steps21-container6 .thq-heading-2,
-    .steps21-container7 .thq-heading-2 {
-      background: var(--art-gradient-2);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .steps21-text15, 
-    .steps21-text18, 
-    .steps21-text21, 
-    .steps21-text24 {
-      color: rgba(76, 29, 149, 0.2) !important;
-      font-weight: 800 !important;
-      -webkit-text-stroke: 1px #4c1d95 !important;
-    }
-
-    /* ===== PRICING ANNOUNCEMENT SECTION ===== */
-    .pricing-announcement {
-      background: var(--art-gradient-1) !important;
-      position: relative;
-      isolation: isolate;
-    }
-
-    .pricing-announcement::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.15)"/></svg>');
-      opacity: 0.4;
-      z-index: -1;
-    }
-
-    .pricing-announcement-title {
-      color: white !important;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      letter-spacing: -0.5px !important;
-    }
-
-    .pricing-announcement-price {
-      background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(8px);
-      padding: 12px 32px;
-      border-radius: 100px;
-      color: white;
-      font-weight: 700;
-      display: inline-block;
-      border: 1px solid rgba(255,255,255,0.5);
-    }
-
-    .pricing-announcement-buttons .thq-button-filled {
-      background: white !important;
-      color: #4c1d95 !important;
-      border-radius: 40px !important;
-      padding: 14px 36px !important;
-      font-weight: 700 !important;
-      letter-spacing: 1px !important;
-      box-shadow: 0 15px 30px -10px rgba(0,0,0,0.2) !important;
-      border: none !important;
-      transition: all 0.3s ease !important;
-    }
-
-    .pricing-announcement-buttons .thq-button-filled:hover {
-      transform: translateY(-4px) scale(1.03);
-      box-shadow: 0 25px 35px -12px black !important;
-    }
-
-    /* ===== FOOTER ENHANCEMENT ===== */
-    .footer4-footer7 {
-      background: linear-gradient(145deg, #1e1b2c, #2d2a3c) !important;
-      border-top: 4px solid transparent !important;
-      border-image: var(--art-gradient-1) !important;
-      border-image-slice: 1 !important;
-    }
-
-    .footer4-footer7 .navbar8-action11,
-    .footer4-footer7 .navbar8-action21 {
-      background: rgba(255,255,255,0.1) !important;
-      border: 1px solid rgba(255,255,255,0.2) !important;
-      color: white !important;
-      box-shadow: none !important;
-    }
-
-    .footer4-footer7 .navbar8-action21 {
-      background: transparent !important;
-    }
-
-    /* ===== HERO SECTION ENHANCEMENT ===== */
-    .hero171-text1 {
-      background: var(--art-gradient-1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      font-weight: 800 !important;
-      letter-spacing: -1px !important;
-      text-shadow: 0 4px 12px rgba(76, 29, 149, 0.15);
-    }
-
-    .hero171-text2 {
-      color: #4b4a5c !important;
-      font-size: 1.25rem !important;
-      line-height: 1.6 !important;
-    }
-
-    /* ===== SELLER BADGE ENHANCEMENT ===== */
-    .seller-badge {
-      background: var(--art-gradient-2);
-      color: white;
-      font-size: 10px;
-      padding: 3px 8px;
-      border-radius: 40px;
-      margin-left: 8px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      box-shadow: 0 2px 8px rgba(217, 119, 6, 0.4);
-    }
-
-    /* Preserving all original animations and interactions */
-    .thq-animated-group-horizontal,
-    .thq-animated-group-horizontal-reverse,
-    .hero171-row-container1,
-    .hero171-row-container2 {
-      animation-duration: 40s !important;
-      animation-timing-function: linear !important;
-      animation-iteration-count: infinite !important;
-    }
-  </style>
 </head>
 
 <body>
@@ -529,7 +165,7 @@
                     <span class="landing-text102">Participate in Competitions</span>
                   </fragment>
                   </a>
-                   <a href="/sellerregistration" class="navbar8-link31 thq-link thq-body-small" style="background: linear-gradient(145deg, #b45309, #d97706); color: white; padding: 10px 22px; border-radius: 40px; margin: 0 10px; font-weight: 600; border: 1px solid rgba(255,237,213,0.4); box-shadow: 0 8px 16px -6px rgba(180,83,9,0.4);">
+                   <a href="/sellerregistration" class="navbar8-link31 thq-link thq-body-small" style="background-color: #FF9800; color: white; padding: 8px 16px; border-radius: 4px; margin: 0 10px; font-weight: 600;">
               <fragment class="landing-fragment111">
                 <span class="landing-text111">Seller's Zone</span>
               </fragment>
@@ -975,21 +611,20 @@
       top: 20px;
       right: 20px;
       z-index: 1000;
-      background: var(--art-gradient-1);
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 50%;
       width: 60px;
       height: 60px;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 10px 25px -8px rgba(76, 29, 149, 0.5);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
-      border: 2px solid rgba(255, 255, 255, 0.5);
     }
 
     .navbar-toggle:hover {
       transform: scale(1.05);
-      box-shadow: 0 16px 30px -8px rgba(76, 29, 149, 0.6);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
 
     .artistic-menu-icon {
@@ -1001,10 +636,10 @@
     .brush-stroke {
       position: absolute;
       height: 4px;
-      background: white;
+      background: linear-gradient(90deg, #3399cc, #9966cc);
       border-radius: 2px;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .brush-stroke-1 {
@@ -1108,15 +743,15 @@
       /* Set a default minimum width */
       margin-left: -125px;
       /* Divide value of min-width by 2 */
-      background: linear-gradient(145deg, #7f1d1d, #991b1b);
+      background-color: #333;
       /* Black background color */
       color: #fff;
       /* White text color */
       text-align: center;
       /* Centered text */
-      border-radius: 100px;
+      border-radius: 8px;
       /* Rounded borders */
-      padding: 16px 24px;
+      padding: 16px;
       /* Padding */
       position: fixed;
       /* Sit on top of the screen */
@@ -1126,12 +761,8 @@
       /* Center the snackbar */
       bottom: 30px;
       /* 30px from the bottom */
-      box-shadow: 0 10px 25px -5px rgba(127, 29, 29, 0.5);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      border: 1px solid rgba(254, 202, 202, 0.3);
-      backdrop-filter: blur(4px);
     }
 
     /* Show the snackbar when clicking on a button (class added with JavaScript) */
