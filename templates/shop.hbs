@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Shop | Artender</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo/logo32.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/logo/logo192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/logo/logo512.png">
+
+    <meta name="theme-color" content="#f97316">
+    <meta property="og:title" content="Shop - Artender">
+    <meta property="og:description"
+        content="Explore and purchase original artworks from talented creators across India. Discover paintings, sketches, and creative masterpieces on Artender.">
+    <meta property="og:image"
+        content="/logo/WhatsApp%20Image%202025-02-23%20at%2000.10.41_0364758d.jpg">
+    <meta property="og:url" content="http://www.artender.in">
+    <meta property="og:type" content="website">
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+
+<div class="landing-container">
+
+<!-- ================= NAVBAR (CLONED) ================= -->
+
+<header class="navbar8-container1">
+    <div data-thq="thq-navbar" class="navbar8-navbar-interactive">
+
+        <img alt="logo"
+            src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg"
+            class="navbar8-image1" />
+
+        <div data-thq="thq-navbar-nav" class="navbar8-desktop-menu">
+            <nav class="navbar8-links1">
+                <a href="/home" class="navbar8-link11 thq-link thq-body-small">Home</a>
+                <a href="/competitions" class="thq-link thq-body-small">
+                    Participate in Competitions
+                </a>
+
+                <a href="/sellerregistration"
+                    class="navbar8-link31 thq-link thq-body-small"
+                    style="background-color:#FF9800;color:white;padding:8px 16px;border-radius:4px;margin:0 10px;font-weight:600;">
+                    Seller's Zone
+                </a>
+
+                <a href="/profile" class="navbar8-link31 thq-link thq-body-small">
+                    Profile
+                </a>
+
+                <a href="/help" class="navbar8-link31 thq-link thq-body-small">
+                    Help
+                </a>
+            </nav>
+
+            <div class="navbar8-buttons1">
+                <a href="/logout">
+                    <button class="navbar8-action11 thq-button-animated thq-button-filled">
+                        Logout
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ================= MOBILE MENU ================= -->
+
+<div class="navbar-toggle" onclick="toggleNavbar()">
+    <div class="artistic-menu-icon">
+        <div class="brush-stroke brush-stroke-1"></div>
+        <div class="brush-stroke brush-stroke-2"></div>
+        <div class="brush-stroke brush-stroke-3"></div>
+    </div>
+</div>
+
+<div id="navbarMenu" class="navbar-menu">
+    <nav class="navbar-menu-links">
+        <a href="/home" class="navbar-menu-link">Home</a>
+        <a href="/competitions" class="navbar-menu-link">Participate in Competitions</a>
+        <a href="/sellerregistration" class="navbar-menu-link">
+            Seller's Zone
+        </a>
+        <a href="/profile" class="navbar-menu-link">Profile</a>
+        <a href="/help" class="navbar-menu-link">Help</a>
+        <a href="/logout">
+            <button class="navbar8-action11" style="width:100%">
+                Logout
+            </button>
+        </a>
+    </nav>
+</div>
+
+<!-- ================= SHOP CONTENT ================= -->
+
+<main class="shop-main">
+
+    <!-- Hero Section -->
+    <div class="shop-hero">
+        <h1>Artender Marketplace</h1>
+        <p>
+            Discover original artworks created by passionate artists.
+            Support creativity. Own something truly unique.
+        </p>
+    </div>
+
+    <!-- Coming Soon Card -->
+    <section class="shop-coming">
+        <div class="shop-card">
+            <h2>Marketplace Coming Soon</h2>
+            <p>
+                We are building a secure and inspiring space where artists can
+                sell their creations and collectors can discover authentic art.
+            </p>
+            <p>
+                Soon you'll be able to browse paintings, sketches, digital art,
+                and more — directly from creators across India.
+            </p>
+
+            <button class="shop-btn">Stay Tuned</button>
+        </div>
+    </section>
+
+</main>
+
+</div>
+
+<!-- ================= STYLES ================= -->
+
+<style>
+
+.shop-main{
+    max-width:1100px;
+    margin:60px auto;
+    padding:0 20px 80px;
+    font-family:'Inter', sans-serif;
+}
+
+.shop-hero{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.shop-hero h1{
+    font-size:42px;
+    font-weight:700;
+    color:#1f2937;
+    margin-bottom:12px;
+}
+
+.shop-hero p{
+    font-size:18px;
+    color:#6b7280;
+}
+
+.shop-coming{
+    display:flex;
+    justify-content:center;
+}
+
+.shop-card{
+    max-width:600px;
+    background:#fff7ed;
+    border:1px solid #fed7aa;
+    padding:40px;
+    border-radius:22px;
+    text-align:center;
+    box-shadow:0 15px 45px rgba(249,115,22,0.18);
+    transition:all .35s ease;
+}
+
+.shop-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 20px 60px rgba(249,115,22,0.3);
+}
+
+.shop-card h2{
+    font-size:24px;
+    color:#ea580c;
+    margin-bottom:18px;
+}
+
+.shop-card p{
+    color:#374151;
+    font-size:15px;
+    line-height:1.7;
+    margin-bottom:14px;
+}
+
+.shop-btn{
+    margin-top:20px;
+    padding:12px 26px;
+    border-radius:30px;
+    border:none;
+    background:linear-gradient(90deg,#f97316,#06b6d4);
+    color:white;
+    font-size:14px;
+    cursor:pointer;
+    transition:all .3s ease;
+}
+
+.shop-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 25px rgba(6,182,212,0.4);
+}
+
+/* Mobile */
+@media(max-width:768px){
+    .shop-hero h1{
+        font-size:30px;
+    }
+
+    .shop-card{
+        padding:30px 20px;
+    }
+}
+
+</style>
+
+<script>
+function toggleNavbar(){
+    document.getElementById("navbarMenu").classList.toggle("open");
+}
+</script>
+
+</body>
+</html>
