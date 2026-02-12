@@ -537,7 +537,7 @@ if (!seller) {
     const response = await axios.post(
   `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`,
   {
-    amount: 1 * 100,
+    amount: 149 * 100,
     expireAfter: 1200,
     metaInfo: {
       udf1: seller.name,
