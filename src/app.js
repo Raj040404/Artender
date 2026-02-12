@@ -329,6 +329,9 @@ app.get("/sellerregistration", requireLogin, async (req, res) => {
   }
 });
 
+app.get("/shop", requireLogin, (req, res) => {
+  res.render("shop");
+});
 
 app.get("/paymentfailed", (req, res) => {
   const reason = req.query.reason || "Unknown error";
