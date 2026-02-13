@@ -2,12 +2,12 @@
 <html lang="en">
 
 <head>
-  <title>Artender – Where creativity blooms</title>
+  <title>Artender</title>
 
   <!-- Meta Information -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#b64516">
+  <meta name="theme-color" content="#f97316">
 
   <!-- Progressive Web App (PWA) Configuration -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,7 +31,7 @@
   <!-- Twitter Card for Social Sharing -->
   <meta property="twitter:card" content="summary_large_image">
 
-  <!-- CSS Reset (preserved) -->
+  <!-- CSS Reset -->
   <style data-tag="reset-style-sheet">
     html {
       line-height: 1.15;
@@ -42,8 +42,8 @@
       margin: 0;
       font-family: Inter, sans-serif;
       font-weight: 400;
-      color: #1c1917;
-      background: #fefaf6;
+      color: var(--dl-color-theme-neutral-dark);
+      background: var(--dl-color-theme-neutral-light);
     }
 
     * {
@@ -91,408 +91,24 @@
   <!-- Animation Library -->
   <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css">
 
-  <!-- Google Fonts: Inter + Space Grotesk for headings (premium) -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400..700&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Custom Styles (from previous enhancement – colors, buttons, header, footer, mobile menu) -->
   <style>
-    /* ----- ARTISTIC & PROFESSIONAL THEME – colors, buttons, header, footer, mobile menu ----- */
-    :root {
-      --color-clay: #b64516;
-      --color-terracotta: #9c3e1a;
-      --color-sand: #fef6e9;
-      --color-parchment: #fff9ef;
-      --color-ink: #2e2b28;
-      --gradient-brush: linear-gradient(135deg, #b64516 0%, #a1431e 40%, #7a543d 100%);
-      --shadow-elevation: 0 20px 35px -10px rgba(28, 25, 23, 0.08), 0 2px 6px rgba(0,0,0,0.02);
-    }
-
-    /* ----- HEADER (navbar) – updated with warm, transparent glassmorphism ----- */
-    .navbar8-wrapper {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .navbar8-container1 {
-      background: rgba(255, 250, 240, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(182, 69, 22, 0.1);
-      padding: 0.5rem 2rem;
-    }
-
-    .navbar8-navbar-interactive {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 1440px;
-      margin: 0 auto;
-    }
-
-    .navbar8-image1 {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid white;
-      box-shadow: 0 6px 14px rgba(182, 69, 22, 0.2);
-      transition: transform 0.3s ease;
-    }
-
-    .navbar8-image1:hover {
-      transform: scale(1.02);
-    }
-
-    .navbar8-desktop-menu {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-    }
-
-    .navbar8-links1 {
-      display: flex;
-      gap: 2.2rem;
-      align-items: center;
-    }
-
-    .navbar8-links1 a {
-      font-size: 1rem;
-      font-weight: 550;
-      color: #3a2c28;
-      position: relative;
-      padding: 0.4rem 0;
-      transition: color 0.2s;
-    }
-
-    .navbar8-links1 a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%) scaleX(0);
-      width: 80%;
-      height: 2px;
-      background: var(--gradient-brush);
-      transition: transform 0.25s ease;
-      border-radius: 2px;
-    }
-
-    .navbar8-links1 a:hover {
-      color: #b64516;
-    }
-
-    .navbar8-links1 a:hover::after {
-      transform: translateX(-50%) scaleX(1);
-    }
-
-    /* Seller zone button – premium gradient */
-    .navbar8-links1 a[href*="sellerregistration"] {
-      background: linear-gradient(145deg, #b64516, #9e3e1a) !important;
-      color: white !important;
-      padding: 0.5rem 1.5rem !important;
-      border-radius: 60px !important;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      box-shadow: 0 6px 14px rgba(182, 69, 22, 0.3);
-      border: 1px solid rgba(255, 215, 170, 0.5);
-    }
-
-    .navbar8-links1 a[href*="sellerregistration"]::after {
-      display: none;
-    }
-
-    .navbar8-links1 a[href*="sellerregistration"]:hover {
-      background: #9e3e1a !important;
-      box-shadow: 0 10px 18px rgba(182, 69, 22, 0.4);
-      transform: translateY(-2px);
-    }
-
-    /* Desktop buttons – refined */
-    .navbar8-buttons1 {
-      display: flex;
-      gap: 0.8rem;
-    }
-
-    .navbar8-buttons1 button {
-      border: none;
-      padding: 0.55rem 1.6rem;
-      border-radius: 60px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      letter-spacing: 0.02em;
-      transition: all 0.25s;
-      cursor: pointer;
-    }
-
-    .navbar8-action11 {
-      background: #1e1b1a;
-      color: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .navbar8-action11:hover {
-      background: #b64516;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 18px rgba(182, 69, 22, 0.35);
-    }
-
-    .navbar8-action21 {
-      background: transparent;
-      border: 1.5px solid #b64516 !important;
-      color: #b64516;
-    }
-
-    .navbar8-action21:hover {
-      background: rgba(182, 69, 22, 0.04);
-      border-color: #87411f;
-      color: #87411f;
-    }
-
-    /* ----- MOBILE MENU – brushstroke toggle (same position, enhanced look) ----- */
-    .navbar-toggle {
-      display: none;
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
-      background: rgba(255, 248, 238, 0.9);
-      backdrop-filter: blur(10px);
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(100, 50, 20, 0.12);
-      border: 1px solid rgba(255,255,240,0.5);
-      transition: all 0.25s;
-    }
-
-    .navbar-toggle:hover {
-      background: white;
-      transform: scale(1.02);
-    }
-
-    .artistic-menu-icon {
-      position: relative;
-      width: 30px;
-      height: 24px;
-    }
-
-    .brush-stroke {
-      position: absolute;
-      height: 4px;
-      background: linear-gradient(90deg, #b64516, #bb7a4b);
-      border-radius: 4px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-      transition: all 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
-    }
-
-    .brush-stroke-1 { top: 0; width: 100%; }
-    .brush-stroke-2 { top: 10px; width: 80%; right: 0; }
-    .brush-stroke-3 { top: 20px; width: 60%; }
-
-    /* Animation when menu is open – same transform */
-    .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-1 {
-      transform: rotate(45deg) translate(6px, 6px);
-      width: 100%;
-      background: #b64516;
-    }
-
-    .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-2 {
-      opacity: 0;
-      transform: translateX(10px);
-    }
-
-    .navbar-menu[style*="display: flex"] ~ .navbar-toggle .brush-stroke-3 {
-      transform: rotate(-45deg) translate(6px, -6px);
-      width: 100%;
-      background: #b64516;
-    }
-
-    /* ----- MOBILE MENU PANEL – refined, artistic, same position, width, padding – only UI colors/textures updated ----- */
-    .navbar-menu {
-      display: none;
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 340px;
-      max-width: 85vw;
-      height: 100vh;
-      background: rgba(255, 244, 235, 0.98);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow: -10px 0 40px rgba(40, 25, 10, 0.1);
-      z-index: 1000;
-      flex-direction: column;
-      padding: 100px 32px 40px;
-      border-left: 1px solid rgba(182, 69, 22, 0.15);
-      overflow-y: auto;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .navbar-menu-links {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    .navbar-menu-link {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      font-size: 1.1rem;
-      font-weight: 520;
-      color: #2e2b28;
-      padding: 8px 12px;
-      border-radius: 16px;
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .navbar-menu-link svg {
-      color: #b64516;
-      width: 24px;
-      height: 24px;
-    }
-
-    .navbar-menu-link:hover {
-      background: rgba(182, 69, 22, 0.06);
-      transform: translateX(6px);
-    }
-
-    .seller-zone-mobile {
-      background: rgba(182, 69, 22, 0.12);
-      border-left: 5px solid #b64516;
-      font-weight: 700;
-    }
-
-    .seller-badge {
-      background: #b64516;
-      color: white;
-      font-size: 0.7rem;
-      padding: 3px 10px;
-      border-radius: 40px;
-      margin-left: 8px;
-    }
-
-    .navbar-menu-auth-section {
-      margin-top: 48px;
-      border-top: 1.5px dashed rgba(182, 69, 22, 0.3);
-      padding-top: 32px;
-    }
-
-    .navbar-menu-auth-divider span {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      color: #8a6a5a;
-      font-weight: 600;
-    }
-
-    .navbar-menu-buttons {
-      display: flex;
-      gap: 16px;
-      margin-top: 20px;
-    }
-
-    .navbar-menu-button {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: #b64516;
-      color: white;
-      padding: 12px 18px;
-      border-radius: 50px;
-      font-weight: 600;
-      border: none;
-      transition: all 0.2s;
-    }
-
-    .navbar-menu-button.signup-button {
-      background: #3a312c;
-    }
-
-    .navbar-menu-button:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.1);
-    }
-
-    /* ----- FOOTER – updated as per premium theme, warm dark ----- */
-    .footer4-footer7 {
-      background: #2c2421;
-      color: #efdfd3;
-      padding: 2.5rem 2rem;
-    }
-
-    .footer4-max-width {
-      max-width: 1280px;
-      margin: 0 auto;
-    }
-
-    .footer4-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .footer4-logo2 {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: 2px solid #c97e54;
-    }
-
-    .footer4-footer7 .navbar8-buttons1 {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .footer4-footer7 .navbar8-action11 {
-      background: #c46836;
-      border: none;
-    }
-
-    .footer4-footer7 .navbar8-action11:hover {
-      background: #b64516;
-    }
-
-    .footer4-footer7 .navbar8-action21 {
-      background: transparent;
-      border: 1.5px solid #eac0a8 !important;
-      color: #ffded2;
-    }
-
-    .footer4-footer7 .navbar8-action21:hover {
-      background: rgba(255,255,255,0.05);
-    }
-
-    /* ----- preserve all original animations, image displays, etc ----- */
-    /* ensure login toast style remains (only colors refined) */
     .login-toast {
       visibility: hidden;
       min-width: 250px;
       margin-left: -125px;
-      background: #b91c1c;
-      background: linear-gradient(145deg, #b91c1c, #991b1b);
+      background-color: #ff4444;
       color: #fff;
       text-align: center;
-      border-radius: 100px;
+      border-radius: 4px;
       padding: 16px;
       position: fixed;
       z-index: 10000;
       left: 50%;
       bottom: 30px;
       font-size: 17px;
-      box-shadow: 0 10px 25px -5px rgba(185, 28, 28, 0.3);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       opacity: 0;
       transition: opacity 0.5s, bottom 0.5s;
-      font-weight: 500;
     }
 
     .login-toast.show {
@@ -500,47 +116,19 @@
       opacity: 1;
       bottom: 50px;
     }
-
-    /* feature cards – keep hover effect, no change */
-    .features241-tab-horizontal1,
-    .features241-tab-horizontal2,
-    .features241-tab-horizontal3 {
-      transition: all 0.3s ease;
-    }
-    .features241-tab-horizontal1:hover,
-    .features241-tab-horizontal2:hover,
-    .features241-tab-horizontal3:hover {
-      transform: translateY(-5px);
-    }
-
-    /* preserve original mobile breakpoint for toggle display */
-    @media (max-width: 768px) {
-      .navbar-toggle {
-        display: flex;
-        width: 50px;
-        height: 50px;
-        top: 15px;
-        right: 15px;
-      }
-      .artistic-menu-icon {
-        width: 24px;
-        height: 20px;
-      }
-      .brush-stroke {
-        height: 3px;
-      }
-      .brush-stroke-2 {
-        top: 8px;
-      }
-      .brush-stroke-3 {
-        top: 16px;
-      }
-    }
-
-    /* all other original styles remain untouched – animations, image grids, etc */
   </style>
 
-  <!-- JavaScript for PWA & Open Graph Fix (unchanged) -->
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400..700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css">
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/home1.css" />
+
+  <!-- JavaScript for PWA & Open Graph Fix -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const ogImage = document.querySelector('meta[property="og:image"]');
@@ -561,23 +149,28 @@
 <body>
   <div>
     <div class="landing-container">
-      <!-- =========== HEADER – updated premium colors/buttons ========== -->
       <navbar8-wrapper class="navbar8-wrapper">
         <header class="navbar8-container1">
           <header data-thq="thq-navbar" class="navbar8-navbar-interactive">
             <img alt="logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg" class="navbar8-image1" />
             <div data-thq="thq-navbar-nav" class="navbar8-desktop-menu">
               <nav class="navbar8-links1">
+                <!--                 <a href="#" class="navbar8-link11 thq-link thq-body-small">
+                  <fragment class="landing-fragment104">
+                    <span class="landing-text104">Explore Artworks</span>
+                  </fragment>
+                </a> -->
                 <a href="javascript:void(0)" onclick="showLoginAlert()" class="thq-link thq-body-small">
                   <fragment class="landing-fragment102">
                     <span class="landing-text102">Participate in Competitions</span>
                   </fragment>
-                </a>
-                <a href="/sellerregistration" class="navbar8-link31 thq-link thq-body-small" style="background-color: #FF9800; color: white; padding: 8px 16px; border-radius: 4px; margin: 0 10px; font-weight: 600;">
-                  <fragment class="landing-fragment111">
-                    <span class="landing-text111">Seller's Zone</span>
-                  </fragment>
-                </a>
+                  </a>
+                   <a href="/sellerregistration" class="navbar8-link31 thq-link thq-body-small" style="background-color: #FF9800; color: white; padding: 8px 16px; border-radius: 4px; margin: 0 10px; font-weight: 600;">
+              <fragment class="landing-fragment111">
+                <span class="landing-text111">Seller's Zone</span>
+              </fragment>
+            </a>
+                
                 <a href="javascript:void(0)" onclick="showLoginAlert()" class="navbar8-link31 thq-link thq-body-small">
                   <fragment class="landing-fragment110">
                     <span class="landing-text110">Profile</span>
@@ -593,7 +186,7 @@
                     <span class="landing-text111">Help</span>
                   </fragment>
                 </a>
-                <a href="/shop" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
+                 <a href="/shop" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
                   <fragment class="landing-fragment111">
                     <span class="landing-text111">Shop</span>
                   </fragment>
@@ -624,8 +217,7 @@
           </header>
         </header>
       </navbar8-wrapper>
-
-      <!-- =========== MOBILE TOGGLE – same position, refined colors ========= -->
+      <!-- Updated Artistic Menu Toggle Button -->
       <div class="navbar-toggle" onclick="toggleNavbar()">
         <div class="artistic-menu-icon">
           <div class="brush-stroke brush-stroke-1"></div>
@@ -634,47 +226,62 @@
         </div>
       </div>
 
-      <!-- =========== MOBILE MENU – UI updated, position/width/links unchanged ========= -->
       <div id="navbarMenu" class="navbar-menu">
         <nav class="navbar-menu-links">
+          <!--     <a href="/explorecompetitions" class="navbar-menu-link">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.49L17.5 6.5 9.99 9.99 6.5 17.5zm5.5-6.6c.61 0 1.1.49 1.1 1.1s-.49 1.1-1.1 1.1-1.1-.49-1.1-1.1.49-1.1 1.1-1.1z"/>
+      </svg>
+      <span>Explore Artworks</span>
+    </a> -->
           <a href="javascript:void(0)" onclick="showLoginAlert()" class="navbar-menu-link">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
               <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z" />
             </svg>
             <span>Participate in Competitions</span>
           </a>
-          <a href="/sellerregistration" class="navbar-menu-link seller-zone-mobile" onclick="return checkLoginForSellerZone(event)">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/>
-              <path d="M9.5 15.5l4-4-4-4L8 9.5l2.5 2.5L8 14.5z"/>
-            </svg>
-            <span>Seller's Zone</span>
-            <span class="seller-badge">(NEW)</span>
-          </a>
+           <a href="/sellerregistration" class="navbar-menu-link seller-zone-mobile" onclick="return checkLoginForSellerZone(event)">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+        <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/>
+        <path d="M9.5 15.5l4-4-4-4L8 9.5l2.5 2.5L8 14.5z"/>
+      </svg>
+      <span>Seller's Zone</span>
+      <span class="seller-badge">(NEW)</span>
+    </a>
           <a href="javascript:void(0)" onclick="showLoginAlert()" class="navbar-menu-link">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+              <path
+                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
             </svg>
             <span>Profile</span>
           </a>
           <a href="javascript:void(0)" onclick="showLoginAlert()" class="navbar-menu-link">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
             </svg>
             <span>About Us</span>
           </a>
           <a href="javascript:void(0)" onclick="showLoginAlert()" class="navbar-menu-link">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
             </svg>
             <span>Help</span>
           </a>
           <a href="/shop" class="navbar-menu-link">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.16 14h9.45c.75 0 1.41-.41 1.75-1.03L21 6H6.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 17.37 5.48 19 7 19h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L7.16 14z"/>
-            </svg>
-            <span>Shop</span>
-          </a>
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 
+    0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 
+    2-2-.9-2-2-2zM7.16 14h9.45c.75 
+    0 1.41-.41 1.75-1.03L21 6H6.21l-.94-2H1v2h2l3.6 
+    7.59-1.35 2.45C4.52 17.37 5.48 19 7 
+    19h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L7.16 
+    14z"/>
+  </svg>
+  <span>Shop</span>
+</a>
+
         </nav>
 
         <div class="navbar-menu-auth-section">
@@ -684,21 +291,21 @@
           <div class="navbar-menu-buttons">
             <a href="/login" class="navbar-menu-button login-button">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                <path
+                  d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
               </svg>
               <span>Login</span>
             </a>
             <a href="/signup" class="navbar-menu-button signup-button">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
               </svg>
               <span>Signup</span>
             </a>
           </div>
         </div>
       </div>
-
-      <!-- =========== HERO – completely untouched, animations & images as original ========= -->
       <hero171-wrapper class="hero171-wrapper">
         <div class="hero171-header78">
           <div class="hero171-column thq-section-padding thq-section-max-width">
@@ -720,38 +327,62 @@
             <div class="hero171-content2">
               <div class="hero171-row-container1 thq-animated-group-container-horizontal thq-mask-image-horizontal">
                 <div class="thq-animated-group-horizontal">
-                  <img alt="Hero Image" src="/homeimages/image1.jpg" class="hero171-placeholder-image10 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image2.jpg" class="hero171-placeholder-image11 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image3.jpg" class="hero171-placeholder-image12 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image4.jpg" class="hero171-placeholder-image13 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image5.jpg" class="hero171-placeholder-image14 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image6.jpg" class="hero171-placeholder-image15 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image1.jpg"
+                    class="hero171-placeholder-image10 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image2.jpg"
+                    class="hero171-placeholder-image11 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image3.jpg"
+                    class="hero171-placeholder-image12 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image4.jpg"
+                    class="hero171-placeholder-image13 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image5.jpg"
+                    class="hero171-placeholder-image14 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image6.jpg"
+                    class="hero171-placeholder-image15 thq-img-scale thq-img-ratio-1-1" />
                 </div>
                 <div class="thq-animated-group-horizontal">
-                  <img alt="Hero Image" src="/homeimages/image7.jpg" class="hero171-placeholder-image16 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image8.jpg" class="hero171-placeholder-image17 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image9.jpg" class="hero171-placeholder-image18 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image10.jpg" class="hero171-placeholder-image19 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image11.jpg" class="hero171-placeholder-image20 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image12.jpg" class="hero171-placeholder-image21 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image7.jpg"
+                    class="hero171-placeholder-image16 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image8.jpg"
+                    class="hero171-placeholder-image17 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image9.jpg"
+                    class="hero171-placeholder-image18 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image10.jpg"
+                    class="hero171-placeholder-image19 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image11.jpg"
+                    class="hero171-placeholder-image20 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image12.jpg"
+                    class="hero171-placeholder-image21 thq-img-scale thq-img-ratio-1-1" />
                 </div>
               </div>
               <div class="hero171-row-container2 thq-animated-group-container-horizontal thq-mask-image-horizontal">
                 <div class="thq-animated-group-horizontal-reverse">
-                  <img alt="Hero Image" src="/homeimages/image13.jpg" class="hero171-placeholder-image22 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image14.jpg" class="hero171-placeholder-image23 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image15.jpg" class="hero171-placeholder-image24 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image16.jpg" class="hero171-placeholder-image25 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image17.jpg" class="hero171-placeholder-image26 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image18.jpg" class="hero171-placeholder-image27 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image13.jpg"
+                    class="hero171-placeholder-image22 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image14.jpg"
+                    class="hero171-placeholder-image23 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image15.jpg"
+                    class="hero171-placeholder-image24 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image16.jpg"
+                    class="hero171-placeholder-image25 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image17.jpg"
+                    class="hero171-placeholder-image26 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image18.jpg"
+                    class="hero171-placeholder-image27 thq-img-scale thq-img-ratio-1-1" />
                 </div>
                 <div class="thq-animated-group-horizontal-reverse">
-                  <img alt="Hero Image" src="/homeimages/image19.jpg" class="hero171-placeholder-image28 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image20.jpg" class="hero171-placeholder-image29 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image21.jpg" class="hero171-placeholder-image30 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image22.jpg" class="hero171-placeholder-image31 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image23.jpg" class="hero171-placeholder-image32 thq-img-scale thq-img-ratio-1-1" />
-                  <img alt="Hero Image" src="/homeimages/image24.jpg" class="hero171-placeholder-image33 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image19.jpg"
+                    class="hero171-placeholder-image28 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image20.jpg"
+                    class="hero171-placeholder-image29 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image21.jpg"
+                    class="hero171-placeholder-image30 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image22.jpg"
+                    class="hero171-placeholder-image31 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image23.jpg"
+                    class="hero171-placeholder-image32 thq-img-scale thq-img-ratio-1-1" />
+                  <img alt="Hero Image" src="/homeimages/image24.jpg"
+                    class="hero171-placeholder-image33 thq-img-scale thq-img-ratio-1-1" />
                 </div>
               </div>
             </div>
@@ -759,12 +390,23 @@
               <div class="hero171-container2">
                 <style>
                   @keyframes scroll-x {
-                    from { transform: translateX(0); }
-                    to { transform: translateX(calc(-100% - 16px)); }
+                    from {
+                      transform: translateX(0);
+                    }
+
+                    to {
+                      transform: translateX(calc(-100% - 16px));
+                    }
                   }
+
                   @keyframes scroll-y {
-                    from { transform: translateY(0); }
-                    to { transform: translateY(calc(-100% - 16px)); }
+                    from {
+                      transform: translateY(0);
+                    }
+
+                    to {
+                      transform: translateY(calc(-100% - 16px));
+                    }
                   }
                 </style>
               </div>
@@ -772,42 +414,77 @@
           </div>
         </div>
       </hero171-wrapper>
-
-      <!-- =========== FEATURES (untouched, only button colors are inherited from global, but no change) ======= -->
       <features241-wrapper class="features241-wrapper">
         <div class="thq-section-padding">
           <div class="features241-container2 thq-section-max-width">
             <div class="features241-image-container">
-              <img alt="feature 1" src="https://images.unsplash.com/photo-1552250575-e508473b090f?ixid=M3w5MTMyMXwwfDF8c2VhcmNofDE1Mnx8YWJzdHJhY3R8ZW58MHx8fHwxNzE2MjAxNjAyfDA&ixlib=rb-4.0.3&w=1400" class="features241-image1 thq-img-ratio-16-9" />
+              <img alt="feature 1"
+                src="https://images.unsplash.com/photo-1552250575-e508473b090f?ixid=M3w5MTMyMXwwfDF8c2VhcmNofDE1Mnx8YWJzdHJhY3R8ZW58MHx8fHwxNzE2MjAxNjAyfDA&ixlib=rb-4.0.3&w=1400"
+                class="features241-image1 thq-img-ratio-16-9" />
             </div>
             <div class="features241-tabs-menu">
               <div class="features241-tab-horizontal1" style="cursor: pointer;" onclick="showLoginAlert()">
-                <div class="features241-divider-container1"><div class="features241-container3"></div></div>
+                <div class="features241-divider-container1">
+                  <div class="features241-container3"></div>
+                </div>
                 <div class="features241-content1">
-                  <h2 class="thq-heading-2"><fragment class="landing-fragment121"><span class="landing-text121">Explore</span></fragment></h2>
-                  <span class="thq-body-small"><fragment class="landing-fragment122"><span class="landing-text122">Discover stunning artworks from talented creators worldwide.</span></fragment></span>
+                  <h2 class="thq-heading-2">
+                    <fragment class="landing-fragment121">
+                      <span class="landing-text121">Explore</span>
+                    </fragment>
+                  </h2>
+                  <span class="thq-body-small">
+                    <fragment class="landing-fragment122">
+                      <span class="landing-text122">
+                        Discover stunning artworks from talented creators worldwide.
+                      </span>
+                    </fragment>
+                  </span>
                 </div>
               </div>
               <div class="features241-tab-horizontal2" style="cursor: pointer;" onclick="showLoginAlert()">
-                <div class="features241-divider-container2"><div class="features241-container4"></div></div>
+                <div class="features241-divider-container2">
+                  <div class="features241-container4"></div>
+                </div>
                 <div class="features241-content2">
-                  <h2 class="thq-heading-2"><fragment class="landing-fragment123"><span class="landing-text123">Participate</span></fragment></h2>
-                  <span class="thq-body-small"><fragment class="landing-fragment120"><span class="landing-text120">Showcase your talent, compete with others, and win exciting prizes.</span></fragment></span>
+                  <h2 class="thq-heading-2">
+                    <fragment class="landing-fragment123">
+                      <span class="landing-text123">Participate</span>
+                    </fragment>
+                  </h2>
+                  <span class="thq-body-small">
+                    <fragment class="landing-fragment120">
+                      <span class="landing-text120">
+                        Showcase your talent, compete with others, and win exciting prizes.
+                      </span>
+                    </fragment>
+                  </span>
                 </div>
               </div>
               <div class="features241-tab-horizontal3" style="cursor: pointer;" onclick="showLoginAlert()">
-                <div class="features241-divider-container3"><div class="features241-container5"></div></div>
+                <div class="features241-divider-container3">
+                  <div class="features241-container5"></div>
+                </div>
                 <div class="features241-content3">
-                  <h2 class="thq-heading-2"><fragment class="landing-fragment119"><span class="landing-text119">Create</span></fragment></h2>
-                  <span class="thq-body-small"><fragment class="landing-fragment118"><span class="landing-text118">Craft a stunning profile that speaks volumes about your artistic journey. Share your passion, exhibit your creations, and make your mark in the art world.</span></fragment></span>
+                  <h2 class="thq-heading-2">
+                    <fragment class="landing-fragment119">
+                      <span class="landing-text119">Create</span>
+                    </fragment>
+                  </h2>
+                  <span class="thq-body-small">
+                    <fragment class="landing-fragment118">
+                      <span class="landing-text118">
+                        Craft a stunning profile that speaks volumes about your artistic journey. Share your passion,
+                        exhibit your creations, and make your mark in the art world.
+                      </span>
+                    </fragment>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </features241-wrapper>
-
-      <!-- =========== STEPS (completely unchanged) ========= -->
       <steps21-wrapper class="steps21-wrapper">
         <div class="steps21-container1 thq-section-padding">
           <div class="steps21-max-width thq-section-max-width">
@@ -817,23 +494,63 @@
               </div>
               <div class="steps21-container3">
                 <div class="steps21-container4 thq-card">
-                  <h2 class="thq-heading-2"><fragment class="landing-fragment188"><span class="landing-text188">Step 1</span></fragment></h2>
-                  <span class="steps21-text14 thq-body-small"><fragment class="landing-fragment184"><span class="landing-text184">Sign up or log in to start your artistic journey...</span></fragment></span>
+                  <h2 class="thq-heading-2">
+                    <fragment class="landing-fragment188">
+                      <span class="landing-text188">Step 1</span>
+                    </fragment>
+                  </h2>
+                  <span class="steps21-text14 thq-body-small">
+                    <fragment class="landing-fragment184">
+                      <span class="landing-text184">
+                        Sign up or log in to start your artistic journey...
+                      </span>
+                    </fragment>
+                  </span>
                   <label class="steps21-text15 thq-heading-3">01</label>
                 </div>
                 <div class="steps21-container5 thq-card">
-                  <h2 class="thq-heading-2"><fragment class="landing-fragment186"><span class="landing-text186">Step 2</span></fragment></h2>
-                  <span class="steps21-text17 thq-body-small"><fragment class="landing-fragment187"><span class="landing-text187">Upload your artwork and gain visibility among art lovers...</span></fragment></span>
+                  <h2 class="thq-heading-2">
+                    <fragment class="landing-fragment186">
+                      <span class="landing-text186">Step 2</span>
+                    </fragment>
+                  </h2>
+                  <span class="steps21-text17 thq-body-small">
+                    <fragment class="landing-fragment187">
+                      <span class="landing-text187">
+                        Upload your artwork and gain visibility among art lovers...
+                      </span>
+                    </fragment>
+                  </span>
                   <label class="steps21-text18 thq-heading-3">02</label>
                 </div>
                 <div class="steps21-container6 thq-card">
-                  <h2 class="thq-heading-2"><fragment class="landing-fragment189"><span class="landing-text189">Step 3</span></fragment></h2>
-                  <span class="steps21-text20 thq-body-small"><fragment class="landing-fragment185"><span class="landing-text185">Join competitions and showcase your creativity to the world...</span></fragment></span>
+                  <h2 class="thq-heading-2">
+                    <fragment class="landing-fragment189">
+                      <span class="landing-text189">Step 3</span>
+                    </fragment>
+                  </h2>
+                  <span class="steps21-text20 thq-body-small">
+                    <fragment class="landing-fragment185">
+                      <span class="landing-text185">
+                        Join competitions and showcase your creativity to the world...
+                      </span>
+                    </fragment>
+                  </span>
                   <label class="steps21-text21 thq-heading-3">03</label>
                 </div>
                 <div class="steps21-container7 thq-card">
-                  <h2 class="thq-heading-2"><fragment class="landing-fragment191"><span class="landing-text191">Step 4</span></fragment></h2>
-                  <span class="steps21-text23 thq-body-small"><fragment class="landing-fragment190"><span class="landing-text190">Win competitions and get rewarded for your artistic skills...</span></fragment></span>
+                  <h2 class="thq-heading-2">
+                    <fragment class="landing-fragment191">
+                      <span class="landing-text191">Step 4</span>
+                    </fragment>
+                  </h2>
+                  <span class="steps21-text23 thq-body-small">
+                    <fragment class="landing-fragment190">
+                      <span class="landing-text190">
+                        Win competitions and get rewarded for your artistic skills...
+                      </span>
+                    </fragment>
+                  </span>
                   <label class="steps21-text24 thq-heading-3">04</label>
                 </div>
               </div>
@@ -841,8 +558,6 @@
           </div>
         </div>
       </steps21-wrapper>
-
-      <!-- =========== CALL TO ACTION (unchanged) ========= -->
       <section class="pricing-announcement thq-section-padding">
         <h2 class="pricing-announcement-title">Envision. Create. Accomplish.</h2>
         <p class="pricing-announcement-price">Participate now .</p>
@@ -853,8 +568,6 @@
         </div>
         <p class="pricing-announcement-desc">Showcase your art and creativity without breaking the bank.</p>
       </section>
-
-      <!-- =========== FOOTER – updated with premium colors, warm dark ========= -->
       <footer4-wrapper class="footer4-wrapper">
         <footer class="footer4-footer7 thq-section-padding">
           <div class="footer4-max-width thq-section-max-width">
@@ -865,12 +578,20 @@
               <div id="Logout-buttons1" class="navbar8-buttons1">
                 <a href="/login">
                   <button class="navbar8-action11 thq-button-animated thq-button-filled">
-                    <span><fragment class="landing-fragment101"><span class="landing-text101">Login</span></fragment></span>
+                    <span>
+                      <fragment class="landing-fragment101">
+                        <span class="landing-text101">Login</span>
+                      </fragment>
+                    </span>
                   </button>
                 </a>
                 <a href="/signup">
                   <button class="navbar8-action21 thq-button-outline thq-button-animated">
-                    <span><fragment class="landing-fragment113"><span class="landing-text113">Signup</span></fragment></span>
+                    <span>
+                      <fragment class="landing-fragment113">
+                        <span class="landing-text113">Signup</span>
+                      </fragment>
+                    </span>
                   </button>
                 </a>
               </div>
@@ -880,8 +601,467 @@
       </footer4-wrapper>
     </div>
   </div>
+  <style>
+    /* Artistic menu button styles */
+    .navbar-toggle {
+      /* Existing styles remain the same, but we add initial display: none */
+      display: none;
+      /* ⬅️ Hides the button by default on large screens */
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
 
-  <!-- Toast (unchanged functionality) -->
+    .navbar-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .artistic-menu-icon {
+      position: relative;
+      width: 30px;
+      height: 24px;
+    }
+
+    .brush-stroke {
+      position: absolute;
+      height: 4px;
+      background: linear-gradient(90deg, #3399cc, #9966cc);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .brush-stroke-1 {
+      top: 0;
+      width: 100%;
+      transform-origin: center;
+    }
+
+    .brush-stroke-2 {
+      top: 10px;
+      width: 80%;
+      right: 0;
+      transform-origin: right;
+    }
+
+    .brush-stroke-3 {
+      top: 20px;
+      width: 60%;
+      transform-origin: center;
+    }
+
+    /* Animation when menu is open */
+    .navbar-menu[style*="display: flex"]~.navbar-toggle .brush-stroke-1 {
+      transform: rotate(45deg) translate(6px, 6px);
+      width: 100%;
+    }
+
+    .navbar-menu[style*="display: flex"]~.navbar-toggle .brush-stroke-2 {
+      opacity: 0;
+      transform: translateX(10px);
+    }
+
+    .navbar-menu[style*="display: flex"]~.navbar-toggle .brush-stroke-3 {
+      transform: rotate(-45deg) translate(6px, -6px);
+      width: 100%;
+    }
+
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+
+      /* ⬅️ Only display the button on screens 768px wide or less */
+      .navbar-toggle {
+        display: flex;
+        /* ⬅️ Shows the button on mobiles and tablets */
+        width: 50px;
+        height: 50px;
+        top: 15px;
+        right: 15px;
+      }
+
+      .artistic-menu-icon {
+        width: 24px;
+        height: 20px;
+      }
+
+      .brush-stroke {
+        height: 3px;
+      }
+
+      .brush-stroke-2 {
+        top: 8px;
+      }
+
+      .brush-stroke-3 {
+        top: 16px;
+      }
+    }
+
+    .pricing-announcement-buttons {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .pricing-announcement-buttons .thq-button-filled {
+      padding: 12px 24px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+    }
+  </style>
+
+  <style>
+    /* Make the feature sections look clickable */
+    .features241-tab-horizontal1,
+    .features241-tab-horizontal2,
+    .features241-tab-horizontal3 {
+      transition: all 0.3s ease;
+    }
+
+    .features241-tab-horizontal1:hover,
+    .features241-tab-horizontal2:hover,
+    .features241-tab-horizontal3:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Toast styles */
+    .login-toast {
+      visibility: hidden;
+      /* Hidden by default. */
+      min-width: 250px;
+      /* Set a default minimum width */
+      margin-left: -125px;
+      /* Divide value of min-width by 2 */
+      background-color: #333;
+      /* Black background color */
+      color: #fff;
+      /* White text color */
+      text-align: center;
+      /* Centered text */
+      border-radius: 8px;
+      /* Rounded borders */
+      padding: 16px;
+      /* Padding */
+      position: fixed;
+      /* Sit on top of the screen */
+      z-index: 1001;
+      /* Add a z-index if needed */
+      left: 50%;
+      /* Center the snackbar */
+      bottom: 30px;
+      /* 30px from the bottom */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Show the snackbar when clicking on a button (class added with JavaScript) */
+    .login-toast.show {
+      visibility: visible;
+      /* Show the snackbar */
+      /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+      However, we want the snackbar to stay for 2.5 seconds, so we add a delay of 2.5s before fading out */
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    /* Animations to fade the snackbar in and out */
+    @-webkit-keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @-webkit-keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+  </style>
+  <style>
+:root{
+  --primary:#ff7a18;
+  --secondary:#ff3c78;
+  --accent:#8e2de2;
+  --dark:#111827;
+  --light:#ffffff;
+  --soft:#f9fafb;
+}
+
+/* ================= BODY ================= */
+
+body{
+  background: linear-gradient(135deg,#fffaf5,#fff0f5);
+  color: var(--dark);
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar8-navbar-interactive{
+  backdrop-filter: blur(16px);
+  background: rgba(255,255,255,0.7);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+}
+
+.navbar8-image1{
+  border-radius:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.15);
+}
+
+.navbar8-links1 a{
+  position:relative;
+  font-weight:500;
+  transition:all .3s ease;
+}
+
+.navbar8-links1 a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-4px;
+  width:0%;
+  height:2px;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  transition:0.3s;
+}
+
+.navbar8-links1 a:hover{
+  color:var(--primary);
+}
+
+.navbar8-links1 a:hover::after{
+  width:100%;
+}
+
+/* ================= BUTTONS ================= */
+
+.thq-button-filled,
+.navbar8-action11{
+  background: linear-gradient(90deg,var(--primary),var(--secondary));
+  border:none;
+  color:white;
+  font-weight:600;
+  border-radius:30px;
+  padding:10px 24px;
+  box-shadow:0 8px 20px rgba(255,122,24,.3);
+  transition:all .3s ease;
+}
+
+.thq-button-filled:hover,
+.navbar8-action11:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 30px rgba(255,60,120,.4);
+}
+
+.thq-button-outline,
+.navbar8-action21{
+  border:2px solid var(--primary);
+  border-radius:30px;
+  font-weight:600;
+  transition:all .3s ease;
+}
+
+.thq-button-outline:hover{
+  background:var(--primary);
+  color:white;
+  transform:translateY(-3px);
+}
+
+/* Seller Zone Highlight */
+.navbar8-link31{
+  background:linear-gradient(90deg,var(--primary),var(--accent));
+  color:white !important;
+  border-radius:25px;
+  padding:8px 18px;
+  font-weight:600;
+  box-shadow:0 8px 20px rgba(142,45,226,.3);
+}
+
+/* ================= HERO ================= */
+
+.hero171-text1{
+  font-size:3.5rem;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero171-text2{
+  font-size:1.2rem;
+  opacity:.85;
+  max-width:600px;
+}
+
+.hero171-content2 img{
+  border-radius:16px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.1);
+}
+
+/* ================= FEATURES ================= */
+
+.features241-container2{
+  background:white;
+  border-radius:20px;
+  padding:40px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.05);
+}
+
+.features241-tab-horizontal1,
+.features241-tab-horizontal2,
+.features241-tab-horizontal3{
+  border-radius:16px;
+  padding:20px;
+  transition:.3s ease;
+}
+
+.features241-tab-horizontal1:hover,
+.features241-tab-horizontal2:hover,
+.features241-tab-horizontal3:hover{
+  background:linear-gradient(90deg,#fff0f5,#fffaf5);
+  box-shadow:0 8px 20px rgba(0,0,0,0.05);
+}
+
+/* ================= STEPS ================= */
+
+.steps21-container4,
+.steps21-container5,
+.steps21-container6,
+.steps21-container7{
+  border-radius:20px;
+  padding:30px;
+  background:white;
+  box-shadow:0 15px 35px rgba(0,0,0,0.05);
+  transition:.3s;
+}
+
+.steps21-container4:hover,
+.steps21-container5:hover,
+.steps21-container6:hover,
+.steps21-container7:hover{
+  transform:translateY(-5px);
+  box-shadow:0 20px 40px rgba(255,122,24,.15);
+}
+
+/* ================= PRICING ANNOUNCEMENT ================= */
+
+.pricing-announcement{
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:white;
+  text-align:center;
+  border-radius:30px;
+  margin:60px 20px;
+  box-shadow:0 20px 50px rgba(255,60,120,.3);
+}
+
+.pricing-announcement-title{
+  font-size:2.2rem;
+  font-weight:700;
+}
+
+.pricing-announcement-price{
+  font-size:1.3rem;
+  opacity:.9;
+}
+
+.pricing-announcement-desc{
+  opacity:.8;
+}
+
+/* ================= MOBILE MENU ================= */
+
+.navbar-menu{
+  background:linear-gradient(135deg,#ffffff,#fff6f0);
+  backdrop-filter:blur(15px);
+  box-shadow:0 15px 40px rgba(0,0,0,0.1);
+}
+
+.navbar-menu-link{
+  border-radius:12px;
+  transition:.3s;
+}
+
+.navbar-menu-link:hover{
+  background:linear-gradient(90deg,#fff0f5,#fffaf5);
+  transform:translateX(5px);
+}
+
+/* ================= FOOTER ================= */
+
+.footer4-footer7{
+  background:var(--dark);
+  color:white;
+}
+
+.footer4-logo2{
+  border-radius:12px;
+  box-shadow:0 6px 18px rgba(255,255,255,.1);
+}
+
+/* ================= TOAST ================= */
+
+.login-toast{
+  background:linear-gradient(90deg,var(--secondary),var(--primary));
+  border-radius:30px;
+  font-weight:500;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:768px){
+  .hero171-text1{
+    font-size:2.2rem;
+  }
+}
+</style>
+
+
   <div id="login-toast" class="login-toast">You need to login first</div>
 
   <script defer src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
