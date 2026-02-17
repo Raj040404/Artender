@@ -7,7 +7,7 @@
   <!-- Meta Information -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f97316">
+  <meta name="theme-color" content="#7c3aed">
 
   <!-- Progressive Web App (PWA) Configuration -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -42,8 +42,8 @@
       margin: 0;
       font-family: Inter, sans-serif;
       font-weight: 400;
-      color: var(--dl-color-theme-neutral-dark);
-      background: var(--dl-color-theme-neutral-light);
+      color: #1a0533;
+      background: #f5f0ff;
     }
 
     * {
@@ -96,17 +96,17 @@
       visibility: hidden;
       min-width: 250px;
       margin-left: -125px;
-      background-color: #ff4444;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
       color: #fff;
       text-align: center;
-      border-radius: 4px;
+      border-radius: 12px;
       padding: 16px;
       position: fixed;
       z-index: 10000;
       left: 50%;
       bottom: 30px;
       font-size: 17px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
       opacity: 0;
       transition: opacity 0.5s, bottom 0.5s;
     }
@@ -144,6 +144,337 @@
       document.head.appendChild(link);
     };
   </script>
+
+  <!-- ===================== COLOR OVERRIDES ===================== -->
+  <style>
+    /* ── Root palette ─────────────────────────────────────────── */
+    :root {
+      --color-deep:      #0d0620;   /* near-black indigo            */
+      --color-dark:      #1a0533;   /* deep violet                  */
+      --color-mid:       #2e0d5c;   /* rich purple                  */
+      --color-accent1:   #7c3aed;   /* electric violet              */
+      --color-accent2:   #db2777;   /* vivid magenta-pink           */
+      --color-accent3:   #06b6d4;   /* teal pop                     */
+      --color-gold:      #f59e0b;   /* warm amber/gold              */
+      --color-light:     #f5f0ff;   /* soft lavender background     */
+      --color-white:     #ffffff;
+      --gradient-main:   linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+      --gradient-hero:   linear-gradient(160deg, #0d0620 0%, #2e0d5c 50%, #0d0620 100%);
+      --gradient-card:   linear-gradient(145deg, #1a0533, #2e0d5c);
+      --gradient-gold:   linear-gradient(90deg, #f59e0b, #ef4444);
+    }
+
+    /* ── Global background & text ─────────────────────────────── */
+    body {
+      background: var(--color-light);
+      color: var(--color-dark);
+    }
+
+    /* ── Navbar ───────────────────────────────────────────────── */
+    .navbar8-container1,
+    .navbar8-navbar-interactive {
+      background: rgba(13, 6, 32, 0.96) !important;
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(124, 58, 237, 0.25) !important;
+    }
+
+    .navbar8-links1 a,
+    .navbar8-links1 span {
+      color: rgba(245, 240, 255, 0.85) !important;
+      transition: color 0.25s;
+    }
+
+    .navbar8-links1 a:hover span {
+      color: var(--color-accent3) !important;
+    }
+
+    /* Seller's Zone pill */
+    .navbar8-links1 a[href="/sellerregistration"] {
+      background: var(--gradient-gold) !important;
+      color: var(--color-white) !important;
+      border-radius: 6px !important;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35) !important;
+    }
+    .navbar8-links1 a[href="/sellerregistration"] span {
+      color: var(--color-white) !important;
+    }
+
+    /* Login / Signup buttons in navbar */
+    .navbar8-action11 {
+      background: var(--gradient-main) !important;
+      border: none !important;
+      color: var(--color-white) !important;
+      border-radius: 8px !important;
+      box-shadow: 0 4px 18px rgba(124, 58, 237, 0.45) !important;
+      font-weight: 600 !important;
+    }
+
+    .navbar8-action21 {
+      border: 2px solid var(--color-accent1) !important;
+      color: var(--color-accent1) !important;
+      border-radius: 8px !important;
+      background: transparent !important;
+      font-weight: 600 !important;
+      transition: all 0.25s;
+    }
+    .navbar8-action21:hover {
+      background: rgba(124, 58, 237, 0.15) !important;
+    }
+
+    /* ── Mobile hamburger menu ────────────────────────────────── */
+    .navbar-toggle {
+      background: rgba(13, 6, 32, 0.92) !important;
+      border: 1px solid rgba(124, 58, 237, 0.4) !important;
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3) !important;
+    }
+
+    .brush-stroke {
+      background: linear-gradient(90deg, var(--color-accent1), var(--color-accent2)) !important;
+    }
+
+    .navbar-menu {
+      background: var(--color-deep) !important;
+      border-right: 1px solid rgba(124, 58, 237, 0.3) !important;
+    }
+
+    .navbar-menu-link {
+      color: rgba(245, 240, 255, 0.85) !important;
+      border-bottom: 1px solid rgba(124, 58, 237, 0.12) !important;
+      transition: background 0.2s, color 0.2s;
+    }
+    .navbar-menu-link:hover {
+      background: rgba(124, 58, 237, 0.18) !important;
+      color: var(--color-accent3) !important;
+    }
+
+    /* Seller zone mobile badge */
+    .seller-zone-mobile {
+      background: rgba(245, 158, 11, 0.12) !important;
+    }
+    .seller-badge {
+      color: var(--color-gold) !important;
+      font-size: 0.72rem !important;
+      font-weight: 700 !important;
+    }
+
+    /* Auth section in mobile menu */
+    .navbar-menu-auth-divider {
+      color: rgba(245, 240, 255, 0.45) !important;
+    }
+    .navbar-menu-auth-divider::before,
+    .navbar-menu-auth-divider::after {
+      background: rgba(124, 58, 237, 0.25) !important;
+    }
+
+    .login-button {
+      background: var(--gradient-main) !important;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4) !important;
+    }
+    .signup-button {
+      background: linear-gradient(135deg, #06b6d4, #7c3aed) !important;
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35) !important;
+    }
+
+    /* ── Hero section ─────────────────────────────────────────── */
+    .hero171-header78 {
+      background: var(--gradient-hero) !important;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero171-header78::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 40%, rgba(124, 58, 237, 0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 60%, rgba(219, 39, 119, 0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero171-text1,
+    .hero171-text1 span {
+      color: var(--color-white) !important;
+      background: var(--gradient-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero171-text2,
+    .hero171-text2 span {
+      color: rgba(245, 240, 255, 0.78) !important;
+    }
+
+    /* ── Features section ─────────────────────────────────────── */
+    .features241-wrapper,
+    .features241-wrapper > div {
+      background: var(--color-white) !important;
+    }
+
+    .features241-tab-horizontal1,
+    .features241-tab-horizontal2,
+    .features241-tab-horizontal3 {
+      border-radius: 14px !important;
+      padding: 18px !important;
+      transition: all 0.3s ease;
+      background: transparent !important;
+    }
+
+    .features241-tab-horizontal1:hover,
+    .features241-tab-horizontal2:hover,
+    .features241-tab-horizontal3:hover {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.07), rgba(219, 39, 119, 0.07)) !important;
+      transform: translateY(-5px);
+    }
+
+    /* Active tab divider lines */
+    .features241-container3,
+    .features241-container4,
+    .features241-container5 {
+      background: var(--gradient-main) !important;
+    }
+
+    .features241-tabs-menu h2,
+    .features241-tabs-menu span {
+      color: var(--color-dark) !important;
+    }
+
+    /* ── How it works – steps ─────────────────────────────────── */
+    .steps21-container1 {
+      background: linear-gradient(180deg, #f5f0ff 0%, #ede9fe 100%) !important;
+    }
+
+    .steps21-section-header h2 {
+      color: var(--color-dark) !important;
+    }
+
+    .steps21-container4,
+    .steps21-container5,
+    .steps21-container6,
+    .steps21-container7 {
+      background: var(--color-white) !important;
+      border: 1px solid rgba(124, 58, 237, 0.18) !important;
+      border-radius: 16px !important;
+      box-shadow: 0 6px 28px rgba(124, 58, 237, 0.1) !important;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+    .steps21-container4:hover,
+    .steps21-container5:hover,
+    .steps21-container6:hover,
+    .steps21-container7:hover {
+      box-shadow: 0 12px 36px rgba(124, 58, 237, 0.22) !important;
+      transform: translateY(-4px);
+    }
+
+    .steps21-container4 h2,
+    .steps21-container5 h2,
+    .steps21-container6 h2,
+    .steps21-container7 h2 {
+      color: var(--color-accent1) !important;
+    }
+
+    .steps21-container4 span,
+    .steps21-container5 span,
+    .steps21-container6 span,
+    .steps21-container7 span {
+      color: #4b3d6e !important;
+    }
+
+    /* Step number labels */
+    .steps21-text15,
+    .steps21-text18,
+    .steps21-text21,
+    .steps21-text24 {
+      background: var(--gradient-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800 !important;
+      opacity: 0.18 !important;
+    }
+
+    /* ── Pricing / CTA banner ─────────────────────────────────── */
+    .pricing-announcement {
+      background: var(--gradient-hero) !important;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pricing-announcement::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 55% 60% at 15% 50%, rgba(219, 39, 119, 0.22) 0%, transparent 65%),
+        radial-gradient(ellipse 45% 55% at 85% 50%, rgba(6, 182, 212, 0.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .pricing-announcement-title {
+      color: var(--color-white) !important;
+    }
+
+    .pricing-announcement-price {
+      background: var(--gradient-gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700 !important;
+    }
+
+    .pricing-announcement-desc {
+      color: rgba(245, 240, 255, 0.72) !important;
+    }
+
+    /* CTA button */
+    .pricing-announcement-buttons .thq-button-filled {
+      background: var(--gradient-main) !important;
+      border: none !important;
+      color: var(--color-white) !important;
+      border-radius: 10px !important;
+      box-shadow: 0 6px 22px rgba(124, 58, 237, 0.5) !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.3px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .pricing-announcement-buttons .thq-button-filled:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.6) !important;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    .footer4-footer7 {
+      background: var(--color-deep) !important;
+      border-top: 1px solid rgba(124, 58, 237, 0.25) !important;
+    }
+
+    #Logout-buttons1 .navbar8-action11 {
+      background: var(--gradient-main) !important;
+      border: none !important;
+      color: var(--color-white) !important;
+      border-radius: 8px !important;
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4) !important;
+      font-weight: 600 !important;
+    }
+
+    #Logout-buttons1 .navbar8-action21 {
+      border: 2px solid var(--color-accent1) !important;
+      color: var(--color-accent1) !important;
+      border-radius: 8px !important;
+      background: transparent !important;
+      font-weight: 600 !important;
+    }
+
+    /* ── Toast notification ───────────────────────────────────── */
+    #login-toast {
+      background: linear-gradient(135deg, #7c3aed, #db2777) !important;
+      border-radius: 12px !important;
+      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.45) !important;
+      font-weight: 500 !important;
+    }
+  </style>
 </head>
 
 <body>
