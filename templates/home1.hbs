@@ -178,27 +178,39 @@
       border-bottom: 1px solid rgba(124, 58, 237, 0.25) !important;
     }
 
-    .navbar8-links1 a,
-    .navbar8-links1 span {
-      color: rgba(245, 240, 255, 0.85) !important;
-      transition: color 0.25s;
-    }
+  /* Fix navigation button visibility */
+.navbar8-links1 a {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 8px 16px !important;
+  border-radius: 6px !important;
+  transition: background-color 0.2s !important;
+}
 
-    .navbar8-links1 a:hover span {
-      color: var(--color-accent3) !important;
-    }
+.navbar8-links1 a:hover {
+  background: rgba(124, 58, 237, 0.2) !important;
+}
 
-    /* Seller's Zone pill */
-    .navbar8-links1 a[href="/sellerregistration"] {
-      background: var(--gradient-gold) !important;
-      color: var(--color-white) !important;
-      border-radius: 6px !important;
-      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35) !important;
-    }
-    .navbar8-links1 a[href="/sellerregistration"] span {
-      color: var(--color-white) !important;
-    }
+/* Ensure text contrast */
+.navbar8-links1 a span {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
 
+/* Make the Shop link stand out more */
+.navbar8-links1 a[href="/shop"] {
+  background: var(--gradient-main) !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3) !important;
+}
+
+/* Seller's Zone button adjustments */
+.navbar8-links1 a[href="/sellerregistration"] {
+  background: #FF9800 !important;
+  color: white !important;
+  font-weight: 600 !important;
+  margin: 0 10px !important;
+}
     /* Login / Signup buttons in navbar */
     .navbar8-action11 {
       background: var(--gradient-main) !important;
@@ -496,7 +508,7 @@
                     <span class="landing-text102">Participate in Competitions</span>
                   </fragment>
                   </a>
-                   <a href="/sellerregistration" class="navbar8-link31 thq-link thq-body-small" style="background-color: #FF9800; color: white; padding: 8px 16px; border-radius: 4px; margin: 0 10px; font-weight: 600;">
+                   <a href="/sellerregistration" class="navbar8-link31 thq-link thq-body-small"; color: white; padding: 8px 16px; border-radius: 4px; margin: 0 10px; font-weight: 600;">
               <fragment class="landing-fragment111">
                 <span class="landing-text111">Seller's Zone</span>
               </fragment>
