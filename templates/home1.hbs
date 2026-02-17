@@ -179,22 +179,42 @@
     }
 
   /* Fix navigation button visibility */
-.navbar8-links1 a {
+/* ULTRA SPECIFIC FIX - Force navigation buttons to be visible */
+.navbar8-links1 a,
+.navbar8-links1 a:link,
+.navbar8-links1 a:visited,
+.navbar8-links1 .thq-link,
+.navbar8-links1 .thq-body-small,
+nav.navbar8-links1 a {
   color: #ffffff !important;
+  background-color: transparent !important;
+  opacity: 1 !important;
   font-weight: 500 !important;
   padding: 8px 16px !important;
   border-radius: 6px !important;
   transition: background-color 0.2s !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
 }
 
 .navbar8-links1 a:hover {
   background: rgba(124, 58, 237, 0.2) !important;
 }
 
-/* Ensure text contrast */
-.navbar8-links1 a span {
+.navbar8-links1 a span,
+.navbar8-links1 .thq-link span,
+.navbar8-links1 .thq-body-small span {
   color: #ffffff !important;
   opacity: 1 !important;
+}
+
+/* Fix for Participate in Competitions link (no class) */
+.navbar8-links1 a[href="javascript:void(0)"] {
+  color: #ffffff !important;
+}
+
+/* Force override any possible inherited colors */
+.navbar8-desktop-menu nav.navbar8-links1 a {
+  color: white !important;
 }
 
 /* Make the Shop link stand out more */
@@ -202,6 +222,8 @@
   background: var(--gradient-main) !important;
   color: white !important;
   box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3) !important;
+  padding: 8px 16px !important;
+  border-radius: 6px !important;
 }
 
 /* Seller's Zone button adjustments */
@@ -209,6 +231,8 @@
   background: #FF9800 !important;
   color: white !important;
   font-weight: 600 !important;
+  padding: 8px 16px !important;
+  border-radius: 4px !important;
   margin: 0 10px !important;
 }
     /* Login / Signup buttons in navbar */
