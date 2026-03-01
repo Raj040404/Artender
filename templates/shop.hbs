@@ -314,22 +314,43 @@
   
 </div>
 
-<main class="about-main">
+<main class="shop-main">
 
-    <div class="coming-soon-wrapper">
-        <div class="coming-soon-content">
-            <h1 class="coming-title">Shop is Coming Soon</h1>
-            <p class="coming-subtitle">
-                A curated marketplace where original artworks meet passionate collectors.
-                Stay tuned — something beautiful is on its way.
-            </p>
+    <div class="shop-container">
 
-            <div class="paint-line"></div>
+        <h1 class="shop-title">Artender Shop</h1>
+
+        <div class="product-list">
+
+            <!-- Product 1 -->
+            <div class="product-card">
+                <img src="/images/i1.jpg" class="product-image">
+
+                <div class="product-info">
+                    <h3 class="product-name">Sunset Harmony</h3>
+                    <p class="product-artist">by Artist Name</p>
+                    <p class="product-price">₹1,200</p>
+                    <button class="product-btn">View Artwork</button>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <img src="/images/i2.jpg" class="product-image">
+
+                <div class="product-info">
+                    <h3 class="product-name">Floral Dream</h3>
+                    <p class="product-artist">by Artist Name</p>
+                    <p class="product-price">₹1,500</p>
+                    <button class="product-btn">View Artwork</button>
+                </div>
+            </div>
+
         </div>
+
     </div>
 
 </main>
-
 <style>
 /* ===== Shop Coming Soon — Artistic Theme ===== */
 
@@ -538,6 +559,123 @@
 .navbar-menu.open ~ .navbar-toggle .brush-stroke-3 {
     transform: rotate(-45deg) translate(6px, -6px);
     width: 100%;
+}
+    /* ===== SHOP PAGE ===== */
+
+.shop-main{
+    min-height:80vh;
+    padding:40px 20px;
+    background:#fff7ed;
+    display:flex;
+    justify-content:center;
+}
+
+.shop-container{
+    width:100%;
+    max-width:900px;
+}
+
+.shop-title{
+    font-size:36px;
+    font-weight:800;
+    margin-bottom:30px;
+    text-align:center;
+    background:linear-gradient(90deg,#f97316,#ea580c);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* Product list */
+.product-list{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+/* Product card */
+.product-card{
+    display:flex;
+    gap:20px;
+    align-items:center;
+    background:white;
+    border-radius:12px;
+    padding:16px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    transition:0.3s;
+}
+
+.product-card:hover{
+    transform:translateY(-2px);
+}
+
+/* Image */
+.product-image{
+    width:120px;
+    height:120px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+/* Info */
+.product-info{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.product-name{
+    font-size:20px;
+    font-weight:700;
+}
+
+.product-artist{
+    font-size:14px;
+    color:#6b7280;
+}
+
+.product-price{
+    font-size:18px;
+    font-weight:600;
+    color:#ea580c;
+}
+
+/* Button */
+.product-btn{
+    margin-top:6px;
+    padding:8px 14px;
+    background:#f97316;
+    color:white;
+    border-radius:6px;
+    font-size:14px;
+    cursor:pointer;
+}
+
+.product-btn:hover{
+    background:#ea580c;
+}
+
+/* Mobile responsiveness */
+
+@media(max-width:600px){
+
+.product-card{
+    flex-direction:row;
+    gap:12px;
+}
+
+.product-image{
+    width:90px;
+    height:90px;
+}
+
+.product-name{
+    font-size:16px;
+}
+
+.product-price{
+    font-size:16px;
+}
+
 }
 
 /* Mobile responsive adjustments */
