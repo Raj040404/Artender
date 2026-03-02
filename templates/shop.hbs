@@ -443,13 +443,7 @@
             transform: rotate(45deg) translate(6px, 6px);
             width: 100%;
         }
-        .shop-main{
-    min-height:80vh;
-    padding:40px 20px;
-    background:#fff7ed;
-    display:flex;
-    justify-content:center;
-}
+      
 
         .navbar-menu[style*="display: flex"]~.navbar-toggle .brush-stroke-2 {
             opacity: 0;
@@ -468,6 +462,73 @@
 
 .shop-buy-btn:hover{
     background:#ea580c !important;
+}
+        /* ===== SHOP PAGE WRAPPER (OLD STYLE BACKGROUND) ===== */
+
+.shop-main{
+    min-height:80vh;
+    padding:40px 20px;
+    background:#fff7ed;   /* same background as previous design */
+    display:flex;
+    justify-content:center;
+}
+
+/* Keep new layout width but center it like previous */
+.shop-container{
+    width:100%;
+    max-width:1100px;
+    margin:auto;
+    position:relative;
+    z-index:10;
+}
+
+/* Title same style as previous shop */
+.shop-title{
+    font-size:36px;
+    font-weight:800;
+    margin-bottom:20px;
+    text-align:center;
+    background:linear-gradient(90deg,#f97316,#ea580c);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* Header alignment */
+.shop-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+/* Search */
+.shop-search-wrapper{
+    display:flex;
+    align-items:center;
+    background:white;
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+.shop-search-input{
+    padding:10px 14px;
+    border:none;
+    outline:none;
+    width:220px;
+}
+
+.shop-search-btn{
+    padding:10px 12px;
+    background:#f97316;
+    color:white;
+    cursor:pointer;
+}
+
+.shop-search-btn:hover{
+    background:#ea580c;
 }
 
         @media (max-width: 768px) {
