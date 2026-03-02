@@ -18,6 +18,7 @@ const LogInSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
+  wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProductCollection' }]
 });
 
 // Schema for Competition Posts
@@ -90,16 +91,40 @@ const SellerRegistrationSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
+// Schema for Shop Products
+const ProductSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  description: { type: String },
+  price: { type: Number, required: true },
+  originalPrice: { type: Number }, // For strikethrough logic
+  discountPercentage: { type: Number },
+  rating: { type: Number, default: 0 },
+  reviewsCount: { type: Number, default: 0 },
+  imageUrl: { type: String, required: true },
+  isNewItem: { type: Boolean, default: false },
+});
 
-// Models
+// Schema for Orders (Purchased Items)
+const OrderSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "LogInCollection", required: true },
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: "ProductCollection", required: true },
+  amount: { type: Number, required: true }, // Store amount in rupees
+  paymentStatus: {
+    type: String, // "pending", "paid", "failed"
+    enum: ["pending", "paid", "failed"],
+    default: "pending"
+  },
+  merchantOrderId: { type: String },
+  phonepeOrderId: { type: String },
+}, { timestamps: true });
+
 const LogInCollection = mongoose.model("LogInCollection", LogInSchema);
 const CompetitionPostCollection = mongoose.model("CompetitionPostCollection", CompetitionPostSchema);
 const ProfileCollection = mongoose.model("ProfileCollection", ProfileSchema);
 const EnrollmentCollection = mongoose.model("EnrollmentCollection", EnrollmentSchema);
-const SellerRegistrationCollection = mongoose.model(
-  "SellerRegistrationCollection",
-  SellerRegistrationSchema
-);
+const SellerRegistrationCollection = mongoose.model("SellerRegistrationCollection", SellerRegistrationSchema);
+const ProductCollection = mongoose.model("ProductCollection", ProductSchema);
+const OrderCollection = mongoose.model("OrderCollection", OrderSchema);
 
 // If you want to use a separate DB for contests
 const conn = mongoose.connection.useDb("test");
@@ -112,4 +137,6 @@ module.exports = {
   ContestCollection,
   EnrollmentCollection,
   SellerRegistrationCollection,
+  ProductCollection,
+  OrderCollection,
 };

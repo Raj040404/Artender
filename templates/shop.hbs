@@ -2,53 +2,29 @@
 <html lang="en">
 
 <head>
-    <title>About</title>
-    <!-- Character Set & Viewport -->
+    <title>Artender Shop</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- Web App Capabilities -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-    <!-- Web App Manifest -->
     <link rel="manifest" href="/manifest.json">
-
-    <!-- Favicon (Browser Tabs) -->
     <link rel="icon" type="image/png" sizes="32x32" href="/logo/logo32.png">
-
-    <!-- Apple Touch Icons (iOS Home Screen) -->
-    <link rel="apple-touch-icon" sizes="192x192" href="/logo/logo192.png">
-    <link rel="apple-touch-icon" sizes="512x512" href="/logo/logo512.png">
-
-    <!-- Social Media & SEO Meta Tags -->
     <meta name="theme-color" content="#f97316">
-    <meta property="og:title" content="Shop-Artender">
-   <meta property="og:description" content="Discover Artender’s vision to empower artists across India through competitions, exhibitions, and a creative marketplace that connects art lovers with original artwork.">
-
-    <meta property="og:image" content="/logo/WhatsApp%20Image%202025-02-23%20at%2000.10.41_0364758d.jpg">
-    <meta property="og:url" content="http://www.artender.in">
-    <meta property="og:type" content="website">
-
-    <!-- Twitter Card for Social Sharing -->
-    <meta property="twitter:card" content="summary_large_image">
-
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style data-tag="reset-style-sheet">
         html {
-            line-height: 1.15;
+            line-height: 1.15
         }
 
         body {
-            margin: 0;
+            margin: 0
         }
 
         * {
             box-sizing: border-box;
             border-width: 0;
             border-style: solid;
-            -webkit-font-smoothing: antialiased;
+            -webkit-font-smoothing: antialiased
         }
 
         p,
@@ -66,11 +42,11 @@
         blockquote,
         figcaption {
             margin: 0;
-            padding: 0;
+            padding: 0
         }
 
         button {
-            background-color: transparent;
+            background-color: transparent
         }
 
         button,
@@ -81,12 +57,12 @@
             font-family: inherit;
             font-size: 100%;
             line-height: 1.15;
-            margin: 0;
+            margin: 0
         }
 
         button,
         select {
-            text-transform: none;
+            text-transform: none
         }
 
         button,
@@ -94,7 +70,7 @@
         [type="reset"],
         [type="submit"] {
             -webkit-appearance: button;
-            color: inherit;
+            color: inherit
         }
 
         button::-moz-focus-inner,
@@ -102,52 +78,27 @@
         [type="reset"]::-moz-focus-inner,
         [type="submit"]::-moz-focus-inner {
             border-style: none;
-            padding: 0;
+            padding: 0
         }
 
         button:-moz-focus,
         [type="button"]:-moz-focus,
         [type="reset"]:-moz-focus,
         [type="submit"]:-moz-focus {
-            outline: 1px dotted ButtonText;
+            outline: 1px dotted ButtonText
         }
 
         a {
             color: inherit;
-            text-decoration: inherit;
+            text-decoration: inherit
         }
 
         input {
-            padding: 2px 4px;
+            padding: 2px 4px
         }
 
         img {
-            display: block;
-        }
-
-        details {
-            display: block;
-            margin: 0;
-            padding: 0;
-        }
-
-        summary::-webkit-details-marker {
-            display: none;
-        }
-
-        [data-thq="accordion"] [data-thq="accordion-content"] {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-in-out;
-            padding: 0;
-        }
-
-        [data-thq="accordion"] details[data-thq="accordion-trigger"][open]+[data-thq="accordion-content"] {
-            max-height: 1000vh;
-        }
-
-        details[data-thq="accordion-trigger"][open] summary [data-thq="accordion-icon"] {
-            transform: rotate(180deg);
+            display: block
         }
 
         html {
@@ -157,7 +108,7 @@
     <style data-tag="default-style-sheet">
         html {
             font-family: Inter;
-            font-size: 16px;
+            font-size: 16px
         }
 
         body {
@@ -169,556 +120,365 @@
             line-height: 1.15;
             color: var(--dl-color-theme-neutral-dark);
             background: var(--dl-color-theme-neutral-light);
-
-            fill: var(--dl-color-theme-neutral-dark);
+            fill: var(--dl-color-theme-neutral-dark)
         }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
         data-tag="font" />
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap"
-        data-tag="font" />
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-        data-tag="font" />
     <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css" />
-    <!-- ... Existing meta tags and styles ... -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-    <!-- <link href="/public/css/home1.css" rel="stylesheet" /> -->
     <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/profile.css">
-    <link rel="stylesheet" href="/css/explore.css" />
+    <link rel="stylesheet" href="/css/home1.css" />
+    <link rel="stylesheet" href="/css/shop.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
-    <div>
-        <div class="landing-container">
-            <navbar8-wrapper class="navbar8-wrapper">
-                <!--Navbar8 component-->
-               <header class="navbar8-container1">
-    <div data-thq="thq-navbar" class="navbar8-navbar-interactive">
- 
-                        <img alt="logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg"
-                            class="navbar8-image1" />
-                        <div data-thq="thq-navbar-nav" class="navbar8-desktop-menu">
-                            <nav class="navbar8-links1">
-                                <a href="/home" class="navbar8-link11 thq-link thq-body-small">
-                                    <fragment class="landing-fragment104">
-                                        <span class="landing-text104">Home</span>
-                                    </fragment>
-                                </a>
-<!--                                 <a href="/explorecompetitions" class="navbar8-link11 thq-link thq-body-small">
-                                    <fragment class="landing-fragment104">
-                                        <span class="landing-text104">Explore Artworks</span>
-                                    </fragment>
-                                </a> -->
-                                <a href="/competitions" class="thq-link thq-body-small">
-                                    <fragment class="landing-fragment102">
-                                        <span class="landing-text102">Participate in Competitions</span>
-                                    </fragment>
-                                </a>
-                                       <a href="/sellerregistration" class="navbar8-link31 thq-link thq-body-small" style="background-color: #FF9800; color: white; padding: 8px 16px; border-radius: 4px; margin: 0 10px; font-weight: 600;">
-              <fragment class="landing-fragment111">
-                <span class="landing-text111">Seller's Zone</span>
-              </fragment>
-            </a>
-                                <a href="/profile" class="navbar8-link31 thq-link thq-body-small">
-                                    <fragment class="landing-fragment110">
-                                        <span class="landing-text110">Profile</span>
-                                    </fragment>
-                                </a>
-                                 <a href="/help" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
-    <fragment class="landing-fragment111">
-      <span class="landing-text111">Help</span>
-    </fragment>
-  </a>
-                            </nav>
-                            <div class="navbar8-buttons1">
-                                <a href="/logout">
-                                    <button class="navbar8-action11 thq-button-animated thq-button-filled">
-                                        <span>
-                                            <fragment class="landing-fragment101">
-                                                <span class="landing-text101">Logout</span>
-                                            </fragment>
-                                        </span>
-                                    </button>
-                                </a>
-                            </div>
-                            <div class="navbar8-container7 thq-box-shadow">
-                    </header>
+    <div class="landing-container">
+        <navbar8-wrapper class="navbar8-wrapper">
+            <header class="navbar8-container1">
+                <header data-thq="thq-navbar" class="navbar8-navbar-interactive">
+                    <img alt="logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg"
+                        class="navbar8-image1" />
+                    <div data-thq="thq-navbar-nav" class="navbar8-desktop-menu">
+                        <nav class="navbar8-links1">
+                            <a href="/competitions" class="thq-link thq-body-small">
+                                <fragment class="landing-fragment102"><span class="landing-text102">Participate in
+                                        Competitions</span></fragment>
+                            </a>
+                            <a href="/sellerregistration" class="navbar8-link31 thq-link thq-body-small"
+                                style="background-color: #FF9800; color: white; padding: 8px 16px; border-radius: 4px; margin: 0 10px; font-weight: 600;">
+                                <fragment class="landing-fragment111"><span class="landing-text111">Seller's Zone</span>
+                                </fragment>
+                            </a>
+                            <a href="/profile" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
+                                <fragment class="landing-fragment110"><span class="landing-text110">Profile</span>
+                                </fragment>
+                            </a>
+                            <a href="/about" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
+                                <fragment class="landing-fragment110"><span class="landing-text110">About us</span>
+                                </fragment>
+                            </a>
+                            <a href="/help" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
+                                <fragment class="landing-fragment111"><span class="landing-text111">Help</span>
+                                </fragment>
+                            </a>
+                            <a href="/shop" rel="noreferrer noopener" class="navbar8-link31 thq-link thq-body-small">
+                                <fragment class="landing-fragment111"><span class="landing-text111"
+                                        style="color:#FF9800;font-weight:bold;">Shop</span></fragment>
+                            </a>
+                        </nav>
+                        <div class="navbar8-buttons1">
+                            <a href="/logout">
+                                <button class="navbar8-action11 thq-button-animated thq-button-filled">
+                                    <span>
+                                        <fragment class="landing-fragment101"><span
+                                                class="landing-text101">Logout</span></fragment>
+                                    </span>
+                                </button>
+                            </a>
+                        </div>
+                        <div class="navbar8-mobile-menu">
+                            <div class="navbar8-container7 thq-box-shadow"></div>
+                        </div>
+                    </div>
                 </header>
-            </navbar8-wrapper>
-          <!-- Updated Artistic Menu Toggle Button -->
-<div class="navbar-toggle" onclick="toggleNavbar()">
-  <div class="artistic-menu-icon">
-    <div class="brush-stroke brush-stroke-1"></div>
-    <div class="brush-stroke brush-stroke-2"></div>
-    <div class="brush-stroke brush-stroke-3"></div>
-  </div>
-</div>
-<div id="navbarMenu" class="navbar-menu">
-  <nav class="navbar-menu-links">
-       <a href="/home" class="navbar-menu-link">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-      </svg>
-      <span>Home</span>
-    </a>
-<!--     <a href="/explorecompetitions" class="navbar-menu-link">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.49L17.5 6.5 9.99 9.99 6.5 17.5zm5.5-6.6c.61 0 1.1.49 1.1 1.1s-.49 1.1-1.1 1.1-1.1-.49-1.1-1.1.49-1.1 1.1-1.1z"/>
-      </svg>
-      <span>Explore Artworks</span>
-    </a> -->
-    <a href="/competitions" class="navbar-menu-link">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-        <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/>
-      </svg>
-      <span>Participate in Competitions</span>
-    </a>
-           <a href="/sellerregistration" class="navbar-menu-link seller-zone-mobile" onclick="return checkLoginForSellerZone(event)">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-        <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/>
-        <path d="M9.5 15.5l4-4-4-4L8 9.5l2.5 2.5L8 14.5z"/>
-      </svg>
-      <span>Seller's Zone</span>
-      <span class="seller-badge">(NEW)</span>
-    </a>
-    <a href="/profile" class="navbar-menu-link">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-      </svg>
-      <span>Profile</span>
-    </a>
-<!--     <a href="/about" class="navbar-menu-link">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
-      </svg>
-      <span>About Us</span> -->
-  
-    <a href="/help" class="navbar-menu-link">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
-      </svg>
-      <span>Help</span>
-    </a>
-    <a href="/logout">
-      <button class="navbar8-action11 thq-button-animated thq-button-filled" style="width: 100%;">
-        Logout
-      </button>
-    </a>
-  </nav>
-  
-</div>
+            </header>
+        </navbar8-wrapper>
 
-<main class="shop-main">
-
-    <div class="shop-container">
-
-        <h1 class="shop-title">Artender Shop</h1>
-
-        <div class="product-list">
-
-            <!-- Product 1 -->
-            <div class="product-card">
-                <img src="/images/i1.jpg" class="product-image">
-
-              <div class="product-info">
-    <h3 class="product-name"> Harmony</h3>
-    <p class="product-artist">by Shweta Singh</p>
-    <p class="product-price">₹1,200</p>
-    <span class="sold-out">Sold Out</span>
-</div>
+        <div class="navbar-toggle" onclick="toggleNavbar()">
+            <div class="artistic-menu-icon">
+                <div class="brush-stroke brush-stroke-1"></div>
+                <div class="brush-stroke brush-stroke-2"></div>
+                <div class="brush-stroke brush-stroke-3"></div>
             </div>
+        </div>
 
-            <!-- Product 2 -->
-            <div class="product-card">
-                <img src="/images/i2.jpg" class="product-image">
-<div class="product-info">
-    <h3 class="product-name">Kingfisher</h3>
-    <p class="product-artist">by Anshika</p>
-    <p class="product-price">₹1,200</p>
-   <span class="sold-out">Sold Out</span>
-</div>
-            </div>
-
+        <div id="navbarMenu" class="navbar-menu">
+            <nav class="navbar-menu-links">
+                <a href="/competitions" class="navbar-menu-link">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z" />
+                    </svg>
+                    <span>Participate in Competitions</span>
+                </a>
+                <a href="/sellerregistration" class="navbar-menu-link seller-zone-mobile">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path
+                            d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z" />
+                        <path d="M9.5 15.5l4-4-4-4L8 9.5l2.5 2.5L8 14.5z" />
+                    </svg>
+                    <span>Seller's Zone</span>
+                </a>
+                <a href="/profile" class="navbar-menu-link">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path
+                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
+                    <span>Profile</span>
+                </a>
+                <a href="/about" class="navbar-menu-link">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
+                    </svg>
+                    <span>About Us</span>
+                </a>
+                <a href="/shop" class="navbar-menu-link">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path
+                            d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.16 14h9.45c.75 0 1.41-.41 1.75-1.03L21 6H6.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 17.37 5.48 19 7 19h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L7.16 14z" />
+                    </svg>
+                    <span>Shop</span>
+                </a>
+                <div class="navbar-menu-auth-section" style="margin-top: 20px; text-align: center;">
+                    <a href="/logout">
+                        <button class="navbar8-action11 thq-button-animated thq-button-filled"
+                            style="width: 100%;">Logout</button>
+                    </a>
+                </div>
+            </nav>
         </div>
 
     </div>
 
-</main>
-<style>
-/* ===== Shop Coming Soon — Artistic Theme ===== */
+    <!-- ===== SHOP FRONTEND ===== -->
+    <!-- Fixed z-index and position relative to ensure buttons are clickable over any rogue nav backgrounds -->
+    <div class="shop-container" style="position: relative; z-index: 10;">
+        <div class="shop-header">
+            <h1 class="shop-title">EliteStore</h1>
+            <div class="shop-search-wrapper">
+                <input type="text" class="shop-search-input" placeholder="Search products...">
+                <button class="shop-search-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path
+                            d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
 
-.about-main{
-    min-height:80vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:40px 20px;
-    font-family:'Noto Sans', sans-serif;
-    background: linear-gradient(135deg, #fff7ed, #ffffff);
-}
+        <div class="shop-product-grid">
+            {{#each products}}
+            <div class="shop-product-card">
+                <div class="shop-img-container">
+                    <img src="{{this.imageUrl}}" alt="{{this.name}}" class="shop-product-img">
+                    {{#if this.isNewItem}}
+                    <span class="shop-badge shop-badge-new">NEW</span>
+                    {{/if}}
+                    {{#if this.discountPercentage}}
+                    <span class="shop-badge shop-badge-discount">-{{this.discountPercentage}}%</span>
+                    {{/if}}
+                    <button class="shop-wishlist-btn">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                            <path
+                                d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="shop-product-info">
+                    <h3 class="shop-product-title">{{this.name}}</h3>
+                    <div class="shop-product-rating">
+                        <div class="shop-stars" style="--rating: {{this.rating}};">
+                            ★★★★★
+                        </div>
+                        <span class="shop-reviews-count">({{this.reviewsCount}})</span>
+                    </div>
+                    <div class="shop-product-price-row">
+                        <span class="shop-price-current">₹{{this.price}}</span>
+                        {{#if this.originalPrice}}
+                        <span class="shop-price-original">₹{{this.originalPrice}}</span>
+                        {{/if}}
+                    </div>
+                    <button class="shop-buy-btn" style="position: relative; z-index: 20;"
+                        onclick="buyProduct('{{this._id}}')">Buy Now</button>
+                </div>
+            </div>
+            {{else}}
+            <div style="text-align:center; grid-column: 1 / -1; padding: 40px;">
+                <h2>No Products Found</h2>
+                <p>Please check back later.</p>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    <!-- ===== END SHOP FRONTEND ===== -->
 
-/* Wrapper */
-.coming-soon-wrapper{
-    text-align:center;
-    max-width:800px;
-    animation: fadeIn 1.2s ease-in-out;
-}
+    <footer4-wrapper class="footer4-wrapper">
+        <footer class="footer4-footer7 thq-section-padding">
+            <div class="footer4-max-width thq-section-max-width">
+                <div class="footer4-content">
+                    <div class="footer4-logo1">
+                        <img alt="Logo" src="/logo/WhatsApp Image 2025-02-23 at 00.10.41_0364758d.jpg"
+                            class="footer4-logo2" />
+                    </div>
+                </div>
+                <div class="navbar8-buttons1">
+                    <a href="/logout">
+                        <button class="navbar8-action11 thq-button-animated thq-button-filled">
+                            <span>Logout</span>
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </footer4-wrapper>
+    </div>
 
-/* Title */
-.coming-title{
-    font-size:48px;
-    font-weight:800;
-    background: linear-gradient(90deg, #f97316, #ea580c, #c2410c);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    margin-bottom:20px;
-    letter-spacing:1px;
-}
-
-/* Subtitle */
-.coming-subtitle{
-    font-size:18px;
-    color:#4b5563;
-    line-height:1.8;
-    margin-bottom:40px;
-}
-
-/* Artistic Paint Stroke */
-.paint-line{
-    height:6px;
-    width:200px;
-    margin:0 auto;
-    background: linear-gradient(90deg, #f97316, #fb923c, #fdba74);
-    border-radius:50px;
-    animation: expandLine 2s ease-in-out infinite alternate;
-}
-
-/* Animations */
-@keyframes expandLine{
-    from{ width:120px; opacity:0.6; }
-    to{ width:260px; opacity:1; }
-}
-
-@keyframes fadeIn{
-    from{ opacity:0; transform:translateY(20px); }
-    to{ opacity:1; transform:translateY(0); }
-}
-
-/* Responsive */
-@media(max-width:768px){
-    .coming-title{
-        font-size:32px;
-    }
-    .coming-subtitle{
-        font-size:16px;
-    }
-}
-</style>
-
-    <!-- ...existing code... -->
-                        <!-- ... your existing HTML content ... -->
-
+    <script defer="" src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
     <script>
         function toggleNavbar() {
-            const menu = document.getElementById("navbarMenu");
-            menu.classList.toggle("open");
+            const navbarMenu = document.getElementById("navbarMenu");
+            navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
+        }
+
+        // Check for success/error URL params
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get("success") === "true") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Payment Successful",
+                    text: "Your order has been placed successfully!",
+                });
+                // Remove param from URL
+                window.history.replaceState({}, document.title, "/shop");
+            }
+        });
+
+        async function buyProduct(productId) {
+            try {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Processing...',
+                        text: 'Initializing secure payment via PhonePe',
+                        allowOutsideClick: false,
+                        didOpen: () => { Swal.showLoading(); }
+                    });
+                } else {
+                    console.log('Processing payment...');
+                }
+
+                const response = await fetch('/api/create-shop-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productId })
+                });
+
+                const data = await response.json();
+                if (data.redirectUrl) {
+                    window.location.href = data.redirectUrl;
+                } else {
+                    console.error("Payment Error Response:", data);
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire('Error', data.error || data.message || 'Failed to initialize payment.', 'error');
+                    } else {
+                        alert(data.error || 'Failed to initialize payment.');
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Error', 'An unexpected error occurred connecting to the server.', 'error');
+                } else {
+                    alert('An unexpected error occurred.');
+                }
+            }
         }
     </script>
 
     <style>
-        .navbar-menu {
-            display: none;
-            flex-direction: column;
-            background-color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            position: absolute;
-            top: 60px;
-            right: 16px;
-            border-radius: 8px;
-            padding: 12px;
-            z-index: 999;
-        }
-
-        .navbar-menu.open {
-            display: flex;
-        }
-
-        .navbar-menu-link {
-            padding: 8px 12px;
-            text-decoration: none;
-            color: #333;
-            font-family: 'Noto Sans', sans-serif;
-        }
-
-        .navbar-menu-link:hover {
-            background-color: #f0f0f0;
-            border-radius: 6px;
-        }
-
+        /* Mobile nav overrides */
         .navbar-toggle {
             display: none;
-            position: absolute;
-            top: 18px;
-            right: 16px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
-        .navbar-toggle-icon {
-            width: 28px;
-            height: 28px;
+        .artistic-menu-icon {
+            position: relative;
+            width: 30px;
+            height: 24px;
         }
 
-        @media screen and (max-width: 768px) {
-            .navbar8-desktop-menu {
-                display: none;
+        .brush-stroke {
+            position: absolute;
+            height: 4px;
+            background: linear-gradient(90deg, #3399cc, #9966cc);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .brush-stroke-1 {
+            top: 0;
+            width: 100%;
+        }
+
+        .brush-stroke-2 {
+            top: 10px;
+            width: 80%;
+            right: 0;
+        }
+
+        .brush-stroke-3 {
+            top: 20px;
+            width: 60%;
+        }
+
+        .navbar-menu[style*="display: flex"]~.navbar-toggle .brush-stroke-1 {
+            transform: rotate(45deg) translate(6px, 6px);
+            width: 100%;
+        }
+
+        .navbar-menu[style*="display: flex"]~.navbar-toggle .brush-stroke-2 {
+            opacity: 0;
+            transform: translateX(10px);
+        }
+
+        .navbar-menu[style*="display: flex"]~.navbar-toggle .brush-stroke-3 {
+            transform: rotate(-45deg) translate(6px, -6px);
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-toggle {
+                display: flex;
+                width: 50px;
+                height: 50px;
+                top: 15px;
+                right: 15px;
             }
 
-            .navbar-toggle {
-                display: block;
+            .artistic-menu-icon {
+                width: 24px;
+                height: 20px;
+            }
+
+            .brush-stroke {
+                height: 3px;
+            }
+
+            .brush-stroke-2 {
+                top: 8px;
+            }
+
+            .brush-stroke-3 {
+                top: 16px;
             }
         }
     </style>
-<style>
-  /* Artistic menu button styles */
- /* Artistic menu button styles */
-.navbar-toggle {
-    /* Existing styles remain the same, but we add initial display: none */
-    display: none; /* ⬅️ Hides the button by default on large screens */
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.navbar-toggle:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-}
-
-.artistic-menu-icon {
-    position: relative;
-    width: 30px;
-    height: 24px;
-}
-
-.brush-stroke {
-    position: absolute;
-    height: 4px;
-    background: linear-gradient(90deg, #3399cc, #9966cc);
-    border-radius: 2px;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.brush-stroke-1 {
-    top: 0;
-    width: 100%;
-    transform-origin: center;
-}
-
-.brush-stroke-2 {
-    top: 10px;
-    width: 80%;
-    right: 0;
-    transform-origin: right;
-}
-
-.brush-stroke-3 {
-    top: 20px;
-    width: 60%;
-    transform-origin: center;
-}
-
-/* Animation when menu is open */
-.navbar-menu.open ~ .navbar-toggle .brush-stroke-1 {
-    transform: rotate(45deg) translate(6px, 6px);
-    width: 100%;
-}
-
-.navbar-menu.open ~ .navbar-toggle .brush-stroke-2 {
-    opacity: 0;
-    transform: translateX(10px);
-}
-
-.navbar-menu.open ~ .navbar-toggle .brush-stroke-3 {
-    transform: rotate(-45deg) translate(6px, -6px);
-    width: 100%;
-}
-    /* ===== SHOP PAGE ===== */
-
-.shop-main{
-    min-height:80vh;
-    padding:40px 20px;
-    background:#fff7ed;
-    display:flex;
-    justify-content:center;
-}
-
-.shop-container{
-    width:100%;
-    max-width:900px;
-}
-    .sold-out{
-    display:inline-block;
-    margin-top:6px;
-    padding:4px 10px;
-    background:#ef4444;
-    color:white;
-    font-size:13px;
-    border-radius:6px;
-    font-weight:600;
-}
-
-.shop-title{
-    font-size:36px;
-    font-weight:800;
-    margin-bottom:30px;
-    text-align:center;
-    background:linear-gradient(90deg,#f97316,#ea580c);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
-
-/* Product list */
-.product-list{
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-}
-
-/* Product card */
-.product-card{
-    display:flex;
-    gap:20px;
-    align-items:center;
-    background:white;
-    border-radius:12px;
-    padding:16px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
-    transition:0.3s;
-}
-
-.product-card:hover{
-    transform:translateY(-2px);
-}
-
-/* Image */
-.product-image{
-    width:120px;
-    height:120px;
-    object-fit:cover;
-    border-radius:8px;
-}
-
-/* Info */
-.product-info{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-}
-
-.product-name{
-    font-size:20px;
-    font-weight:700;
-}
-
-.product-artist{
-    font-size:14px;
-    color:#6b7280;
-}
-
-.product-price{
-    font-size:18px;
-    font-weight:600;
-    color:#ea580c;
-}
-
-/* Button */
-.product-btn{
-    margin-top:6px;
-    padding:8px 14px;
-    background:#f97316;
-    color:white;
-    border-radius:6px;
-    font-size:14px;
-    cursor:pointer;
-}
-
-.product-btn:hover{
-    background:#ea580c;
-}
-
-/* Mobile responsiveness */
-
-@media(max-width:600px){
-
-.product-card{
-    flex-direction:row;
-    gap:12px;
-}
-
-.product-image{
-    width:90px;
-    height:90px;
-}
-
-.product-name{
-    font-size:16px;
-}
-
-.product-price{
-    font-size:16px;
-}
-
-}
-
-/* Mobile responsive adjustments */
-@media (max-width: 768px) {
-    /* ⬅️ Only display the button on screens 768px wide or less */
-    .navbar-toggle {
-        display: flex; /* ⬅️ Shows the button on mobiles and tablets */
-        width: 50px;
-        height: 50px;
-        top: 15px;
-        right: 15px;
-    }
-
-    .artistic-menu-icon {
-        width: 24px;
-        height: 20px;
-    }
-
-    .brush-stroke {
-        height: 3px;
-    }
-
-    .brush-stroke-2 {
-        top: 8px;
-    }
-
-    .brush-stroke-3 {
-        top: 16px;
-    }
-}
-</style>
-
 </body>
 
 </html>
-
-

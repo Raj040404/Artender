@@ -4,7 +4,7 @@ const path = require("path");
 const hbs = require("hbs");
 const multer = require("multer");
 const session = require("express-session");
-const { LogInCollection, CompetitionPostCollection, ProfileCollection, ContestCollection, EnrollmentCollection, SellerRegistrationCollection } = require("./mongodb");
+const { LogInCollection, CompetitionPostCollection, ProfileCollection, ContestCollection, EnrollmentCollection, SellerRegistrationCollection, ProductCollection, OrderCollection } = require("./mongodb");
 const handlebars = require("hbs");
 const MongoStore = require("connect-mongo");
 const nodemailer = require("nodemailer");
@@ -82,7 +82,7 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      secure: process.env.NODE_ENV === "production", // Secure cookies in production
+      secure: false, // Set to false to allow HTTP logins on localhost
       sameSite: "lax"
     }
   })
@@ -329,8 +329,14 @@ app.get("/sellerregistration", requireLogin, async (req, res) => {
   }
 });
 
-app.get("/shop", requireLogin, (req, res) => {
-  res.render("shop");
+app.get("/shop", requireLogin, async (req, res) => {
+  try {
+    const products = await ProductCollection.find({}).lean();
+    res.render("shop", { products });
+  } catch (err) {
+    console.error("Error fetching products:", err);
+    res.status(500).send("Error loading shop.");
+  }
 });
 
 app.get("/paymentfailed", (req, res) => {
@@ -392,83 +398,82 @@ app.use(express.urlencoded({ extended: true }));
 app.post("/sellerregistration", requireLogin, async (req, res) => {
   console.log("=== SELLER REGISTRATION FORM SUBMITTED ===");
   console.log("Received form data:", req.body);
-  
+
   try {
     // Get form data
     const { name, age, address, mobileNumber } = req.body;
     const artworkCategory = req.body.artworkCategory || [];
 
-    
+
     // Debug log everything
     console.log("Name:", name);
     console.log("Age:", age);
     console.log("Address:", address);
     console.log("Mobile:", mobileNumber);
     console.log("Categories:", artworkCategory);
-    
+
     // Validate required fields
-   if (!name || !age || !address || !mobileNumber || artworkCategory.length === 0)
- {
+    if (!name || !age || !address || !mobileNumber || artworkCategory.length === 0) {
       console.log("❌ Missing required fields");
       return res.render("SellerRegistration", {
         error: "All fields are required. Please fill in all information."
       });
     }
-    
+
     // Check if already registered
-const existingRegistration = await SellerRegistrationCollection.findOne({
-  userId: req.session.userId,
-  paid: true
-});
+    const existingRegistration = await SellerRegistrationCollection.findOne({
+      userId: req.session.userId,
+      paid: true
+    });
 
-if (existingRegistration) {
-  console.log("❌ Already a paid seller:", existingRegistration);
+    if (existingRegistration) {
+      console.log("❌ Already a paid seller:", existingRegistration);
 
-  return res.render("SellerRegistration", {
-    error: "You are already registered as a seller on Artender."
-  });
-}
+      return res.render("SellerRegistration", {
+        error: "You are already registered as a seller on Artender."
+      });
+    }
 
-    
+
     // Create new seller registration
-// Check if any record exists for this user
-let seller = await SellerRegistrationCollection.findOne({
-  userId: req.session.userId
-});
+    // Check if any record exists for this user
+    let seller = await SellerRegistrationCollection.findOne({
+      userId: req.session.userId
+    });
 
-if (seller && seller.paid === false) {
-  // ✅ UPDATE old unpaid record
-  seller.name = name;
-  seller.age = parseInt(age);
-  seller.address = address;
-  seller.mobileNumber = mobileNumber;
-  seller.artworkCategory = artworkCategory;
+    if (seller && seller.paid === false) {
+      // ✅ UPDATE old unpaid record
+      seller.name = name;
+      seller.age = parseInt(age);
+      seller.address = address;
+      seller.mobileNumber = mobileNumber;
+      seller.artworkCategory = artworkCategory;
 
-  await seller.save();
-  console.log("♻️ Updated existing unpaid registration:", seller);
+      await seller.save();
+      console.log("♻️ Updated existing unpaid registration:", seller);
 
-} else if (!seller) {
-  // ✅ CREATE new record
-  seller = new SellerRegistrationCollection({
-    userId: req.session.userId,
-    name,
-    age: parseInt(age),
-    address,
-    mobileNumber,
-    artworkCategory,
-    paid: false
-  });
+    } else if (!seller) {
+      // ✅ CREATE new record
+      seller = new SellerRegistrationCollection({
+        userId: req.session.userId,
+        name,
+        age: parseInt(age),
+        address,
+        mobileNumber,
+        artworkCategory,
+        paid: false
+      });
 
-  await seller.save();
-  console.log("✅ Created new registration:", seller);
-}
+      await seller.save();
+      console.log("✅ Created new registration:", seller);
+    }
 
     // Redirect to success page
-   return res.render("sellerPayment", {
-  sellerId: seller._id
+    return res.render("sellerPayment", {
+      sellerId: seller._id
 
-});
-    
+    });
+
   } catch (error) {
     console.error("❌ Error saving seller registration:", error);
     res.render("SellerRegistration", {
@@ -512,17 +517,17 @@ app.post("/api/create-seller-phonepe-order", requireLogin, async (req, res) => {
     const { sellerId, phone } = req.body;
 
     const seller = await SellerRegistrationCollection.findOne({
-  _id: sellerId,
-  userId: req.session.userId
-});
+      _id: sellerId,
+      userId: req.session.userId
+    });
 
-if (!seller) {
-  return res.status(403).json({ error: "Unauthorized seller access" });
-}
+    if (!seller) {
+      return res.status(403).json({ error: "Unauthorized seller access" });
+    }
 
- if (seller.paid && seller.status === "paid") {
-  return res.status(400).json({ error: "Seller already paid" });
-}
+    if (seller.paid && seller.status === "paid") {
+      return res.status(400).json({ error: "Seller already paid" });
+    }
 
     const merchantOrderId = `SELLER_${sellerId}_${Date.now()}`;
 
@@ -535,33 +540,33 @@ if (!seller) {
     const accessToken = await getPhonePeAccessToken();
 
     const response = await axios.post(
-  `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`,
-  {
-    amount: 149 * 100,
-    expireAfter: 1200,
-    metaInfo: {
-      udf1: seller.name,
-      udf2: seller.mobileNumber,
-      udf3: "SellerRegistration",
-      udf4: req.session.email,
-      udf5: "Artender",
-    },
-    merchantOrderId,
-    paymentFlow: {
-      type: "PG_CHECKOUT",
-      message: "Seller Registration Payment",
-      merchantUrls: {
-        redirectUrl: "https://www.artender.in/seller/phonepe-callback",
+      `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`,
+      {
+        amount: 149 * 100,
+        expireAfter: 1200,
+        metaInfo: {
+          udf1: seller.name,
+          udf2: seller.mobileNumber,
+          udf3: "SellerRegistration",
+          udf4: req.session.email,
+          udf5: "Artender",
+        },
+        merchantOrderId,
+        paymentFlow: {
+          type: "PG_CHECKOUT",
+          message: "Seller Registration Payment",
+          merchantUrls: {
+            redirectUrl: "https://www.artender.in/seller/phonepe-callback",
+          },
+        },
       },
-    },
-  },
-  {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `O-Bearer ${accessToken}`,
-    },
-  }
-);
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `O-Bearer ${accessToken}`,
+        },
+      }
+    );
 
 
     // Save redirect + orderId
@@ -1488,6 +1493,241 @@ app.post("/reset-password", async (req, res) => {
 });
 
 
+
+// --- Shop Payment and Orders ---
+
+// Seed dummy data helper
+app.get("/seed-products", async (req, res) => {
+  try {
+    await ProductCollection.deleteMany({});
+    const dummyProducts = [
+      {
+        name: "Premium Headphones",
+        description: "High-quality noise-cancelling headphones.",
+        price: 4999,
+        originalPrice: 6999,
+        discountPercentage: 28,
+        rating: 4.5,
+        reviewsCount: 120,
+        imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80",
+        isNewItem: true
+      },
+      {
+        name: "Minimalist Watch",
+        description: "Elegant and simple aesthetic watch.",
+        price: 2499,
+        originalPrice: 3500,
+        discountPercentage: 28,
+        rating: 4.2,
+        reviewsCount: 85,
+        imageUrl: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=500&q=80",
+        isNewItem: false
+      },
+      {
+        name: "Smart Fitness Band",
+        description: "Track your health metrics daily.",
+        price: 1999,
+        originalPrice: 2499,
+        discountPercentage: 20,
+        rating: 4.0,
+        reviewsCount: 340,
+        imageUrl: "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b2?w=500&q=80",
+        isNewItem: true
+      },
+      {
+        name: "Leather Wallet",
+        description: "Classic brown leather wallet.",
+        price: 899,
+        originalPrice: 1299,
+        discountPercentage: 30,
+        rating: 4.7,
+        reviewsCount: 45,
+        imageUrl: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=500&q=80",
+        isNewItem: false
+      },
+      {
+        name: "Wireless Earbuds",
+        description: "Compact earbuds with great sound.",
+        price: 1599,
+        originalPrice: 2000,
+        discountPercentage: 20,
+        rating: 4.3,
+        reviewsCount: 220,
+        imageUrl: "https://images.unsplash.com/photo-1606220588913-b3aecb492f25?w=500&q=80",
+        isNewItem: true
+      },
+      {
+        name: "Classic Sunglasses",
+        description: "UV-protected classic aviators.",
+        price: 1299,
+        originalPrice: 1999,
+        discountPercentage: 35,
+        rating: 4.6,
+        reviewsCount: 95,
+        imageUrl: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500&q=80",
+        isNewItem: false
+      },
+      {
+        name: "Pro Camera Backpack",
+        description: "Durable backpack for photographers.",
+        price: 3499,
+        originalPrice: 4500,
+        discountPercentage: 22,
+        rating: 4.8,
+        reviewsCount: 310,
+        imageUrl: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80",
+        isNewItem: true
+      },
+      {
+        name: "Mechanical Keyboard",
+        description: "RGB mechanical keyboard for gaming.",
+        price: 3999,
+        originalPrice: 5500,
+        discountPercentage: 27,
+        rating: 4.9,
+        reviewsCount: 540,
+        imageUrl: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=500&q=80",
+        isNewItem: false
+      }
+    ];
+    await ProductCollection.insertMany(dummyProducts);
+    res.send("Dummy products seeded successfully. Go back to /shop");
+  } catch (err) {
+    res.status(500).send("Error seeding products: " + err.message);
+  }
+});
+
+// Create Shop Order
+app.post("/api/create-shop-order", requireLogin, async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const phone = req.session.phone || "9999999999"; // Fallback phone if missing from session
+
+    const product = await ProductCollection.findById(productId);
+    if (!product) return res.status(404).json({ error: "Product not found" });
+
+    const user = await LogInCollection.findById(req.session.userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const merchantOrderId = `SHOP_${product._id}_${Date.now()}`;
+
+    // Create a pending order in DB using backend secure price
+    const order = new OrderCollection({
+      userId: user._id,
+      productId: product._id,
+      amount: product.price,
+      paymentStatus: "pending",
+      merchantOrderId
+    });
+    await order.save();
+
+    const accessToken = await getPhonePeAccessToken();
+    const payUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`;
+
+    const requestHeaders = {
+      "Content-Type": "application/json",
+      Authorization: `O-Bearer ${accessToken}`,
+    };
+
+    const requestBody = {
+      amount: Number(product.price) * 100,
+      expireAfter: 1200,
+      metaInfo: {
+        udf1: user.name,
+        udf2: productId.toString(),
+        udf3: phone,
+        udf4: user.email,
+        udf5: "ArtenderShop",
+      },
+      paymentFlow: {
+        type: "PG_CHECKOUT",
+        message: `Payment for ${product.name}`,
+        merchantUrls: {
+          redirectUrl: process.env.SHOP_PHONEPE_CALLBACK_URL || "https://www.artender.in/shop/phonepe-callback",
+        },
+      },
+      merchantOrderId,
+    };
+
+    const response = await axios.post(payUrl, requestBody, { headers: requestHeaders });
+    const data = response.data;
+
+    // Save PhonePe orderId
+    order.phonepeOrderId = data?.orderId || null;
+    await order.save();
+
+    if (data?.redirectUrl) {
+      return res.json({ redirectUrl: data.redirectUrl, orderId: merchantOrderId });
+    } else {
+      return res.status(500).json({ error: "Failed to create PhonePe payment", details: data });
+    }
+  } catch (err) {
+    console.error("[create-shop-order] Error:", err.response?.data || err.message);
+    res.status(500).json({ error: "Failed to create shop order", details: err.response?.data || err.message });
+  }
+});
+
+app.get("/shop/phonepe-callback", async (req, res) => {
+  let { orderId, merchantOrderId } = req.query;
+
+  try {
+    if (!merchantOrderId && !orderId) {
+      return res.redirect("/paymentfailed?reason=Missing+orderId");
+    }
+
+    const accessToken = await getPhonePeAccessToken();
+    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${merchantOrderId || orderId}/status?details=false`;
+
+    async function checkStatus() {
+      const response = await axios.get(statusUrl, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `O-Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    }
+
+    let statusResponse = await checkStatus();
+
+    function resolveState(resp) {
+      const nested = resp?.paymentDetails?.[0]?.state;
+      const top = resp?.state;
+      if (nested === "SUCCESS" || nested === "COMPLETED") return "SUCCESS";
+      if (top === "SUCCESS" || top === "COMPLETED") return "SUCCESS";
+      if (nested === "PENDING" || top === "PENDING") return "PENDING";
+      return "FAILED";
+    }
+
+    let paymentState = resolveState(statusResponse);
+
+    if (paymentState === "PENDING") {
+      await new Promise(r => setTimeout(r, 2000));
+      statusResponse = await checkStatus();
+      paymentState = resolveState(statusResponse);
+    }
+
+    if (paymentState === "SUCCESS") {
+      await OrderCollection.findOneAndUpdate(
+        { merchantOrderId: statusResponse?.merchantOrderId || merchantOrderId },
+        { $set: { paymentStatus: "paid", phonepeOrderId: orderId || statusResponse?.orderId } }
+      );
+      return res.redirect("/shop?success=true");
+    } else if (paymentState === "PENDING") {
+      return res.redirect(`/paymentpending?orderId=${merchantOrderId}`);
+    } else {
+      await OrderCollection.findOneAndUpdate(
+        { merchantOrderId: statusResponse?.merchantOrderId || merchantOrderId },
+        { $set: { paymentStatus: "failed", phonepeOrderId: orderId || statusResponse?.orderId } }
+      );
+      const reason = statusResponse?.message || "Payment failed";
+      return res.redirect(`/paymentfailed?reason=${encodeURIComponent(reason)}`);
+    }
+  } catch (err) {
+    console.error("[shop-phonepe-callback] Error:", err.response?.data || err.message);
+    return res.redirect(`/paymentfailed?reason=${encodeURIComponent(err.message)}`);
+  }
+});
 
 // Start the server
 const PORT = process.env.PORT || 3000;
