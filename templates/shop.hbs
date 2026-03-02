@@ -245,7 +245,8 @@
 
     <!-- ===== SHOP FRONTEND ===== -->
     <!-- Fixed z-index and position relative to ensure buttons are clickable over any rogue nav backgrounds -->
-    <div class="shop-container" style="position: relative; z-index: 10;">
+   <div class="shop-main">
+<div class="shop-container" style="position: relative; z-index: 10;">
         <div class="shop-header">
             <h1 class="shop-title">EliteStore</h1>
             <div class="shop-search-wrapper">
@@ -302,6 +303,7 @@
             </div>
             {{/each}}
         </div>
+</div>
     </div>
     <!-- ===== END SHOP FRONTEND ===== -->
 
@@ -441,6 +443,13 @@
             transform: rotate(45deg) translate(6px, 6px);
             width: 100%;
         }
+        .shop-main{
+    min-height:80vh;
+    padding:40px 20px;
+    background:#fff7ed;
+    display:flex;
+    justify-content:center;
+}
 
         .navbar-menu[style*="display: flex"]~.navbar-toggle .brush-stroke-2 {
             opacity: 0;
@@ -451,6 +460,15 @@
             transform: rotate(-45deg) translate(6px, -6px);
             width: 100%;
         }
+        .shop-buy-btn{
+    background:#f97316 !important;
+    color:white;
+    border:none;
+}
+
+.shop-buy-btn:hover{
+    background:#ea580c !important;
+}
 
         @media (max-width: 768px) {
             .navbar-toggle {
