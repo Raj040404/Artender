@@ -37,14 +37,26 @@
       line-height: 1.15;
       scroll-behavior: smooth;
     }
+    :root{
+  --primary:#ff7a18;
+  --secondary:#8e44ad;
+  --accent:#1abc9c;
 
-    body {
-      margin: 0;
-      font-family: Inter, sans-serif;
-      font-weight: 400;
-      color: var(--dl-color-theme-neutral-dark);
-      background: var(--dl-color-theme-neutral-light);
-    }
+  --bg:#fffaf5;
+  --card:#ffffff;
+
+  --text-dark:#2c2c2c;
+  --text-light:#666;
+
+  --gradient:linear-gradient(135deg,#ff7a18,#8e44ad);
+}
+
+   body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:#fffaf5;
+  color:#2c2c2c;
+}
 
     * {
       box-sizing: border-box;
@@ -58,9 +70,6 @@
     ul,
     pre,
     div,
-    h1,
-    h2,
-    h3,
     h4,
     h5,
     h6,
@@ -70,6 +79,10 @@
       margin: 0;
       padding: 0;
     }
+    h1,h2,h3{
+  font-family:'Playfair Display',serif;
+  letter-spacing:0.5px;
+}
 
     button {
       background-color: transparent;
@@ -122,6 +135,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400..700&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  
 
   <!-- Custom Styles -->
   <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css">
@@ -719,6 +734,58 @@
       font-size: 1.1rem;
       border-radius: 8px;
     }
+    .navbar8-navbar-interactive{
+  background:#ffffff;
+  border-bottom:1px solid #eee;
+}
+
+.navbar8-links1 a{
+  color:var(--text-dark);
+  font-weight:500;
+}
+
+.navbar8-links1 a:hover{
+  color:var(--primary);
+}
+    .thq-button-filled{
+  background:var(--gradient);
+  color:white;
+  border:none;
+  border-radius:8px;
+}
+
+.thq-button-filled:hover{
+  opacity:0.9;
+  transform:translateY(-2px);
+}
+
+.thq-button-outline{
+  border:2px solid var(--primary);
+  color:var(--primary);
+  border-radius:8px;
+}
+
+.thq-button-outline:hover{
+  background:var(--primary);
+  color:white;
+}
+    .footer4-footer7{
+  background:#1f1f1f;
+  color:#eee;
+}
+
+.footer4-footer7 a{
+  color:#ccc;
+}
+
+.footer4-footer7 a:hover{
+  color:#ff7a18;
+}
+    .login-toast{
+  background:var(--gradient);
+  border-radius:10px;
+  font-weight:500;
+}
   </style>
 
   <style>
