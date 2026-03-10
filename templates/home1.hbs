@@ -809,16 +809,58 @@
   border-color:var(--primary);
   box-shadow:0 10px 25px rgba(0,0,0,0.08);
 }
-    .thq-card{
-  background:#ffffff;
-  border-radius:14px;
-  border:1px solid #eee;
-  transition:all .3s ease;
+.thq-card{
+  background: linear-gradient(145deg, #ffffff, #f8fdff);
+  border-radius:16px;
+  border:1px solid rgba(0, 200, 255, 0.15);
+  padding:20px;
+
+  transition:all .35s ease;
+  position:relative;
+  overflow:hidden;
+
+  box-shadow:
+    0 6px 18px rgba(0,0,0,0.05),
+    0 2px 6px rgba(0,200,255,0.05);
 }
 
+/* subtle artistic gradient glow */
+.thq-card::before{
+  content:"";
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:radial-gradient(circle at center,
+    rgba(0,255,255,0.08),
+    transparent 60%);
+  opacity:0;
+  transition:opacity .4s ease;
+}
+
+/* hover effect */
 .thq-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 12px 30px rgba(0,0,0,0.1);
+  transform:translateY(-8px) scale(1.01);
+
+  border-color:rgba(0, 200, 255, 0.4);
+
+  box-shadow:
+    0 18px 45px rgba(0,0,0,0.12),
+    0 8px 25px rgba(0,200,255,0.15);
+}
+
+.thq-card:hover::before{
+  opacity:1;
+}
+    .thq-card::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:4px;
+  background:linear-gradient(90deg,#00d4ff,#3a7bd5,#00ffa6);
 }
   </style>
 
