@@ -39,6 +39,20 @@
     html {
       line-height: 1.15;
     }
+     :root{
+  --primary:#ff7a18;
+  --secondary:#8e44ad;
+  --accent:#1abc9c;
+
+  --bg:#fffaf5;
+  --card:#ffffff;
+
+  --text-dark:#2c2c2c;
+  --text-light:#666;
+
+  --gradient:linear-gradient(135deg,#ff7a18,#8e44ad);
+}
+
 
     body{
   margin:0;
@@ -1258,6 +1272,28 @@ border-bottom:1px solid rgba(0,0,0,0.05);
 
 .navbar8-links1 a:hover{
   color:var(--primary);
+}
+  .thq-button-filled{
+  background:var(--gradient);
+  color:white;
+  border:none;
+  border-radius:8px;
+}
+
+.thq-button-filled:hover{
+  opacity:0.9;
+  transform:translateY(-2px);
+}
+
+.thq-button-outline{
+  border:2px solid var(--primary);
+  color:var(--primary);
+  border-radius:8px;
+}
+
+.thq-button-outline:hover{
+  background:var(--primary);
+  color:white;
 }
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
