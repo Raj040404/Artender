@@ -803,16 +803,41 @@ border-bottom:1px solid rgba(0,0,0,0.05);
   max-width:650px;
 }
 /* default card */
+/* base card style */
 .steps21-container3 .thq-card{
-  background:#ffffff;
+  background:linear-gradient(145deg,#ffffff,#f9fafc);
+  border-radius:18px;
+  border:1px solid rgba(0,0,0,0.06);
+  padding:28px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  transition:all .35s ease;
 }
 
-/* alternate cyan cards */
+/* premium alternate cards */
 .steps21-container3 .thq-card:nth-child(even){
-  background:linear-gradient(135deg,#e6fbff,#c8f4ff);
-  border:1px solid rgba(0,200,255,0.25);
+  background:linear-gradient(145deg,#f4f1ff,#ebe6ff);
+  border:1px solid rgba(120,90,255,0.2);
 }
 
+/* hover effect */
+.steps21-container3 .thq-card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 20px 50px rgba(0,0,0,0.12);
+}
+    .steps21-container3 label{
+  font-size:52px;
+  font-weight:700;
+  opacity:0.2;
+}
+    .steps21-container3 .thq-card::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:3px;
+  background:linear-gradient(90deg,#ff7a18,#ffb347,#7f5af0);
+}
   </style>
 
   <style>
