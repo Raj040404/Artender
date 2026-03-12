@@ -504,9 +504,10 @@
         <div class="steps21-container1 thq-section-padding">
           <div class="steps21-max-width thq-section-max-width">
             <div class="steps21-container2 thq-grid-2">
-              <div class="steps21-section-header">
-                <h2 class="thq-heading-2">How it works</h2>
-              </div>
+               <div class="how-heading">
+      <h2 class="steps21-text10">How it works</h2>
+    </div>
+
               <div class="steps21-container3">
                 <div class="steps21-container4 thq-card">
                   <h2 class="thq-heading-2">
@@ -881,12 +882,18 @@ border-bottom:1px solid rgba(0,0,0,0.05);
 }
 
 /* Graffiti decoration */
+.how-heading{
+  position:relative;
+  z-index:5;
+  background:#f3e9dd; /* same color as section background */
+  padding-bottom:20px;
+}
+
 .steps21-container1::after{
   content:"";
   position:absolute;
-
   left:40px;
-  bottom:40px;   /* keeps graffiti below the heading */
+  top:180px;
 
   width:540px;
   height:540px;
@@ -894,15 +901,11 @@ border-bottom:1px solid rgba(0,0,0,0.05);
   background:url("/images/Graffiti.png") no-repeat center;
   background-size:contain;
 
-  opacity:0.7;
+  opacity:0.75;
   transform:rotate(-8deg);
 
   pointer-events:none;
   z-index:0;
-}
-    .steps21-container2{
-  position:relative;
-  z-index:2;
 }
     @media (max-width:768px){
   .steps21-container1::after{
