@@ -886,16 +886,17 @@ border-bottom:1px solid rgba(0,0,0,0.05);
   position:absolute;
 
   left:40px;
-  top:50%;
-  transform:translateY(-50%) rotate(-8deg);
+  bottom:40px;   /* keeps graffiti below the heading */
 
-  width:420px;
-  height:420px;
+  width:540px;
+  height:540px;
 
   background:url("/images/Graffiti.png") no-repeat center;
   background-size:contain;
 
-  opacity:0.65;
+  opacity:0.7;
+  transform:rotate(-8deg);
+
   pointer-events:none;
   z-index:0;
 }
