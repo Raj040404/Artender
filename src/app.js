@@ -4,7 +4,7 @@ const path = require("path");
 const hbs = require("hbs");
 const multer = require("multer");
 const session = require("express-session");
-const { LogInCollection, CompetitionPostCollection, ProfileCollection, ContestCollection, EnrollmentCollection, SellerRegistrationCollection, ProductCollection, OrderCollection } = require("./mongodb");
+const { LogInCollection, CompetitionPostCollection, ProfileCollection, ContestCollection, EnrollmentCollection, SellerRegistrationCollection, ProductCollection, OrderCollection, CertificateCollection } = require("./mongodb");
 const handlebars = require("hbs");
 const MongoStore = require("connect-mongo");
 const nodemailer = require("nodemailer");
@@ -298,6 +298,28 @@ app.post("/login", async (req, res) => {
   } catch (err) {
     console.error("Error logging in:", err);
     res.status(500).send("Error logging in. Please try again later.");
+  }
+});
+app.get("/certificate/:certificateId", async (req, res) => {
+  try {
+
+    const certId = req.params.certificateId;
+
+    const certificate = await CertificateCollection.findOne({
+      certificateId: certId
+    });
+
+    if (!certificate) {
+      return res.render("certificateInvalid");
+    }
+
+    res.render("certificateVerified", {
+      certificate
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
   }
 });
 
