@@ -118,6 +118,14 @@ const OrderSchema = new mongoose.Schema({
   phonepeOrderId: { type: String },
 }, { timestamps: true });
 
+const CertificateSchema = new mongoose.Schema({
+  certificateId: String,
+  name: String,
+  event: String,
+  rank: String,
+  date: String
+});
+
 const LogInCollection = mongoose.model("LogInCollection", LogInSchema);
 const CompetitionPostCollection = mongoose.model("CompetitionPostCollection", CompetitionPostSchema);
 const ProfileCollection = mongoose.model("ProfileCollection", ProfileSchema);
@@ -125,6 +133,8 @@ const EnrollmentCollection = mongoose.model("EnrollmentCollection", EnrollmentSc
 const SellerRegistrationCollection = mongoose.model("SellerRegistrationCollection", SellerRegistrationSchema);
 const ProductCollection = mongoose.model("ProductCollection", ProductSchema);
 const OrderCollection = mongoose.model("OrderCollection", OrderSchema);
+const CertificateCollection = mongoose.model("certificates", CertificateSchema);
+
 
 // If you want to use a separate DB for contests
 const conn = mongoose.connection.useDb("test");
@@ -139,4 +149,5 @@ module.exports = {
   SellerRegistrationCollection,
   ProductCollection,
   OrderCollection,
+  CertificateCollection 
 };
