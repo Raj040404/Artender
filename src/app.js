@@ -331,11 +331,13 @@ app.get("/completeenrollment", requireLogin, (req, res) => {
   const contestId = req.query.contestId || "";
   res.render("completeenrollment", { contestId });
 });
-app.get('/cart', async (req,res)=>{
+app.get('/cart', requireLogin, async (req,res)=>{
 
     const userId = req.session.userId;
 
-    const cart = await Cart.findOne({userId}).populate('items.product');
+    const cart = await CartCollection
+        .findOne({userId})
+        .populate('items.product');
 
     res.render('cart',{
         items: cart ? cart.items : []
@@ -550,10 +552,10 @@ app.post('/api/cart/add', async (req,res)=>{
         const userId = req.session.userId;
         const {productId} = req.body;
 
-        let cart = await Cart.findOne({userId});
+        let cart = await CartCollection.findOne({userId});
 
         if(!cart){
-            cart = new Cart({
+            cart = new CartCollection({
                 userId,
                 items:[]
             });
@@ -581,28 +583,59 @@ app.post('/api/cart/add', async (req,res)=>{
     }
 
 });
-app.post('/api/cart/checkout', async (req,res)=>{
+app.post('/api/cart/checkout', requireLogin, async (req, res) => {
+
+  try {
 
     const userId = req.session.userId;
 
-    const cart = await Cart.findOne({userId}).populate('items.product');
+    const cart = await CartCollection
+      .findOne({ userId })
+      .populate('items.product');
 
-    if(!cart || cart.items.length === 0){
-        return res.json({error:"Cart empty"});
+    if (!cart || cart.items.length === 0) {
+      return res.json({ success: false, message: "Cart is empty" });
     }
 
-    let total = 0;
+    let totalAmount = 0;
 
-    cart.items.forEach(item=>{
-        total += item.product.price * item.quantity;
+    cart.items.forEach(item => {
+      totalAmount += item.product.price * item.quantity;
     });
 
-    // call your existing PhonePe function here
-    const payment = await createPhonePePayment(total);
+    // convert to paise (PhonePe requires paise)
+    const amountInPaise = totalAmount * 100;
+
+    // create merchant order id
+    const merchantOrderId = "ORDER_" + Date.now();
+
+    // Create an order entry for tracking
+    const order = new OrderCollection({
+      userId: userId,
+      productId: cart.items[0].product._id, // first product (for compatibility)
+      amount: totalAmount,
+      paymentStatus: "pending",
+      merchantOrderId: merchantOrderId
+    });
+
+    await order.save();
+
+    // Redirect user to your existing shop payment route
+    res.json({
+      success: true,
+      redirectUrl: `/shop/pay/${merchantOrderId}/${amountInPaise}`
+    });
+
+  } catch (err) {
+
+    console.error("Cart checkout error:", err);
 
     res.json({
-        redirectUrl:payment.redirectUrl
+      success: false,
+      message: "Checkout failed"
     });
+
+  }
 
 });
 
