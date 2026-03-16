@@ -331,7 +331,17 @@ app.get("/completeenrollment", requireLogin, (req, res) => {
   const contestId = req.query.contestId || "";
   res.render("completeenrollment", { contestId });
 });
+app.get('/cart', async (req,res)=>{
 
+    const userId = req.session.userId;
+
+    const cart = await Cart.findOne({userId}).populate('items.product');
+
+    res.render('cart',{
+        items: cart ? cart.items : []
+    });
+
+});
 app.get("/sellerregistration", requireLogin, async (req, res) => {
   try {
     const existingRegistration = await SellerRegistrationCollection.findOne({
@@ -532,6 +542,68 @@ app.get("/seller-success", requireLogin, async (req, res) => {
     console.error("Error loading seller success page:", err);
     res.redirect("/sellerregistration");
   }
+});
+app.post('/api/cart/add', async (req,res)=>{
+
+    try{
+
+        const userId = req.session.userId;
+        const {productId} = req.body;
+
+        let cart = await Cart.findOne({userId});
+
+        if(!cart){
+            cart = new Cart({
+                userId,
+                items:[]
+            });
+        }
+
+        const existing = cart.items.find(i=>i.product.toString() === productId);
+
+        if(existing){
+            existing.quantity += 1;
+        }else{
+            cart.items.push({
+                product:productId,
+                quantity:1
+            });
+        }
+
+        await cart.save();
+
+        res.json({success:true});
+
+    }catch(err){
+
+        res.json({success:false,message:"Cart error"});
+
+    }
+
+});
+app.post('/api/cart/checkout', async (req,res)=>{
+
+    const userId = req.session.userId;
+
+    const cart = await Cart.findOne({userId}).populate('items.product');
+
+    if(!cart || cart.items.length === 0){
+        return res.json({error:"Cart empty"});
+    }
+
+    let total = 0;
+
+    cart.items.forEach(item=>{
+        total += item.product.price * item.quantity;
+    });
+
+    // call your existing PhonePe function here
+    const payment = await createPhonePePayment(total);
+
+    res.json({
+        redirectUrl:payment.redirectUrl
+    });
+
 });
 
 app.post("/api/create-seller-phonepe-order", requireLogin, async (req, res) => {
