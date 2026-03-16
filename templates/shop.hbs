@@ -607,7 +607,31 @@ border-radius:12px;
 max-width:900px;
 width:90%;
 position:relative;
+
+max-height:90vh;        /* prevents modal from exceeding screen */
+overflow-y:auto;        /* enables vertical scrolling */
+
 animation:fadeIn .3s ease;
+}
+        #modalDescription{
+margin-top:10px;
+line-height:1.6;
+color:#444;
+
+max-height:200px;
+overflow-y:auto;
+padding-right:5px;
+}
+        .product-modal-info{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+#modalBuyBtn{
+margin-top:auto;
+position:sticky;
+bottom:0;
 }
 
 .product-modal-grid{
