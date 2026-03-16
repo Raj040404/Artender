@@ -313,6 +313,18 @@
                     </div>
                     <button class="shop-buy-btn" style="position: relative; z-index: 20;"
                         onclick="buyProduct('{{this._id}}')">Buy Now</button>
+                    <button class="shop-details-btn"
+        onclick="viewDetails(
+            '{{this.name}}',
+            `{{this.description}}`,
+            '{{this.price}}',
+            '{{this.originalPrice}}',
+            '{{this.imageUrl}}',
+            '{{this.rating}}',
+            '{{this.reviewsCount}}'
+        )">
+        View Details
+    </button>
                 </div>
             </div>
             {{else}}
@@ -323,6 +335,46 @@
             {{/each}}
         </div>
     </div>
+    <!-- PRODUCT DETAILS MODAL -->
+<div id="productModal" class="product-modal">
+
+  <div class="product-modal-content">
+
+    <span class="product-modal-close" onclick="closeProductModal()">&times;</span>
+
+    <div class="product-modal-grid">
+
+        <div class="product-modal-image">
+            <img id="modalImage" src="">
+        </div>
+
+        <div class="product-modal-info">
+
+            <h2 id="modalTitle"></h2>
+
+            <div class="product-modal-rating">
+                ⭐ <span id="modalRating"></span>
+                <span id="modalReviews"></span>
+            </div>
+
+            <p id="modalDescription"></p>
+
+            <div class="product-modal-price">
+                <span class="modal-price-current" id="modalPrice"></span>
+                <span class="modal-price-original" id="modalOriginalPrice"></span>
+            </div>
+
+            <button id="modalBuyBtn" class="shop-buy-btn">
+                Buy Now
+            </button>
+
+        </div>
+
+    </div>
+
+  </div>
+
+</div>
     <!-- ===== END SHOP FRONTEND ===== -->
 
     <footer4-wrapper class="footer4-wrapper">
@@ -352,6 +404,22 @@
             const navbarMenu = document.getElementById("navbarMenu");
             navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
         }
+        function viewDetails(name, description, price, originalPrice, image, rating, reviews){
+
+    document.getElementById("modalTitle").innerText = name;
+    document.getElementById("modalDescription").innerText = description;
+    document.getElementById("modalPrice").innerText = "₹" + price;
+    document.getElementById("modalOriginalPrice").innerText = originalPrice ? "₹"+originalPrice : "";
+    document.getElementById("modalImage").src = image;
+    document.getElementById("modalRating").innerText = rating;
+    document.getElementById("modalReviews").innerText = "(" + reviews + " reviews)";
+
+    document.getElementById("productModal").style.display = "flex";
+}
+
+function closeProductModal(){
+    document.getElementById("productModal").style.display = "none";
+}
 
         // Check for success/error URL params
         document.addEventListener("DOMContentLoaded", () => {
@@ -495,6 +563,106 @@ border-bottom:1px solid rgba(0,0,0,0.05);
 
 .footer4-footer7 a{
   color:#ccc;
+}
+        .shop-product-actions{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.shop-details-btn{
+background:#eee;
+border:none;
+padding:10px 14px;
+border-radius:6px;
+cursor:pointer;
+font-weight:500;
+transition:0.3s;
+}
+
+.shop-details-btn:hover{
+background:#ddd;
+}
+
+
+/* MODAL */
+
+.product-modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.product-modal-content{
+background:white;
+padding:30px;
+border-radius:12px;
+max-width:900px;
+width:90%;
+position:relative;
+animation:fadeIn .3s ease;
+}
+
+.product-modal-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:30px;
+}
+
+.product-modal-image img{
+width:100%;
+border-radius:10px;
+}
+
+.product-modal-info h2{
+font-size:28px;
+margin-bottom:10px;
+}
+
+.product-modal-rating{
+margin-bottom:10px;
+color:#f59e0b;
+font-weight:500;
+}
+
+.product-modal-price{
+margin-top:15px;
+margin-bottom:20px;
+}
+
+.modal-price-current{
+font-size:24px;
+font-weight:700;
+color:#f97316;
+margin-right:10px;
+}
+
+.modal-price-original{
+text-decoration:line-through;
+color:#999;
+}
+
+.product-modal-close{
+position:absolute;
+right:20px;
+top:10px;
+font-size:28px;
+cursor:pointer;
+}
+
+@media(max-width:768px){
+
+.product-modal-grid{
+grid-template-columns:1fr;
+}
+
 }
 
 .footer4-footer7 a:hover{
