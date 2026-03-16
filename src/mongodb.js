@@ -125,6 +125,32 @@ const CertificateSchema = new mongoose.Schema({
   rank: String,
   date: String
 });
+// Schema for Cart
+const CartSchema = new mongoose.Schema({
+
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "LogInCollection",
+    required: true
+  },
+
+  items: [
+    {
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ProductCollection",
+        required: true
+      },
+      quantity: {
+        type: Number,
+        default: 1
+      }
+    }
+  ]
+
+}, { timestamps: true });
+
+const CartCollection = mongoose.model("CartCollection", CartSchema);
 
 const LogInCollection = mongoose.model("LogInCollection", LogInSchema);
 const CompetitionPostCollection = mongoose.model("CompetitionPostCollection", CompetitionPostSchema);
@@ -149,5 +175,6 @@ module.exports = {
   SellerRegistrationCollection,
   ProductCollection,
   OrderCollection,
-  CertificateCollection 
+  CertificateCollection,
+  CartCollection
 };
