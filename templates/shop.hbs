@@ -267,6 +267,9 @@
     <!-- Fixed z-index and position relative to ensure buttons are clickable over any rogue nav backgrounds -->
     <div class="shop-container" style="position: relative; z-index: 10;">
         <div class="shop-header">
+            <a href="/cart" class="cart-btn">
+    🛒 Cart
+</a>
             <h1 class="shop-title">EliteStore</h1>
             <div class="shop-search-wrapper">
                 <input type="text" class="shop-search-input" placeholder="Search products...">
@@ -311,9 +314,10 @@
                         <span class="shop-price-original">₹{{this.originalPrice}}</span>
                         {{/if}}
                     </div>
-                    <button class="shop-buy-btn" style="position: relative; z-index: 20;"
-                        onclick="buyProduct('{{this._id}}')">Buy Now</button>
-                    <button class="shop-details-btn"
+                  <button class="shop-buy-btn"
+    onclick="addToCart('{{this._id}}')">
+    Add to Cart
+</button>
         onclick="viewDetails(
             '{{this.name}}',
             `{{this.description}}`,
@@ -453,6 +457,43 @@ function closeProductModal(){
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ productId })
                 });
+                async function addToCart(productId){
+
+    try{
+
+        const res = await fetch('/api/cart/add',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({productId})
+        });
+
+        const data = await res.json();
+
+        if(data.success){
+
+            Swal.fire({
+                icon:'success',
+                title:'Added to Cart',
+                text:'Product added successfully'
+            });
+
+        }else{
+
+            Swal.fire({
+                icon:'error',
+                title:'Error',
+                text:data.message || 'Failed to add product'
+            });
+
+        }
+
+    }catch(err){
+
+        Swal.fire('Error','Server error','error');
+
+    }
+
+}
 
                 const data = await response.json();
                 if (data.redirectUrl) {
@@ -583,7 +624,19 @@ transition:0.3s;
 .shop-details-btn:hover{
 background:#ddd;
 }
+.cart-btn{
+background:#f97316;
+color:white;
+padding:10px 18px;
+border-radius:8px;
+font-weight:600;
+margin-left:15px;
+text-decoration:none;
+}
 
+.cart-btn:hover{
+background:#ea580c;
+}
 
 /* MODAL */
 
