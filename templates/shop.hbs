@@ -267,10 +267,11 @@
     <!-- Fixed z-index and position relative to ensure buttons are clickable over any rogue nav backgrounds -->
     <div class="shop-container" style="position: relative; z-index: 10;">
         <div class="shop-header">
-            <a href="/cart" class="cart-btn">
-    🛒 Cart
-</a>
+   
             <h1 class="shop-title">EliteStore</h1>
+            <a href="/cart" class="cart-btn">
+🛒 Cart
+</a>
             <div class="shop-search-wrapper">
                 <input type="text" class="shop-search-input" placeholder="Search products...">
                 <button class="shop-search-btn">
@@ -318,6 +319,8 @@
     onclick="addToCart('{{this._id}}')">
     Add to Cart
 </button>
+                    
+    <button class="shop-details-btn"
         onclick="viewDetails(
             '{{this.name}}',
             `{{this.description}}`,
@@ -403,17 +406,21 @@
     </div>
 
     <script defer="" src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
-    <script>
-        function toggleNavbar() {
-            const navbarMenu = document.getElementById("navbarMenu");
-            navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
-        }
-        function viewDetails(name, description, price, originalPrice, image, rating, reviews){
+   <script>
+
+function toggleNavbar() {
+    const navbarMenu = document.getElementById("navbarMenu");
+    navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
+}
+
+/* ---------------- PRODUCT MODAL ---------------- */
+
+function viewDetails(name, description, price, originalPrice, image, rating, reviews){
 
     document.getElementById("modalTitle").innerText = name;
     document.getElementById("modalDescription").innerText = description;
     document.getElementById("modalPrice").innerText = "₹" + price;
-    document.getElementById("modalOriginalPrice").innerText = originalPrice ? "₹"+originalPrice : "";
+    document.getElementById("modalOriginalPrice").innerText = originalPrice ? "₹" + originalPrice : "";
     document.getElementById("modalImage").src = image;
     document.getElementById("modalRating").innerText = rating;
     document.getElementById("modalReviews").innerText = "(" + reviews + " reviews)";
@@ -425,39 +432,28 @@ function closeProductModal(){
     document.getElementById("productModal").style.display = "none";
 }
 
-        // Check for success/error URL params
-        document.addEventListener("DOMContentLoaded", () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get("success") === "true") {
-                Swal.fire({
-                    icon: "success",
-                    title: "Payment Successful",
-                    text: "Your order has been placed successfully!",
-                });
-                // Remove param from URL
-                window.history.replaceState({}, document.title, "/shop");
-            }
+/* ---------------- PAGE LOAD ---------------- */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.get("success") === "true") {
+
+        Swal.fire({
+            icon: "success",
+            title: "Payment Successful",
+            text: "Your order has been placed successfully!",
         });
 
-        async function buyProduct(productId) {
-            try {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        title: 'Processing...',
-                        text: 'Initializing secure payment via PhonePe',
-                        allowOutsideClick: false,
-                        didOpen: () => { Swal.showLoading(); }
-                    });
-                } else {
-                    console.log('Processing payment...');
-                }
+        window.history.replaceState({}, document.title, "/shop");
+    }
 
-                const response = await fetch('/api/create-shop-order', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ productId })
-                });
-                async function addToCart(productId){
+});
+
+/* ---------------- ADD TO CART ---------------- */
+
+async function addToCart(productId){
 
     try{
 
@@ -489,33 +485,76 @@ function closeProductModal(){
 
     }catch(err){
 
-        Swal.fire('Error','Server error','error');
+        console.error(err);
+
+        Swal.fire({
+            icon:'error',
+            title:'Server Error',
+            text:'Could not connect to server'
+        });
 
     }
 
 }
 
-                const data = await response.json();
-                if (data.redirectUrl) {
-                    window.location.href = data.redirectUrl;
-                } else {
-                    console.error("Payment Error Response:", data);
-                    if (typeof Swal !== 'undefined') {
-                        Swal.fire('Error', data.error || data.message || 'Failed to initialize payment.', 'error');
-                    } else {
-                        alert(data.error || 'Failed to initialize payment.');
-                    }
-                }
-            } catch (err) {
-                console.error(err);
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire('Error', 'An unexpected error occurred connecting to the server.', 'error');
-                } else {
-                    alert('An unexpected error occurred.');
-                }
-            }
+/* ---------------- BUY PRODUCT (PHONEPE) ---------------- */
+
+async function buyProduct(productId) {
+
+    try {
+
+        if (typeof Swal !== 'undefined') {
+
+            Swal.fire({
+                title: 'Processing...',
+                text: 'Initializing secure payment via PhonePe',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
         }
-    </script>
+
+        const response = await fetch('/api/create-shop-order', {
+
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId })
+
+        });
+
+        const data = await response.json();
+
+        if (data.redirectUrl) {
+
+            window.location.href = data.redirectUrl;
+
+        } else {
+
+            console.error("Payment Error Response:", data);
+
+            Swal.fire({
+                icon:'error',
+                title:'Payment Failed',
+                text:data.error || data.message || 'Failed to initialize payment'
+            });
+
+        }
+
+    } catch (err) {
+
+        console.error(err);
+
+        Swal.fire({
+            icon:'error',
+            title:'Server Error',
+            text:'An unexpected error occurred'
+        });
+
+    }
+
+}
+
+</script>
 
     <style>
         /* Mobile nav overrides */
@@ -601,6 +640,7 @@ border-bottom:1px solid rgba(0,0,0,0.05);
   background:#1f1f1f;
   color:#eee;
 }
+        
 
 .footer4-footer7 a{
   color:#ccc;
@@ -774,6 +814,22 @@ grid-template-columns:1fr;
 .thq-button-outline:hover{
   background:var(--primary);
   color:white;
+}
+        .shop-header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:20px;
+}
+
+.cart-btn{
+background:#f97316;
+color:white;
+padding:10px 18px;
+border-radius:8px;
+font-weight:600;
+text-decoration:none;
+display:inline-block;
 }
 
 
