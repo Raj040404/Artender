@@ -859,6 +859,74 @@ display:inline-block;
                 top: 16px;
             }
         }
+        /* FIX SHOP HEADER LAYOUT */
+
+.shop-header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+flex-wrap:wrap;
+}
+
+/* Ensure title does not take full width */
+
+.shop-title{
+flex:1;
+min-width:150px;
+}
+
+/* Make cart button always visible */
+
+.cart-btn{
+display:inline-flex !important;
+align-items:center;
+justify-content:center;
+
+background:#f97316;
+color:white;
+
+padding:10px 18px;
+border-radius:8px;
+
+font-weight:600;
+text-decoration:none;
+
+white-space:nowrap;
+
+z-index:20;
+position:relative;
+}
+
+/* Hover */
+
+.cart-btn:hover{
+background:#ea580c;
+}
+
+/* Prevent search from covering cart */
+
+.shop-search-wrapper{
+flex:2;
+min-width:220px;
+}
+
+/* Mobile fix */
+
+@media(max-width:768px){
+
+.shop-header{
+flex-direction:column;
+align-items:stretch;
+gap:10px;
+}
+
+.cart-btn{
+width:100%;
+text-align:center;
+}
+
+}
     </style>
 </body>
 
