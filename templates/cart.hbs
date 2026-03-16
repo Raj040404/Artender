@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Your Cart | Artender Shop</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family: Arial, Helvetica, sans-serif;
+background:#f9fafb;
+margin:0;
+padding:0;
+}
+
+.cart-container{
+max-width:1000px;
+margin:auto;
+padding:40px 20px;
+}
+
+.cart-title{
+font-size:32px;
+font-weight:700;
+margin-bottom:30px;
+}
+
+.cart-item{
+display:flex;
+align-items:center;
+gap:20px;
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:15px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.cart-image{
+width:120px;
+height:120px;
+object-fit:cover;
+border-radius:10px;
+}
+
+.cart-details{
+flex:1;
+}
+
+.cart-product-name{
+font-size:20px;
+font-weight:600;
+margin-bottom:6px;
+}
+
+.cart-price{
+color:#f97316;
+font-size:18px;
+font-weight:600;
+}
+
+.cart-quantity{
+margin-top:5px;
+color:#555;
+}
+
+.cart-summary{
+margin-top:40px;
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.cart-total{
+font-size:22px;
+font-weight:700;
+margin-bottom:20px;
+}
+
+.checkout-btn{
+background:#f97316;
+color:white;
+border:none;
+padding:14px 28px;
+font-size:18px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.checkout-btn:hover{
+background:#ea580c;
+}
+
+.empty-cart{
+text-align:center;
+margin-top:100px;
+font-size:22px;
+color:#666;
+}
+
+.shop-link{
+display:inline-block;
+margin-top:20px;
+background:#111827;
+color:white;
+padding:12px 20px;
+border-radius:8px;
+text-decoration:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="cart-container">
+
+<h1 class="cart-title">Your Cart</h1>
+
+{{#if items.length}}
+
+<div id="cart-items">
+
+{{#each items}}
+
+<div class="cart-item">
+
+<img class="cart-image" src="{{this.product.imageUrl}}">
+
+<div class="cart-details">
+
+<div class="cart-product-name">
+{{this.product.name}}
+</div>
+
+<div class="cart-price">
+₹{{this.product.price}}
+</div>
+
+<div class="cart-quantity">
+Quantity: {{this.quantity}}
+</div>
+
+</div>
+
+</div>
+
+{{/each}}
+
+</div>
+
+<div class="cart-summary">
+
+<div class="cart-total">
+Total: ₹<span id="cartTotal">0</span>
+</div>
+
+<button class="checkout-btn" onclick="checkout()">
+Proceed to Payment
+</button>
+
+</div>
+
+{{else}}
+
+<div class="empty-cart">
+
+Your cart is empty.
+
+<br>
+
+<a href="/shop" class="shop-link">
+Browse Shop
+</a>
+
+</div>
+
+{{/if}}
+
+</div>
+
+<script>
+
+const items = {{{json items}}};
+
+function calculateTotal(){
+
+let total = 0;
+
+items.forEach(item=>{
+total += item.product.price * item.quantity;
+});
+
+document.getElementById("cartTotal").innerText = total;
+
+}
+
+calculateTotal();
+
+
+async function checkout(){
+
+try{
+
+const res = await fetch('/api/cart/checkout',{
+method:'POST'
+});
+
+const data = await res.json();
+
+if(data.success){
+
+window.location.href = data.redirectUrl;
+
+}else{
+
+alert(data.message || "Checkout failed");
+
+}
+
+}catch(err){
+
+alert("Server error");
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
