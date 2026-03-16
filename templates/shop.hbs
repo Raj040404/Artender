@@ -265,14 +265,16 @@
 
     <!-- ===== SHOP FRONTEND ===== -->
     <!-- Fixed z-index and position relative to ensure buttons are clickable over any rogue nav backgrounds -->
-    <div class="shop-container" style="position: relative; z-index: 10;">
-        <div class="shop-header">
-   
-            <h1 class="shop-title">EliteStore</h1>
-            <a href="/cart" class="cart-btn">
-🛒 Cart
-</a>
-            <div class="shop-search-wrapper">
+   <div class="shop-header">
+
+    <h1 class="shop-title">EliteStore</h1>
+
+    <a href="/cart" class="cart-btn">
+        🛒 Cart
+    </a>
+
+</div>
+            <!-- <div class="shop-search-wrapper">
                 <input type="text" class="shop-search-input" placeholder="Search products...">
                 <button class="shop-search-btn">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
@@ -281,7 +283,7 @@
                     </svg>
                 </button>
             </div>
-        </div>
+        </div> -->
 
         <div class="shop-product-grid">
             {{#each products}}
@@ -673,7 +675,6 @@ font-weight:600;
 margin-left:15px;
 text-decoration:none;
 }
-
 .cart-btn:hover{
 background:#ea580c;
 }
@@ -815,22 +816,30 @@ grid-template-columns:1fr;
   background:var(--primary);
   color:white;
 }
-        .shop-header{
+      .shop-header{
 display:flex;
 align-items:center;
 justify-content:space-between;
-gap:20px;
+padding:20px 0;
+margin-bottom:20px;
 }
-
 .cart-btn{
+display:flex;
+align-items:center;
+gap:8px;
+
 background:#f97316;
 color:white;
+
 padding:10px 18px;
 border-radius:8px;
+
 font-weight:600;
 text-decoration:none;
-display:inline-block;
+
+transition:0.3s;
 }
+
 
 
         @media (max-width: 768px) {
@@ -861,42 +870,19 @@ display:inline-block;
         }
         /* FIX SHOP HEADER LAYOUT */
 
-.shop-header{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:15px;
-flex-wrap:wrap;
-}
+
 
 /* Ensure title does not take full width */
 
 .shop-title{
-flex:1;
-min-width:150px;
+font-size:32px;
+font-weight:700;
+color:#2c2c2c;
 }
 
 /* Make cart button always visible */
 
-.cart-btn{
-display:inline-flex !important;
-align-items:center;
-justify-content:center;
 
-background:#f97316;
-color:white;
-
-padding:10px 18px;
-border-radius:8px;
-
-font-weight:600;
-text-decoration:none;
-
-white-space:nowrap;
-
-z-index:20;
-position:relative;
-}
 
 /* Hover */
 
@@ -906,10 +892,10 @@ background:#ea580c;
 
 /* Prevent search from covering cart */
 
-.shop-search-wrapper{
+/* .shop-search-wrapper{
 flex:2;
 min-width:220px;
-}
+} */
 
 /* Mobile fix */
 
@@ -917,13 +903,18 @@ min-width:220px;
 
 .shop-header{
 flex-direction:column;
-align-items:stretch;
-gap:10px;
+align-items:center;
+gap:12px;
+text-align:center;
+}
+
+.shop-title{
+font-size:28px;
 }
 
 .cart-btn{
-width:100%;
-text-align:center;
+width:160px;
+justify-content:center;
 }
 
 }
