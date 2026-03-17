@@ -178,6 +178,30 @@ const CartSchema = new mongoose.Schema({
   ]
 
 }, { timestamps: true });
+const AddressSchema = new mongoose.Schema({
+
+    userId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"LogInCollection",
+        required:true
+    },
+
+    addressLine:{
+        type:String,
+        required:true
+    },
+
+    phone:{
+        type:String,
+        required:true
+    },
+
+    pincode:{
+        type:String,
+        required:true
+    }
+
+});
 
 const CartCollection = mongoose.model("CartCollection", CartSchema);
 
@@ -189,6 +213,7 @@ const SellerRegistrationCollection = mongoose.model("SellerRegistrationCollectio
 const ProductCollection = mongoose.model("ProductCollection", ProductSchema);
 const OrderCollection = mongoose.model("OrderCollection", OrderSchema);
 const CertificateCollection = mongoose.model("certificates", CertificateSchema);
+const AddressCollection = mongoose.model("Address",AddressSchema);
 
 
 // If you want to use a separate DB for contests
@@ -205,5 +230,6 @@ module.exports = {
   ProductCollection,
   OrderCollection,
   CertificateCollection,
-  CartCollection
+  CartCollection,
+  AddressCollection
 };
