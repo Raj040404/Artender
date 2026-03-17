@@ -583,62 +583,56 @@ app.post('/api/cart/add', async (req,res)=>{
     }
 
 });
-app.post('/api/cart/checkout', requireLogin, async (req, res) => {
+app.post("/api/cart/checkout", async (req,res)=>{
 
-  try {
+try{
 
-    const userId = req.session.userId;
+const userId = req.session.userId;
 
-    const cart = await CartCollection
-      .findOne({ userId })
-      .populate('items.product');
+if(!userId){
+return res.json({
+success:false,
+message:"Login required"
+});
+}
 
-    if (!cart || cart.items.length === 0) {
-      return res.json({ success: false, message: "Cart is empty" });
-    }
+const cart = await CartCollection
+.findOne({userId})
+.populate("items.product");
 
-    let totalAmount = 0;
+if(!cart || cart.items.length === 0){
+return res.json({
+success:false,
+message:"Cart empty"
+});
+}
 
-    cart.items.forEach(item => {
-      totalAmount += item.product.price * item.quantity;
-    });
+let total = 0;
 
-    // convert to paise (PhonePe requires paise)
-    const amountInPaise = totalAmount * 100;
-
-    // create merchant order id
-    const merchantOrderId = "ORDER_" + Date.now();
-
-    // Create an order entry for tracking
-    const order = new OrderCollection({
-      userId: userId,
-      productId: cart.items[0].product._id, // first product (for compatibility)
-      amount: totalAmount,
-      paymentStatus: "pending",
-      merchantOrderId: merchantOrderId
-    });
-
-    await order.save();
-
-    // Redirect user to your existing shop payment route
-    res.json({
-      success: true,
-      redirectUrl: `/shop/pay/${merchantOrderId}/${amountInPaise}`
-    });
-
-  } catch (err) {
-
-    console.error("Cart checkout error:", err);
-
-    res.json({
-      success: false,
-      message: "Checkout failed"
-    });
-
-  }
-
+cart.items.forEach(item=>{
+total += item.product.price * item.quantity;
 });
 
+// Create PhonePe order here
+const paymentUrl = await createPhonePeOrder(total);
+
+res.json({
+success:true,
+redirectUrl:paymentUrl
+});
+
+}catch(err){
+
+console.log(err);
+
+res.json({
+success:false,
+message:"Checkout failed"
+});
+
+}
+
+});
 app.post("/api/create-seller-phonepe-order", requireLogin, async (req, res) => {
   try {
     const { sellerId, phone } = req.body;
