@@ -106,16 +106,45 @@ const ProductSchema = new mongoose.Schema({
 
 // Schema for Orders (Purchased Items)
 const OrderSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "LogInCollection", required: true },
-  productId: { type: mongoose.Schema.Types.ObjectId, ref: "ProductCollection", required: true },
-  amount: { type: Number, required: true }, // Store amount in rupees
+
+  userId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: "LogInCollection", 
+    required: true 
+  },
+
+  items: [
+    {
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ProductCollection",
+        required: true
+      },
+      quantity: {
+        type: Number,
+        default: 1
+      },
+      price: {
+        type: Number,
+        required: true
+      }
+    }
+  ],
+
+  amount: { 
+    type: Number, 
+    required: true 
+  },
+
   paymentStatus: {
-    type: String, // "pending", "paid", "failed"
+    type: String,
     enum: ["pending", "paid", "failed"],
     default: "pending"
   },
+
   merchantOrderId: { type: String },
-  phonepeOrderId: { type: String },
+  phonepeOrderId: { type: String }
+
 }, { timestamps: true });
 
 const CertificateSchema = new mongoose.Schema({
