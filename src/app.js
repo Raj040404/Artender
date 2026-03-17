@@ -1827,13 +1827,18 @@ app.post("/api/create-shop-order", requireLogin, async (req, res) => {
     const merchantOrderId = `SHOP_${product._id}_${Date.now()}`;
 
     // Create a pending order in DB using backend secure price
-    const order = new OrderCollection({
-      userId: user._id,
-      productId: product._id,
-      amount: product.price,
-      paymentStatus: "pending",
-      merchantOrderId
-    });
+  new OrderCollection({
+userId,
+items:[
+{
+productId,
+quantity:1,
+price:product.price
+}
+],
+amount,
+merchantOrderId
+})
     await order.save();
 
     const accessToken = await getPhonePeAccessToken();
