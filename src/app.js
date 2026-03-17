@@ -583,55 +583,99 @@ app.post('/api/cart/add', async (req,res)=>{
     }
 
 });
-app.post("/api/cart/checkout", async (req,res)=>{
+app.post("/api/cart/checkout", requireLogin, async (req, res) => {
+  try {
 
-try{
+    const userId = req.session.userId;
 
-const userId = req.session.userId;
+    const cart = await CartCollection
+      .findOne({ userId })
+      .populate("items.product");
 
-if(!userId){
-return res.json({
-success:false,
-message:"Login required"
-});
-}
+    if (!cart || cart.items.length === 0) {
+      return res.json({ success: false, message: "Cart empty" });
+    }
 
-const cart = await CartCollection
-.findOne({userId})
-.populate("items.product");
+    const user = await LogInCollection.findById(userId);
+    if (!user) return res.json({ success: false, message: "User not found" });
 
-if(!cart || cart.items.length === 0){
-return res.json({
-success:false,
-message:"Cart empty"
-});
-}
+    // Calculate total securely from DB prices
+    let total = 0;
 
-let total = 0;
+    cart.items.forEach(item => {
+      total += item.product.price * item.quantity;
+    });
 
-cart.items.forEach(item=>{
-total += item.product.price * item.quantity;
-});
+    const merchantOrderId = `SHOP_CART_${userId}_${Date.now()}`;
 
-// Create PhonePe order here
-const paymentUrl = await createPhonePeOrder(total);
+    // Create order containing ALL cart items
+    const order = new OrderCollection({
+      userId,
+      items: cart.items.map(i => ({
+        productId: i.product._id,
+        quantity: i.quantity,
+        price: i.product.price
+      })),
+      amount: total,
+      paymentStatus: "pending",
+      merchantOrderId
+    });
 
-res.json({
-success:true,
-redirectUrl:paymentUrl
-});
+    await order.save();
 
-}catch(err){
+    const accessToken = await getPhonePeAccessToken();
 
-console.log(err);
+    const response = await axios.post(
+      `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`,
+      {
+        amount: total * 100,
+        expireAfter: 1200,
+        metaInfo: {
+          udf1: user.name,
+          udf2: "CartPurchase",
+          udf3: req.session.phone || "9999999999",
+          udf4: user.email,
+          udf5: "ArtenderShop"
+        },
+        paymentFlow: {
+          type: "PG_CHECKOUT",
+          message: "Payment for Cart Purchase",
+          merchantUrls: {
+            redirectUrl:
+              process.env.SHOP_PHONEPE_CALLBACK_URL ||
+              "https://www.artender.in/shop/phonepe-callback"
+          }
+        },
+        merchantOrderId
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `O-Bearer ${accessToken}`
+        }
+      }
+    );
 
-res.json({
-success:false,
-message:"Checkout failed"
-});
+    const data = response.data;
 
-}
+    order.phonepeOrderId = data?.orderId || null;
+    await order.save();
 
+    res.json({
+      success: true,
+      redirectUrl: data.redirectUrl
+    });
+
+  } catch (err) {
+
+    console.error("[cart-checkout] Error:", err.response?.data || err.message);
+
+    res.json({
+      success: false,
+      message: "Checkout failed"
+    });
+
+  }
 });
 app.post("/api/create-seller-phonepe-order", requireLogin, async (req, res) => {
   try {
@@ -1449,7 +1493,57 @@ async function getPhonePeAccessToken() {
     throw new Error("Failed to get access token from PhonePe.");
   }
 }
+async function createPhonePeOrder(amount){
 
+try{
+
+const accessToken = await getPhonePeAccessToken();
+
+const merchantOrderId = `CART_${Date.now()}`;
+
+const response = await axios.post(
+`${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`,
+{
+amount: amount * 100,
+expireAfter: 1200,
+
+metaInfo:{
+udf1:"CartPurchase",
+udf2:"ArtenderShop",
+udf3:"CartPayment",
+udf4:"Artender",
+udf5:"Shop"
+},
+
+merchantOrderId,
+
+paymentFlow:{
+type:"PG_CHECKOUT",
+message:"Payment for Artender Shop Cart",
+merchantUrls:{
+redirectUrl: process.env.SHOP_PHONEPE_CALLBACK_URL || "https://www.artender.in/shop/phonepe-callback"
+}
+}
+
+},
+{
+headers:{
+"Content-Type":"application/json",
+Authorization:`O-Bearer ${accessToken}`
+}
+}
+);
+
+return response.data.redirectUrl;
+
+}catch(err){
+
+console.error("[createPhonePeOrder] Error:",err.response?.data || err.message);
+throw new Error("PhonePe order failed");
+
+}
+
+}
 app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async (req, res) => {
   try {
     const contestId = (req.body.contestId || req.query.contestId || "").trim();
@@ -1828,13 +1922,29 @@ app.get("/shop/phonepe-callback", async (req, res) => {
       paymentState = resolveState(statusResponse);
     }
 
-    if (paymentState === "SUCCESS") {
-      await OrderCollection.findOneAndUpdate(
-        { merchantOrderId: statusResponse?.merchantOrderId || merchantOrderId },
-        { $set: { paymentStatus: "paid", phonepeOrderId: orderId || statusResponse?.orderId } }
-      );
-      return res.redirect("/shop?success=true");
-    } else if (paymentState === "PENDING") {
+ if (paymentState === "SUCCESS") {
+
+const order = await OrderCollection.findOneAndUpdate(
+{
+merchantOrderId: statusResponse?.merchantOrderId || merchantOrderId
+},
+{
+$set:{
+paymentStatus:"paid",
+phonepeOrderId: orderId || statusResponse?.orderId
+}
+},
+{ new:true }
+);
+
+// clear cart
+if(order){
+await CartCollection.deleteOne({ userId: order.userId });
+}
+
+return res.redirect("/shop?success=true");
+
+}else if (paymentState === "PENDING") {
       return res.redirect(`/paymentpending?orderId=${merchantOrderId}`);
     } else {
       await OrderCollection.findOneAndUpdate(
