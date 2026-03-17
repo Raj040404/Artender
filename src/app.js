@@ -4,7 +4,7 @@ const path = require("path");
 const hbs = require("hbs");
 const multer = require("multer");
 const session = require("express-session");
-const { LogInCollection, CompetitionPostCollection, ProfileCollection, ContestCollection, EnrollmentCollection, SellerRegistrationCollection, ProductCollection, OrderCollection, CertificateCollection, CartCollection } = require("./mongodb");
+const { LogInCollection, CompetitionPostCollection, ProfileCollection, ContestCollection, EnrollmentCollection, SellerRegistrationCollection, ProductCollection, OrderCollection, CertificateCollection, CartCollection, AddressCollection } = require("./mongodb");
 const handlebars = require("hbs");
 const MongoStore = require("connect-mongo");
 const nodemailer = require("nodemailer");
@@ -339,8 +339,11 @@ app.get('/cart', requireLogin, async (req,res)=>{
         .findOne({userId})
         .populate('items.product');
 
+    const addresses = await AddressCollection.find({userId});
+
     res.render('cart',{
-        items: cart ? cart.items : []
+        items: cart ? cart.items : [],
+        addresses
     });
 
 });
@@ -587,6 +590,11 @@ app.post("/api/cart/checkout", requireLogin, async (req, res) => {
   try {
 
     const userId = req.session.userId;
+    const {addressId} = req.body;
+    const address = await AddressCollection.findOne({
+_id:addressId,
+userId
+});
 
     const cart = await CartCollection
       .findOne({ userId })
@@ -609,17 +617,29 @@ app.post("/api/cart/checkout", requireLogin, async (req, res) => {
     const merchantOrderId = `SHOP_CART_${userId}_${Date.now()}`;
 
     // Create order containing ALL cart items
-    const order = new OrderCollection({
-      userId,
-      items: cart.items.map(i => ({
-        productId: i.product._id,
-        quantity: i.quantity,
-        price: i.product.price
-      })),
-      amount: total,
-      paymentStatus: "pending",
-      merchantOrderId
-    });
+  const order = new OrderCollection({
+
+userId,
+
+items: cart.items.map(i => ({
+productId: i.product._id,
+quantity: i.quantity,
+price: i.product.price
+})),
+
+amount: total,
+
+shippingAddress:{
+addressLine: address.addressLine,
+phone: address.phone,
+pincode: address.pincode
+},
+
+paymentStatus:"pending",
+
+merchantOrderId
+
+});
 
     await order.save();
 
@@ -2020,7 +2040,79 @@ res.json({success:false,message:"Server error"});
 }
 
 });
+app.post("/api/address/add", requireLogin, async (req,res)=>{
 
+try{
+
+const userId = req.session.userId;
+
+const {addressLine,phone,pincode} = req.body;
+
+const address = new AddressCollection({
+userId,
+addressLine,
+phone,
+pincode
+});
+
+await address.save();
+
+res.json({success:true});
+
+}catch(err){
+
+console.error(err);
+res.json({success:false});
+
+}
+
+});
+app.post("/api/address/edit", requireLogin, async (req,res)=>{
+
+try{
+
+const {addressId,addressLine,phone,pincode} = req.body;
+
+await AddressCollection.updateOne(
+{_id:addressId,userId:req.session.userId},
+{
+addressLine,
+phone,
+pincode
+}
+);
+
+res.json({success:true});
+
+}catch(err){
+
+console.error(err);
+res.json({success:false});
+
+}
+
+});
+app.post("/api/address/delete", requireLogin, async (req,res)=>{
+
+try{
+
+const {addressId} = req.body;
+
+await AddressCollection.deleteOne({
+_id:addressId,
+userId:req.session.userId
+});
+
+res.json({success:true});
+
+}catch(err){
+
+console.error(err);
+res.json({success:false});
+
+}
+
+});
 // Start the server
 const PORT = process.env.PORT || 3000;
 
