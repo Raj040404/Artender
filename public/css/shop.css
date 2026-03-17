@@ -1,10 +1,8 @@
 /* EliteStore Shop CSS mimicking Figma Design */
 .shop-container {
-  max-width: 95%;
-  /* Make it take up the vast majority of the screen */
-  margin: -800px auto 0 auto;
-  /* Massive pull up to bypass the empty space of the removed elements */
-  padding: 10px 20px 40px 20px;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
   background-color: #F8F8F8;
   min-height: calc(100vh - 200px);
 }
