@@ -208,12 +208,16 @@ async function checkout(){
 try{
 
 const res = await fetch('/api/cart/checkout',{
-method:'POST'
+method:'POST',
+headers:{
+"Content-Type":"application/json"
+},
+credentials:"include"
 });
 
 const data = await res.json();
 
-if(data.success){
+if(data.success && data.redirectUrl){
 
 window.location.href = data.redirectUrl;
 
@@ -225,6 +229,7 @@ alert(data.message || "Checkout failed");
 
 }catch(err){
 
+console.error(err);
 alert("Server error");
 
 }
