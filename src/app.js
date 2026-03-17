@@ -590,66 +590,106 @@ app.post("/api/cart/checkout", requireLogin, async (req, res) => {
   try {
 
     const userId = req.session.userId;
-    const {addressId} = req.body;
-    const address = await AddressCollection.findOne({
-_id:addressId,
-userId
-});
+    const { addressId } = req.body;
 
+    // 1️⃣ Check if address selected
+    if (!addressId) {
+      return res.json({
+        success: false,
+        message: "Please select a delivery address"
+      });
+    }
+
+    // 2️⃣ Get Address
+    const address = await AddressCollection.findOne({
+      _id: addressId,
+      userId
+    });
+
+    if (!address) {
+      return res.json({
+        success: false,
+        message: "Invalid address"
+      });
+    }
+
+    // 3️⃣ Get Cart
     const cart = await CartCollection
       .findOne({ userId })
       .populate("items.product");
 
     if (!cart || cart.items.length === 0) {
-      return res.json({ success: false, message: "Cart empty" });
+      return res.json({
+        success: false,
+        message: "Cart empty"
+      });
     }
 
+    // 4️⃣ Get User
     const user = await LogInCollection.findById(userId);
-    if (!user) return res.json({ success: false, message: "User not found" });
 
-    // Calculate total securely from DB prices
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    // 5️⃣ Calculate total securely
     let total = 0;
 
-    cart.items.forEach(item => {
-      total += item.product.price * item.quantity;
-    });
+    for (const item of cart.items) {
 
+      if (!item.product) {
+        return res.json({
+          success: false,
+          message: "One product no longer exists"
+        });
+      }
+
+      total += item.product.price * item.quantity;
+    }
+
+    // 6️⃣ Create Merchant Order ID
     const merchantOrderId = `SHOP_CART_${userId}_${Date.now()}`;
 
-    // Create order containing ALL cart items
-  const order = new OrderCollection({
+    // 7️⃣ Create Order
+    const order = new OrderCollection({
 
-userId,
+      userId,
 
-items: cart.items.map(i => ({
-productId: i.product._id,
-quantity: i.quantity,
-price: i.product.price
-})),
+      items: cart.items.map(i => ({
+        productId: i.product._id,
+        quantity: i.quantity,
+        price: i.product.price
+      })),
 
-amount: total,
+      amount: total,
 
-shippingAddress:{
-addressLine: address.addressLine,
-phone: address.phone,
-pincode: address.pincode
-},
+      shippingAddress: {
+        addressLine: address.addressLine,
+        phone: address.phone,
+        pincode: address.pincode
+      },
 
-paymentStatus:"pending",
+      paymentStatus: "pending",
 
-merchantOrderId
+      merchantOrderId
 
-});
+    });
 
     await order.save();
 
+    // 8️⃣ PhonePe token
     const accessToken = await getPhonePeAccessToken();
 
+    // 9️⃣ Create PhonePe order
     const response = await axios.post(
       `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`,
       {
         amount: total * 100,
         expireAfter: 1200,
+
         metaInfo: {
           udf1: user.name,
           udf2: "CartPurchase",
@@ -657,15 +697,18 @@ merchantOrderId
           udf4: user.email,
           udf5: "ArtenderShop"
         },
+
         paymentFlow: {
           type: "PG_CHECKOUT",
           message: "Payment for Cart Purchase",
+
           merchantUrls: {
             redirectUrl:
               process.env.SHOP_PHONEPE_CALLBACK_URL ||
               "https://www.artender.in/shop/phonepe-callback"
           }
         },
+
         merchantOrderId
       },
       {
@@ -678,9 +721,12 @@ merchantOrderId
 
     const data = response.data;
 
+    // 🔟 Save PhonePe order ID
     order.phonepeOrderId = data?.orderId || null;
+
     await order.save();
 
+    // 1️⃣1️⃣ Send redirect URL to frontend
     res.json({
       success: true,
       redirectUrl: data.redirectUrl
@@ -688,7 +734,10 @@ merchantOrderId
 
   } catch (err) {
 
-    console.error("[cart-checkout] Error:", err.response?.data || err.message);
+    console.error(
+      "[cart-checkout] Error:",
+      err.response?.data || err.message
+    );
 
     res.json({
       success: false,
