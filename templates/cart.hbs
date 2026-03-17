@@ -171,6 +171,34 @@ padding:8px 14px;
 border-radius:6px;
 cursor:pointer;
 }
+  .edit-btn{
+background:#2563eb;
+color:white;
+border:none;
+padding:4px 10px;
+border-radius:5px;
+font-size:13px;
+cursor:pointer;
+margin-right:6px;
+}
+
+.edit-btn:hover{
+background:#1d4ed8;
+}
+
+.delete-btn{
+background:#ef4444;
+color:white;
+border:none;
+padding:4px 10px;
+border-radius:5px;
+font-size:13px;
+cursor:pointer;
+}
+
+.delete-btn:hover{
+background:#dc2626;
+}
 
 @media(max-width:700px){
 
@@ -257,6 +285,18 @@ class="address-radio"
 <div>{{this.addressLine}}</div>
 <div>Phone: {{this.phone}}</div>
 <div>PIN: {{this.pincode}}</div>
+
+<div style="margin-top:8px;">
+
+<button onclick="editAddress('{{this._id}}','{{this.addressLine}}','{{this.phone}}','{{this.pincode}}')" class="edit-btn">
+Edit
+</button>
+
+<button onclick="deleteAddress('{{this._id}}')" class="delete-btn">
+Delete
+</button>
+
+</div>
 
 </div>
 
@@ -460,6 +500,76 @@ if(data.success){
 location.reload();
 }else{
 alert("Failed to add address");
+}
+
+})
+.catch(err=>{
+console.error(err);
+alert("Server error");
+});
+
+}
+  function editAddress(addressId,addressLine,phone,pincode){
+
+const newAddress = prompt("Edit address", addressLine);
+if(!newAddress) return;
+
+const newPhone = prompt("Edit phone", phone);
+if(!newPhone) return;
+
+const newPincode = prompt("Edit pincode", pincode);
+if(!newPincode) return;
+
+fetch("/api/address/edit",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+credentials:"include",
+body:JSON.stringify({
+addressId,
+addressLine:newAddress,
+phone:newPhone,
+pincode:newPincode
+})
+})
+.then(res=>res.json())
+.then(data=>{
+
+if(data.success){
+location.reload();
+}else{
+alert("Failed to update address");
+}
+
+})
+.catch(err=>{
+console.error(err);
+alert("Server error");
+});
+
+}
+  function deleteAddress(addressId){
+
+if(!confirm("Delete this address?")) return;
+
+fetch("/api/address/delete",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+credentials:"include",
+body:JSON.stringify({
+addressId
+})
+})
+.then(res=>res.json())
+.then(data=>{
+
+if(data.success){
+location.reload();
+}else{
+alert("Failed to delete address");
 }
 
 })
