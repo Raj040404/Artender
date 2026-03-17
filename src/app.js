@@ -1998,6 +1998,28 @@ return res.redirect("/paymentfailed?reason=Server+Error");
 }
 
 });
+app.post("/api/cart/remove", async (req,res)=>{
+
+try{
+
+const userId = req.session.userId;
+const {productId} = req.body;
+
+await CartCollection.updateOne(
+{userId},
+{$pull:{items:{product:productId}}}
+);
+
+res.json({success:true});
+
+}catch(err){
+
+console.error(err);
+res.json({success:false,message:"Server error"});
+
+}
+
+});
 
 // Start the server
 const PORT = process.env.PORT || 3000;
