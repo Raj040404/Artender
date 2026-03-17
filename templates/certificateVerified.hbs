@@ -1,9 +1,113 @@
-<h1>✅ Certificate Verified</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Certificate Verification | Artender</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg,#fff7ed,#f1f5f9);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:100vh;
+}
+
+/* Main Card */
+
+.verify-card{
+    background:white;
+    padding:40px;
+    border-radius:16px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.08);
+    max-width:500px;
+    width:90%;
+    text-align:center;
+}
+
+/* Logo */
+
+.verify-logo{
+    width:80px;
+    margin-bottom:10px;
+}
+
+/* Title */
+
+.verify-title{
+    font-size:26px;
+    margin-bottom:25px;
+    color:#16a34a;
+}
+
+/* Certificate Details */
+
+.verify-details{
+    text-align:left;
+    margin-top:20px;
+}
+
+.verify-details p{
+    font-size:16px;
+    margin:10px 0;
+    padding:10px 14px;
+    background:#f8fafc;
+    border-radius:8px;
+}
+
+.verify-details b{
+    color:#f97316;
+}
+
+/* Footer */
+
+.verify-footer{
+    margin-top:25px;
+    font-size:14px;
+    color:#64748b;
+}
+
+.verify-footer span{
+    color:#f97316;
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="verify-card">
+
+<img src="/public-images-logo-logo192.png" class="verify-logo">
+
+<h1 class="verify-title">✅ Certificate Verified</h1>
+
+<div class="verify-details">
 
 <p><b>Name:</b> {{certificate.name}}</p>
+
 <p><b>Event:</b> {{certificate.event}}</p>
+
 <p><b>Rank:</b> {{certificate.rank}}</p>
+
 <p><b>Date:</b> {{certificate.date}}</p>
+
 <p><b>Certificate ID:</b> {{certificate.certificateId}}</p>
 
-<p>Issued by <b>Artender</b></p>
+</div>
+
+<div class="verify-footer">
+Issued by <span>Artender</span>
+</div>
+
+</div>
+
+</body>
+</html>
