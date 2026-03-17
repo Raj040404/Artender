@@ -135,6 +135,11 @@ const OrderSchema = new mongoose.Schema({
     type: Number, 
     required: true 
   },
+  shippingAddress:{
+addressLine:String,
+phone:String,
+pincode:String
+},
 
   paymentStatus: {
     type: String,
