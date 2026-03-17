@@ -134,6 +134,43 @@ padding:12px 20px;
 border-radius:8px;
 text-decoration:none;
 }
+  .address-section{
+margin-top:30px;
+background:white;
+padding:20px;
+border-radius:14px;
+box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+
+.address-card{
+padding:12px;
+border:1px solid #e5e7eb;
+border-radius:8px;
+margin-bottom:10px;
+cursor:pointer;
+}
+
+.address-card:hover{
+border-color:#f97316;
+}
+
+.address-radio{
+margin-right:10px;
+}
+
+.address-info{
+display:inline-block;
+}
+
+.add-address-btn{
+margin-top:10px;
+background:#111827;
+color:white;
+border:none;
+padding:8px 14px;
+border-radius:6px;
+cursor:pointer;
+}
 
 @media(max-width:700px){
 
@@ -192,6 +229,56 @@ Remove
 </div>
 
 {{/each}}
+
+</div>
+  <div class="address-section">
+
+<h2 style="margin-top:30px;">Delivery Address</h2>
+
+{{#if addresses.length}}
+
+<div class="address-list">
+
+{{#each addresses}}
+
+<div class="address-card">
+
+<label>
+
+<input 
+type="radio" 
+name="address" 
+value="{{this._id}}"
+class="address-radio"
+/>
+
+<div class="address-info">
+
+<div>{{this.addressLine}}</div>
+<div>Phone: {{this.phone}}</div>
+<div>PIN: {{this.pincode}}</div>
+
+</div>
+
+</label>
+
+</div>
+
+{{/each}}
+
+</div>
+
+{{else}}
+
+<div style="margin-top:10px;color:#666;">
+No address added yet.
+</div>
+
+{{/if}}
+
+<button onclick="addAddress()" class="add-address-btn">
++ Add Address
+</button>
 
 </div>
 
@@ -289,6 +376,15 @@ alert("Server error");
 
 async function checkout(){
 
+const selectedAddress = document.querySelector(
+"input[name='address']:checked"
+)?.value;
+
+if(!selectedAddress){
+alert("Please select a delivery address");
+return;
+}
+
 const btn = document.querySelector(".checkout-btn");
 btn.disabled = true;
 btn.innerText = "Processing...";
@@ -300,7 +396,10 @@ method:'POST',
 headers:{
 "Content-Type":"application/json"
 },
-credentials:"include"
+credentials:"include",
+body:JSON.stringify({
+addressId:selectedAddress
+})
 });
 
 const data = await res.json();
