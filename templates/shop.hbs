@@ -974,24 +974,8 @@ padding-top:10px;
 
 /* remove any browser spacing */
 
-body{
-margin:0;
-padding:0;
-}
-        /* FIX GAP BETWEEN NAVBAR AND CONTENT */
-.landing-container {
-    margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
-}
-.navbar8-wrapper {
-    margin-bottom: 0 !important;
-}
-.shop-header {
-    margin-top: 0 !important;
-    padding-top: 10px; /* keep a tiny breathing room */
-}
-        /* ===== FINAL GAP FIX ===== */
-/* Remove all margins from navbar containers */
+/* ===== FINAL GAP FIX ===== */
+/* Force zero margins/paddings on all navbar containers */
 .navbar8-wrapper,
 .navbar8-container1,
 .navbar8-navbar-interactive,
@@ -1002,19 +986,24 @@ padding:0;
     padding-bottom: 0 !important;
 }
 
-/* Ensure landing container doesn't add space */
+/* Landing container must not add space */
 .landing-container {
     margin: 0 !important;
     padding: 0 !important;
 }
 
-/* Pull shop header exactly below navbar */
-.shop-header {
-    margin-top: 0 !important;
-    padding-top: 5px !important;   /* tiny breathing room, adjust if needed */
+/* Hide the mobile menu by default – it was pushing content down */
+#navbarMenu {
+    display: none !important;
 }
 
-/* Remove any default body padding that might sneak in */
+/* Pull shop header flush to navbar */
+.shop-header {
+    margin-top: 0 !important;
+    padding-top: 5px !important;   /* tiny breathing room – adjust or remove if needed */
+}
+
+/* Remove any default body spacing */
 body {
     margin: 0 !important;
     padding: 0 !important;
