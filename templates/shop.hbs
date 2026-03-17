@@ -265,86 +265,105 @@
 
     <!-- ===== SHOP FRONTEND ===== -->
     <!-- Fixed z-index and position relative to ensure buttons are clickable over any rogue nav backgrounds -->
-   <div class="shop-header">
+   <!-- ===== SHOP FRONTEND ===== -->
 
-    <h1 class="shop-title">EliteStore</h1>
+<div class="shop-container">
 
-    <a href="/cart" class="cart-btn">
-        🛒 Cart
-    </a>
+    <div class="shop-header">
+        <h1 class="shop-title">EliteStore</h1>
 
-</div>
-            <!-- <div class="shop-search-wrapper">
-                <input type="text" class="shop-search-input" placeholder="Search products...">
-                <button class="shop-search-btn">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+        <a href="/cart" class="cart-btn">
+            🛒 Cart
+        </a>
+    </div>
+
+    <div class="shop-product-grid">
+
+        {{#each products}}
+
+        <div class="shop-product-card">
+
+            <div class="shop-img-container">
+
+                <img src="{{this.imageUrl}}" alt="{{this.name}}" class="shop-product-img">
+
+                {{#if this.isNewItem}}
+                <span class="shop-badge shop-badge-new">NEW</span>
+                {{/if}}
+
+                {{#if this.discountPercentage}}
+                <span class="shop-badge shop-badge-discount">-{{this.discountPercentage}}%</span>
+                {{/if}}
+
+                <button class="shop-wishlist-btn">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
                         <path
-                            d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                            d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3z"/>
                     </svg>
                 </button>
-            </div>
-        </div> -->
 
-        <div class="shop-product-grid">
-            {{#each products}}
-            <div class="shop-product-card">
-                <div class="shop-img-container">
-                    <img src="{{this.imageUrl}}" alt="{{this.name}}" class="shop-product-img">
-                    {{#if this.isNewItem}}
-                    <span class="shop-badge shop-badge-new">NEW</span>
+            </div>
+
+            <div class="shop-product-info">
+
+                <h3 class="shop-product-title">{{this.name}}</h3>
+
+                <div class="shop-product-rating">
+                    <div class="shop-stars" style="--rating: {{this.rating}};">
+                        ★★★★★
+                    </div>
+                    <span class="shop-reviews-count">({{this.reviewsCount}})</span>
+                </div>
+
+                <div class="shop-product-price-row">
+                    <span class="shop-price-current">₹{{this.price}}</span>
+
+                    {{#if this.originalPrice}}
+                    <span class="shop-price-original">₹{{this.originalPrice}}</span>
                     {{/if}}
-                    {{#if this.discountPercentage}}
-                    <span class="shop-badge shop-badge-discount">-{{this.discountPercentage}}%</span>
-                    {{/if}}
-                    <button class="shop-wishlist-btn">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                            <path
-                                d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z" />
-                        </svg>
+                </div>
+
+                <div class="shop-product-actions">
+
+                    <button class="shop-buy-btn"
+                        onclick="addToCart('{{this._id}}')">
+                        Add to Cart
                     </button>
+
+                    <button class="shop-details-btn"
+                        onclick="viewDetails(
+                            '{{this.name}}',
+                            `{{this.description}}`,
+                            '{{this.price}}',
+                            '{{this.originalPrice}}',
+                            '{{this.imageUrl}}',
+                            '{{this.rating}}',
+                            '{{this.reviewsCount}}'
+                        )">
+                        View Details
+                    </button>
+
                 </div>
-                <div class="shop-product-info">
-                    <h3 class="shop-product-title">{{this.name}}</h3>
-                    <div class="shop-product-rating">
-                        <div class="shop-stars" style="--rating: {{this.rating}};">
-                            ★★★★★
-                        </div>
-                        <span class="shop-reviews-count">({{this.reviewsCount}})</span>
-                    </div>
-                    <div class="shop-product-price-row">
-                        <span class="shop-price-current">₹{{this.price}}</span>
-                        {{#if this.originalPrice}}
-                        <span class="shop-price-original">₹{{this.originalPrice}}</span>
-                        {{/if}}
-                    </div>
-                  <button class="shop-buy-btn"
-    onclick="addToCart('{{this._id}}')">
-    Add to Cart
-</button>
-                    
-    <button class="shop-details-btn"
-        onclick="viewDetails(
-            '{{this.name}}',
-            `{{this.description}}`,
-            '{{this.price}}',
-            '{{this.originalPrice}}',
-            '{{this.imageUrl}}',
-            '{{this.rating}}',
-            '{{this.reviewsCount}}'
-        )">
-        View Details
-    </button>
-                </div>
+
             </div>
-            {{else}}
-            <div style="text-align:center; grid-column: 1 / -1; padding: 40px;">
-                <h2>No Products Found</h2>
-                <p>Please check back later.</p>
-            </div>
-            {{/each}}
+
         </div>
+
+        {{else}}
+
+        <div style="text-align:center; grid-column: 1 / -1; padding: 40px;">
+            <h2>No Products Found</h2>
+            <p>Please check back later.</p>
+        </div>
+
+        {{/each}}
+
     </div>
-    <!-- PRODUCT DETAILS MODAL -->
+
+</div>
+
+<!-- PRODUCT DETAILS MODAL -->
+
 <div id="productModal" class="product-modal">
 
   <div class="product-modal-content">
@@ -384,6 +403,8 @@
   </div>
 
 </div>
+
+<!-- ===== END SHOP FRONTEND ===== -->
     <!-- ===== END SHOP FRONTEND ===== -->
 
     <footer4-wrapper class="footer4-wrapper">
