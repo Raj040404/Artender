@@ -427,6 +427,48 @@ btn.innerText="Proceed to Payment";
 }
 
 }
+  function addAddress(){
+
+const addressLine = prompt("Enter your address");
+
+if(!addressLine) return;
+
+const phone = prompt("Enter phone number");
+
+if(!phone) return;
+
+const pincode = prompt("Enter pincode");
+
+if(!pincode) return;
+
+fetch("/api/address/add",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+credentials:"include",
+body:JSON.stringify({
+addressLine,
+phone,
+pincode
+})
+})
+.then(res => res.json())
+.then(data => {
+
+if(data.success){
+location.reload();
+}else{
+alert("Failed to add address");
+}
+
+})
+.catch(err=>{
+console.error(err);
+alert("Server error");
+});
+
+}
 
 </script>
 
