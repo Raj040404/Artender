@@ -377,12 +377,14 @@ class="address-radio"
 
 <div style="margin-top:8px;">
 
-<button onclick='openModal(true, {
-  _id:"{{this._id}}",
-  addressLine:"{{this.addressLine}}",
-  phone:"{{this.phone}}",
-  pincode:"{{this.pincode}}"
-})'
+<button 
+class="edit-btn"
+onclick='openModal(true, {
+  _id: "{{this._id}}",
+  addressLine: "{{this.addressLine}}",
+  phone: "{{this.phone}}",
+  pincode: "{{this.pincode}}"
+})'>
 Edit
 </button>
 
