@@ -1045,6 +1045,40 @@ body {
     margin: 0 !important;
     padding: 0 !important;
 }
+        /* ===== FIX HUGE TOP GAP (REAL FIX) ===== */
+
+/* Control navbar height */
+.navbar8-navbar-interactive {
+    padding: 10px 40px !important;
+    min-height: unset !important;
+    height: auto !important;
+}
+
+/* Reduce logo size (MAIN ISSUE) */
+.navbar8-image1 {
+    height: 50px !important;
+    width: auto !important;
+    object-fit: contain;
+}
+
+/* Remove extra vertical space from wrappers */
+.navbar8-wrapper,
+.navbar8-container1 {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* Kill landing container expansion */
+.landing-container {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Ensure shop starts immediately */
+.shop-container {
+    margin-top: 0 !important;
+    padding-top: 10px !important;
+}
     </style>
 </body>
 
