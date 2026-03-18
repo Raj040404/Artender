@@ -1004,6 +1004,43 @@ padding-top:10px;
 }
 
 /* Remove any default body spacing */
+
+        /* ===== REMOVE GAP BETWEEN NAVBAR & SHOP ===== */
+
+/* Kill all unwanted spacing from navbar wrappers */
+.navbar8-wrapper,
+.navbar8-container1,
+.navbar8-navbar-interactive {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Remove extra spacing from landing container */
+.landing-container {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* FIX: Shop container top spacing */
+.shop-container {
+    margin-top: 0 !important;
+    padding-top: 10px !important; /* small breathing space */
+}
+
+/* FIX: Header spacing */
+.shop-header {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    margin-bottom: 25px; /* cleaner spacing */
+}
+
+/* Remove any hidden block pushing layout */
+#navbarMenu {
+    display: none;
+    position: absolute;
+}
+
+/* Ensure body has zero spacing */
 body {
     margin: 0 !important;
     padding: 0 !important;
