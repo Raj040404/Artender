@@ -155,7 +155,7 @@
 </head>
 
 <body>
-    <div class="landing-container">
+  <div class="navbar-section">
         <navbar8-wrapper class="navbar8-wrapper">
             <header class="navbar8-container1">
                 <header data-thq="thq-navbar" class="navbar8-navbar-interactive">
@@ -206,6 +206,7 @@
                 </header>
             </header>
         </navbar8-wrapper>
+      </div>
 
         <div class="navbar-toggle" onclick="toggleNavbar()">
             <div class="artistic-menu-icon">
@@ -1078,6 +1079,51 @@ body {
 .shop-container {
     margin-top: 0 !important;
     padding-top: 10px !important;
+}
+        /* ===== FINAL CLEAN FIX ===== */
+
+/* REMOVE teleport landing behavior */
+.landing-container {
+    display: none !important;
+}
+
+/* New navbar wrapper */
+.navbar-section {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar height control */
+.navbar8-navbar-interactive {
+    padding: 12px 40px !important;
+    height: auto !important;
+    min-height: unset !important;
+}
+
+/* Fix logo */
+.navbar8-image1 {
+    height: 50px !important;
+    width: auto;
+}
+
+/* Remove all extra spacing */
+.navbar8-wrapper,
+.navbar8-container1 {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Ensure shop starts immediately */
+.shop-container {
+    margin-top: 0 !important;
+    padding-top: 10px;
+}
+
+/* Hide mobile menu initially */
+#navbarMenu {
+    display: none;
+    position: absolute;
 }
     </style>
 </body>
