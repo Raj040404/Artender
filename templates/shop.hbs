@@ -578,6 +578,11 @@ async function buyProduct(productId) {
 
 }
 
+function toggleNavbar() {
+    const menu = document.getElementById("navbarMenu");
+    menu.classList.toggle("open");
+}
+
 </script>
 
     <style>
@@ -994,9 +999,7 @@ padding-top:10px;
 }
 
 /* Hide the mobile menu by default – it was pushing content down */
-#navbarMenu {
-    display: none !important;
-}
+
 
 /* Pull shop header flush to navbar */
 .shop-header {
@@ -1121,9 +1124,66 @@ body {
 }
 
 /* Hide mobile menu initially */
-#navbarMenu {
+
+        .navbar-menu {
     display: none;
+    flex-direction: column;
+    background: white;
     position: absolute;
+    top: 70px;
+    right: 16px;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+
+.navbar-menu.open {
+    display: flex;
+}
+        /* Navbar font consistency */
+.navbar8-links1 a,
+.navbar-menu-link {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* Desktop links */
+.navbar8-links1 a {
+    color: #2c2c2c;
+    transition: 0.3s;
+}
+
+.navbar8-links1 a:hover {
+    color: #ff7a18;
+}
+
+/* Seller button */
+.navbar8-link31 {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Logout button */
+.navbar8-action11 {
+    font-size: 14px;
+    padding: 8px 16px;
+}
+        .navbar-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.navbar-menu-link:hover {
+    background: #f3f4f6;
+}
+        .navbar-toggle {
+    z-index: 2000; /* above everything */
 }
     </style>
 </body>
