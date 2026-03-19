@@ -208,13 +208,7 @@
         </navbar8-wrapper>
       </div>
 
-        <div class="navbar-toggle" onclick="toggleNavbar()">
-            <div class="artistic-menu-icon">
-                <div class="brush-stroke brush-stroke-1"></div>
-                <div class="brush-stroke brush-stroke-2"></div>
-                <div class="brush-stroke brush-stroke-3"></div>
-            </div>
-        </div>
+      
 
         <div id="navbarMenu" class="navbar-menu">
             <nav class="navbar-menu-links">
@@ -263,6 +257,14 @@
         </div>
 
     </div>
+
+      <div class="navbar-toggle" onclick="toggleNavbar()">
+            <div class="artistic-menu-icon">
+                <div class="brush-stroke brush-stroke-1"></div>
+                <div class="brush-stroke brush-stroke-2"></div>
+                <div class="brush-stroke brush-stroke-3"></div>
+            </div>
+        </div>
 
     <!-- ===== SHOP FRONTEND ===== -->
     <!-- Fixed z-index and position relative to ensure buttons are clickable over any rogue nav backgrounds -->
@@ -432,10 +434,6 @@
     <script defer="" src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
    <script>
 
-function toggleNavbar() {
-    const navbarMenu = document.getElementById("navbarMenu");
-    navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
-}
 
 /* ---------------- PRODUCT MODAL ---------------- */
 
@@ -579,8 +577,7 @@ async function buyProduct(productId) {
 }
 
 function toggleNavbar() {
-    const menu = document.getElementById("navbarMenu");
-    menu.classList.toggle("open");
+    document.getElementById("navbarMenu").classList.toggle("open");
 }
 
 </script>
@@ -1039,10 +1036,7 @@ padding-top:10px;
 }
 
 /* Remove any hidden block pushing layout */
-#navbarMenu {
-    display: none;
-    position: absolute;
-}
+
 
 /* Ensure body has zero spacing */
 body {
@@ -1125,7 +1119,7 @@ body {
 
 /* Hide mobile menu initially */
 
-        .navbar-menu {
+    .navbar-menu {
     display: none;
     flex-direction: column;
     background: white;
@@ -1141,6 +1135,7 @@ body {
 .navbar-menu.open {
     display: flex;
 }
+
         /* Navbar font consistency */
 .navbar8-links1 a,
 .navbar-menu-link {
@@ -1184,6 +1179,17 @@ body {
 }
         .navbar-toggle {
     z-index: 2000; /* above everything */
+}
+.navbar-menu.open ~ .navbar-toggle .brush-stroke-1 {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.navbar-menu.open ~ .navbar-toggle .brush-stroke-2 {
+    opacity: 0;
+}
+
+.navbar-menu.open ~ .navbar-toggle .brush-stroke-3 {
+    transform: rotate(-45deg) translate(6px, -6px);
 }
     </style>
 </body>
