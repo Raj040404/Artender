@@ -607,9 +607,10 @@
         <h2 class="pricing-announcement-title">Envision. Create. Accomplish.</h2>
         <p class="pricing-announcement-price">Participate now.</p>
         <div class="pricing-announcement-buttons" style="position: relative; z-index: 10;">
-          <a href="/competitions" class="thq-button-animated thq-button-filled" style="cursor: pointer;">
-            <span>Explore Now</span>
-          </a>
+         <button onclick="goToCompetitions()" 
+        class="thq-button-animated thq-button-filled">
+  Explore Now
+</button>
         </div>
         <p class="pricing-announcement-desc">Showcase your art and creativity without breaking the bank.</p>
       </section>
@@ -645,6 +646,10 @@
       const navbarMenu = document.getElementById("navbarMenu");
       navbarMenu.style.display = navbarMenu.style.display === "flex" ? "none" : "flex";
     }
+
+    function goToCompetitions(){
+  window.location.href = "/competitions";
+}
   </script>
 
   <style>
@@ -898,6 +903,7 @@ border-bottom:1px solid rgba(0,0,0,0.05);
   margin:60px auto;
   box-shadow:0 15px 40px rgba(0,0,0,0.08);
 }
+    
 
 .pricing-announcement-title{
   color:#134E4A;
@@ -942,7 +948,15 @@ border-bottom:1px solid rgba(0,0,0,0.05);
     display:none;
   }
 }
+.pricing-announcement {
+  position: relative;
+  z-index: 1;
+}
 
+.pricing-announcement-buttons {
+  position: relative;
+  z-index: 100;
+}
  
   </style>
 </body>
