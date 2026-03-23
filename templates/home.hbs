@@ -607,10 +607,11 @@
         <h2 class="pricing-announcement-title">Envision. Create. Accomplish.</h2>
         <p class="pricing-announcement-price">Participate now.</p>
         <div class="pricing-announcement-buttons" style="position: relative; z-index: 10;">
-         <button onclick="goToCompetitions()" 
-        class="thq-button-animated thq-button-filled">
-  Explore Now
-</button>
+        <a href="/competitions" 
+   class="thq-button-animated thq-button-filled"
+   style="display:inline-block; padding:12px 24px;">
+   Explore Now
+</a>
         </div>
         <p class="pricing-announcement-desc">Showcase your art and creativity without breaking the bank.</p>
       </section>
@@ -957,8 +958,22 @@ border-bottom:1px solid rgba(0,0,0,0.05);
   position: relative;
   z-index: 100;
 }
+    .pricing-announcement * {
+  pointer-events: auto;
+}
+
+.pricing-announcement::before,
+.pricing-announcement::after {
+  pointer-events: none;
+}
+    .pricing-announcement-buttons a {
+  position: relative;
+  z-index: 9999;
+  cursor: pointer;
+}
  
   </style>
+              
 </body>
 
 </html>
