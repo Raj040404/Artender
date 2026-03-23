@@ -333,18 +333,19 @@
                         Add to Cart
                     </button>
 
-                    <button class="shop-details-btn"
-                        onclick="viewDetails(
-                            '{{this.name}}',
-                            `{{this.description}}`,
-                            '{{this.price}}',
-                            '{{this.originalPrice}}',
-                            '{{this.imageUrl}}',
-                            '{{this.rating}}',
-                            '{{this.reviewsCount}}'
-                        )">
-                        View Details
-                    </button>
+                   <button class="shop-details-btn"
+    onclick="viewDetails(
+        '{{this._id}}',
+        '{{this.name}}',
+        `{{this.description}}`,
+        '{{this.price}}',
+        '{{this.originalPrice}}',
+        '{{this.imageUrl}}',
+        '{{this.rating}}',
+        '{{this.reviewsCount}}'
+    )">
+    View Details
+</button>
 
                 </div>
 
@@ -396,7 +397,7 @@
             </div>
 
             <button id="modalBuyBtn" class="shop-buy-btn">
-                Buy Now
+                Add to cart
             </button>
 
         </div>
@@ -437,7 +438,7 @@
 
 /* ---------------- PRODUCT MODAL ---------------- */
 
-function viewDetails(name, description, price, originalPrice, image, rating, reviews){
+function viewDetails(productId, name, description, price, originalPrice, image, rating, reviews){
 
     document.getElementById("modalTitle").innerText = name;
     document.getElementById("modalDescription").innerText = description;
@@ -446,6 +447,14 @@ function viewDetails(name, description, price, originalPrice, image, rating, rev
     document.getElementById("modalImage").src = image;
     document.getElementById("modalRating").innerText = rating;
     document.getElementById("modalReviews").innerText = "(" + reviews + " reviews)";
+
+    // 🔥 KEY PART: attach addToCart to modal button
+    const modalBtn = document.getElementById("modalBuyBtn");
+    modalBtn.innerText = "Add to Cart";
+    modalBtn.onclick = async () => {
+    await addToCart(productId);
+    closeProductModal();
+};
 
     document.getElementById("productModal").style.display = "flex";
 }
@@ -575,6 +584,8 @@ async function buyProduct(productId) {
     }
 
 }
+       
+    
 
 function toggleNavbar() {
     document.getElementById("navbarMenu").classList.toggle("open");
