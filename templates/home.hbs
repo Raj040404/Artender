@@ -615,6 +615,19 @@
         </div>
         <p class="pricing-announcement-desc">Showcase your art and creativity without breaking the bank.</p>
       </section>
+                  <section class="featured-products-section">
+  <h2 class="featured-title">Checkout Exclusive Handmade Crafts</h2>
+
+  <div id="products-container" class="products-grid">
+    <!-- Products will be injected here -->
+  </div>
+
+  <div class="shop-login-btn-container">
+    <a href="/shop">
+      <button class="shop-login-btn">Visit Shop</button>
+    </a>
+  </div>
+</section>
       <footer4-wrapper class="footer4-wrapper">
         <!--Footer4 component-->
         <footer class="footer4-footer7 thq-section-padding">
@@ -971,8 +984,110 @@ border-bottom:1px solid rgba(0,0,0,0.05);
   z-index: 9999;
   cursor: pointer;
 }
+    .featured-products-section {
+  padding: 60px 20px;
+  text-align: center;
+  background: #fffaf5;
+}
+
+.featured-title {
+  font-size: 32px;
+  font-family: 'Playfair Display', serif;
+  color: #914728;
+  margin-bottom: 40px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.product-card {
+  background: white;
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+}
+
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.product-name {
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.product-price {
+  color: #ff7a18;
+  font-weight: bold;
+}
+
+.shop-login-btn-container {
+  margin-top: 40px;
+}
+
+.shop-login-btn {
+  background: linear-gradient(135deg,#ff7a18,#8e44ad);
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.shop-login-btn:hover {
+  opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
  
   </style>
+              <script>
+async function loadProducts() {
+  try {
+    const res = await fetch("/api/featured-products");
+    const products = await res.json();
+
+    const container = document.getElementById("products-container");
+
+    products.forEach(product => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+
+      card.innerHTML = `
+        <img src="${product.imageUrl}" alt="${product.name}">
+        <div class="product-name">${product.name}</div>
+        <div class="product-price">₹${product.price}</div>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error("Error loading products:", err);
+  }
+}
+
+loadProducts();
+</script>
               
 </body>
 
