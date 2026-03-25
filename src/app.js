@@ -2162,6 +2162,17 @@ res.json({success:false});
 }
 
 });
+
+// Route to get 4 featured products
+app.get("/api/featured-products", async (req, res) => {
+  try {
+    const products = await ProductCollection.find().limit(4);
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
+});
 // Start the server
 const PORT = process.env.PORT || 3000;
 
