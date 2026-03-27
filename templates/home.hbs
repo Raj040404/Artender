@@ -623,9 +623,7 @@
   </div>
 
   <div class="shop-login-btn-container">
-    <a href="/shop">
-      <button class="shop-login-btn">Visit Shop</button>
-    </a>
+ <a href="/shop" class="shop-login-btn">Visit Shop</a>
   </div>
 </section>
       <footer4-wrapper class="footer4-wrapper">
@@ -967,7 +965,7 @@ border-bottom:1px solid rgba(0,0,0,0.05);
 }
 .pricing-announcement {
   position: relative;
-  z-index: 1;
+  z-index: 100;
 }
 
 .pricing-announcement-buttons {
@@ -986,6 +984,7 @@ border-bottom:1px solid rgba(0,0,0,0.05);
   position: relative;
   z-index: 9999;
   cursor: pointer;
+  pointer-events: auto !important;
 }
     .featured-products-section {
   padding: 60px 20px;
@@ -1091,7 +1090,17 @@ border-bottom:1px solid rgba(0,0,0,0.05);
     .hero171-content2 {
   overflow: hidden;
 }
- 
+ .shop-login-btn {
+  display: inline-block;
+  background: linear-gradient(135deg,#ff7a18,#8e44ad);
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+}
   </style>
               <script>
 async function loadProducts() {
