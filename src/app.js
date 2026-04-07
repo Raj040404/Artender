@@ -17,6 +17,13 @@ const crypto = require("crypto"); // Add this for hashing
 hbs.registerHelper("json", function (context) {
   return JSON.stringify(context);
 });
+hbs.registerHelper("formatDate", function (date) {
+  return new Date(date).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+});
 
 
 // Register the "startsWith" helper
@@ -1050,7 +1057,7 @@ app.get("/profile", requireLogin, async (req, res) => {
       return res.status(404).send("User not found.");
     }
 
-    // Fetch profile details
+    // ✅ Fetch profile details
     const profile = await ProfileCollection.findOne({ email: user.email });
 
     const profileData = profile || {
@@ -1061,8 +1068,10 @@ app.get("/profile", requireLogin, async (req, res) => {
       location: "No location set",
     };
 
-    // Fetch user's posts
-    const posts = await CompetitionPostCollection.find({ username: user.name }).sort({ createdAt: -1 });
+    // ✅ Fetch user's posts
+    const posts = await CompetitionPostCollection.find({
+      username: user.name
+    }).sort({ createdAt: -1 });
 
     const formattedPosts = posts.map((post) => {
       return {
@@ -1071,18 +1080,33 @@ app.get("/profile", requireLogin, async (req, res) => {
         file: post.file ? post.file.toString("base64") : null,
         fileType: post.fileType || "image/png",
         postNo: post.postNo,
-        likes: post.likes, // Send the full likes array
-        likeCount: post.likes.length, // Send only the count for display
-        isLiked: post.likes.includes(userId), // Check if the logged-in user liked it
+        likes: post.likes,
+        likeCount: post.likes.length,
+        isLiked: post.likes.includes(userId),
       };
     });
 
-    // Fetch enrolled contests for the user
-    const enrolledContests = await EnrollmentCollection.find({ userName: user.name }).exec();
-    const contestIds = enrolledContests.map((enrollment) => enrollment.contestId);
-    const populatedContests = await ContestCollection.find({ contestId: { $in: contestIds } });
+    // ✅ Fetch enrolled contests
+    const enrolledContests = await EnrollmentCollection.find({
+      userName: user.name
+    }).exec();
 
-    // Pass the results to the view
+    const contestIds = enrolledContests.map(
+      (enrollment) => enrollment.contestId
+    );
+
+    const populatedContests = await ContestCollection.find({
+      contestId: { $in: contestIds }
+    });
+
+    // ✅ FETCH USER ORDERS
+    const orders = await OrderCollection.find({
+      userId: user._id
+    })
+      .populate("items.productId")
+      .sort({ createdAt: -1 });
+
+    // ✅ Render profile page
     res.render("profile", {
       name: profileData.username,
       email: profileData.email,
@@ -1091,14 +1115,19 @@ app.get("/profile", requireLogin, async (req, res) => {
       location: profileData.location,
       posts: formattedPosts,
       enrolledContests: populatedContests,
-      profilePicture: profileData.profilePicture ? profileData.profilePicture.toString("base64") : null,
+      profilePicture: profileData.profilePicture
+        ? profileData.profilePicture.toString("base64")
+        : null,
+
+      // ✅ SEND ORDERS TO HBS
+      orders
     });
+
   } catch (err) {
     console.error("Error loading profile:", err.message);
     res.status(500).send("Error loading profile. Please try again later.");
   }
 });
-
 
 
 app.post("/updateProfile", requireLogin, upload.single("profilePicture"), async (req, res) => {
