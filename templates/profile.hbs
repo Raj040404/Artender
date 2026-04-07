@@ -422,6 +422,31 @@
             <p>No contests enrolled yet.</p>
             {{/if}}
         </section>
+        <section id="myOrders" class="profile-section">
+    <h3>My Orders</h3>
+
+    {{#if orders.length}}
+        {{#each orders}}
+            <div class="order-card">
+                <p><strong>Order Date:</strong> {{formatDate this.createdAt}}</p>
+                <p><strong>Total Amount:</strong> ₹{{this.amount}}</p>
+
+                <div class="ordered-products">
+                    {{#each this.items}}
+                        <div class="ordered-item">
+                            <img src="{{this.productId.imageUrl}}" alt="{{this.productId.name}}" />
+                            <p>{{this.productId.name}}</p>
+                            <p>Qty: {{this.quantity}}</p>
+                            <p>₹{{this.price}}</p>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        {{/each}}
+    {{else}}
+        <p>No orders yet.</p>
+    {{/if}}
+</section>
 
         <!-- User's Posts Section -->
         <section id="userPosts" class="profile-section">
@@ -863,7 +888,35 @@ border-bottom:1px solid rgba(0,0,0,0.05);
   background:var(--primary);
   color:white;
 }
+.order-card {
+    background: #fff;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
 
+.ordered-products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.ordered-item {
+    width: 180px;
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.ordered-item img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+}
 
 
 /* Mobile responsive adjustments */
