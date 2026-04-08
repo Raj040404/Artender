@@ -392,6 +392,16 @@
     To view terms and conditions <a href="javascript:void(0);" onclick="openTermsConditions()" style="color:#007bff; text-decoration:underline;">click here</a>.
   </p>
 </main>
+                <main>
+  <h3 style="text-align: center;">🔁 Cancellation & Exchange Policy:</h3><br>
+  <p style="text-align: center;">
+    To view cancellation and exchange policy 
+    <a href="javascript:void(0);" onclick="openCancellationPolicy()" 
+       style="color:#007bff; text-decoration:underline;">
+       click here
+    </a>.
+  </p>
+</main>
             <div id="privacyPolicyModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
   <div style="background-color:#fff; margin:5% auto; padding:20px; border:1px solid #888; width:90%; max-width:800px; border-radius:10px; font-family:Inter, sans-serif; line-height:1.6;">
     <span onclick="closePrivacyPolicy()" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
@@ -514,6 +524,40 @@
     <p>If you have any questions about this policy, feel free to contact us:<br>
     📧 help.artender@gmail.com<br>
     🏢 Sishu Mandir Road, Dindori, 481880</p>
+  </div>
+</div>
+                <!-- Cancellation & Exchange Policy Modal -->
+<div id="cancellationPolicyModal" 
+     style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
+  
+  <div style="background-color:#fff; margin:5% auto; padding:20px; border:1px solid #888; width:90%; max-width:800px; border-radius:10px; font-family:Inter, sans-serif; line-height:1.6;">
+    
+    <span onclick="closeCancellationPolicy()" 
+          style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">
+      &times;
+    </span>
+
+    <h2 style="text-align:center;">Cancellation & Exchange Policy</h2>
+
+    <p><strong>Effective Date:</strong> 08/04/2026</p>
+
+    <h4>1. Cancellation Policy</h4>
+    <p>
+      Orders can be cancelled within <strong>2 hours of placing the order</strong>, 
+      provided the item has not already been processed or shipped.
+    </p>
+
+    <h4>2. Exchange Policy</h4>
+    <p>
+      Exchange is available only for <strong>selected eligible items</strong>. 
+      Items must be unused and in original condition with packaging intact.
+    </p>
+
+    <h4>3. Assistance</h4>
+    <p>
+      For assistance regarding cancellation or exchange, contact us at:<br>
+      📞 <strong>+91 9343433379</strong>
+    </p>
   </div>
 </div>
 
@@ -1155,21 +1199,35 @@ function closeTermsConditions() {
             menu.classList.toggle("open");
         }
 
-  // Close modal when user clicks outside of it
-  window.onclick = function (event) {
-    const privacyModal = document.getElementById('privacyPolicyModal');
-    const refundModal = document.getElementById('refundPolicyModal');
-    const termsModal = document.getElementById('termsConditionsModal');
 
 
-    if (event.target === privacyModal) {
-      privacyModal.style.display = "none";
-    } else if (event.target === refundModal) {
-      refundModal.style.display = "none";
-    } else if (event.target === termsModal) {
-    termsModal.style.display = "none";
+
+  function openCancellationPolicy() {
+    document.getElementById('cancellationPolicyModal').style.display = 'block';
   }
-  };
+
+  function closeCancellationPolicy() {
+    document.getElementById('cancellationPolicyModal').style.display = 'none';
+  }
+
+      // Close modal when user clicks outside of it
+ window.onclick = function (event) {
+  const privacyModal = document.getElementById('privacyPolicyModal');
+  const refundModal = document.getElementById('refundPolicyModal');
+  const termsModal = document.getElementById('termsConditionsModal');
+  const cancellationModal = document.getElementById('cancellationPolicyModal');
+
+  if (event.target === privacyModal) {
+    privacyModal.style.display = "none";
+  } else if (event.target === refundModal) {
+    refundModal.style.display = "none";
+  } else if (event.target === termsModal) {
+    termsModal.style.display = "none";
+  } else if (event.target === cancellationModal) {
+    cancellationModal.style.display = "none";
+  }
+};
+
 </script>
 <style>
  /* Artistic menu button styles */
