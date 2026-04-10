@@ -263,6 +263,29 @@ display:flex;
 justify-content:space-between;
 margin-top:20px;
 }
+  }
+
+.payment-note-list{
+  margin:0;
+  padding-left:18px;
+  color:#444;
+}
+
+.payment-note-list li{
+  margin-bottom:8px;
+  line-height:1.6;
+  font-size:14px;
+}
+
+.payment-note-list li:last-child{
+  margin-bottom:0;
+}
+
+@media(max-width:700px){
+  .payment-note-box{
+    padding:14px;
+  }
+}
 
 .save-btn{
 background:#f97316;
@@ -417,6 +440,15 @@ No address added yet.
 </button>
 
 </div>
+  <div class="payment-note-box">
+  <div class="payment-note-title">Important Delivery & Payment Information</div>
+  <ul class="payment-note-list">
+    <li>We currently support <strong>online payment only</strong>. Cash on Delivery (COD) is not available.</li>
+    <li>Expected delivery time is <strong>7–15 business days</strong>, depending on your delivery location.</li>
+    <li><strong>Delivery is completely free</strong> from our side with no additional shipping charges.</li>
+  </ul>
+</div>
+
 
 <div class="cart-summary">
 
@@ -427,6 +459,7 @@ Total: ₹<span id="cartTotal">0</span>
 <button class="checkout-btn" onclick="checkout()">
 Proceed to Payment
 </button>
+  
 
 </div>
 
