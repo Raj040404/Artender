@@ -1642,96 +1642,84 @@ throw new Error("PhonePe order failed");
 }
 
 }
-app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async (req, res) => {
+app.post("/api/create-shop-order", requireLogin, async (req, res) => {
   try {
-    const contestId = (req.body.contestId || req.query.contestId || "").trim();
-    const phone = req.body.phone;
+    const { productId } = req.body;
+    const phone = req.session.phone || "9999999999";
 
-    const contest = await ContestCollection.findOne({ contestId }).lean();
-    if (!contest) return res.status(404).json({ error: "Contest not found" });
+    const product = await ProductCollection.findById(productId);
+    if (!product) return res.status(404).json({ error: "Product not found" });
 
     const user = await LogInCollection.findById(req.session.userId);
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    if (!req.file) return res.status(400).json({ error: "No file uploaded." });
-    if (!/^\d{10}$/.test(phone)) return res.status(400).json({ error: "Invalid phone number." });
+    const amount = product.price; // or product.price * quantity
+    const merchantOrderId = `SHOP_${product._id}_${Date.now()}`;
 
-    // Always generate and save merchantOrderId (our ID)
-    const merchantOrderId = `ARTENDER_${contestId}_${user._id}_${Date.now()}`;
-    console.log("[create-phonepe-order] Generated merchantOrderId:", merchantOrderId);
 
-    // Save pending enrollment
-    await EnrollmentCollection.findOneAndUpdate(
-      { userName: user.name, contestId },
-      {
-        userName: user.name,
-        email: user.email,
-        contestId,
-        file: req.file.buffer.toString("base64"),
-        fileType: req.file.mimetype,
-        paid: false,
-        phone,
-        paymentId: merchantOrderId,   // your internal ID
-        merchantOrderId,              // duplicate field for clarity
-      },
-      { upsert: true, new: true }
-    );
+    const order = new OrderCollection({
+      userId: user._id,
+      items: [{
+        productId: product._id,
+        quantity: 1,
+        price: product.price
+      }],
+      amount: amount,
+      merchantOrderId: merchantOrderId,
+      paymentStatus: "pending"
+    });
+    await order.save();
 
     const accessToken = await getPhonePeAccessToken();
     const payUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`;
 
-    const requestHeaders = {
-      "Content-Type": "application/json",
-      Authorization: `O-Bearer ${accessToken}`,
-    };
-
     const requestBody = {
-      amount: Number(contest.price) * 100,
+      amount: Number(product.price) * 100,
       expireAfter: 1200,
       metaInfo: {
         udf1: user.name,
-        udf2: contestId,
+        udf2: productId.toString(),
         udf3: phone,
         udf4: user.email,
-        udf5: "Artender",
+        udf5: "ArtenderShop"
       },
       paymentFlow: {
         type: "PG_CHECKOUT",
-        message: "Payment for contest enrollment",
+        message: `Payment for ${product.name}`,
         merchantUrls: {
-          redirectUrl: process.env.PHONEPE_CALLBACK_URL || "https://www.artender.in/enroll/phonepe-callback",
-        },
+          redirectUrl: process.env.SHOP_PHONEPE_CALLBACK_URL || "https://www.artender.in/shop/phonepe-callback"
+        }
       },
-      merchantOrderId, // send to PhonePe
+      merchantOrderId
     };
 
-    const response = await axios.post(payUrl, requestBody, { headers: requestHeaders });
+    const response = await axios.post(payUrl, requestBody, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `O-Bearer ${accessToken}`
+      }
+    });
+
     const data = response.data;
 
-    // Save PhonePe orderId (if returned)
-    await EnrollmentCollection.findOneAndUpdate(
-      { merchantOrderId },
-      { $set: { phonepeOrderId: data?.orderId || null, phonepeRedirectUrl: data?.redirectUrl || null } },
-      { new: true }
-    );
+
+    order.phonepeOrderId = data?.orderId || null;
+    await order.save();
 
     if (data?.redirectUrl) {
       return res.json({ redirectUrl: data.redirectUrl, orderId: merchantOrderId });
     } else {
-      return res.status(500).json({ error: "Failed to create PhonePe order", details: data });
+      return res.status(500).json({ error: "Failed to create PhonePe payment", details: data });
     }
   } catch (err) {
-    console.error("[create-phonepe-order] Error:", err.response?.data || err.message);
-    res.status(500).json({ error: "Failed to create PhonePe order", details: err.response?.data || err.message });
+    console.error("[create-shop-order] Error:", err.response?.data || err.message);
+    res.status(500).json({ error: "Failed to create shop order", details: err.response?.data || err.message });
   }
 });
 
 
 
 
-// --- Forgot Password Logic ---
-
-// Show forgot password form
 app.get("/forgot-password", (req, res) => {
   res.render("forgotPassword");
 });
@@ -1986,115 +1974,106 @@ merchantOrderId
 });
 
 app.get("/shop/phonepe-callback", async (req, res) => {
+  let { orderId, merchantOrderId } = req.query;
 
-let { orderId, merchantOrderId } = req.query;
+  console.log("[shop-callback] incoming:", req.query);
 
-console.log("[shop-callback] incoming:", req.query);
+  try {
+    // ✅ FALLBACK: if IDs missing, get the latest pending order from DB
+    if (!merchantOrderId && !orderId) {
+      const recentOrder = await OrderCollection.findOne({ paymentStatus: "pending" })
+        .sort({ createdAt: -1 })
+        .lean();
+      if (recentOrder) {
+        merchantOrderId = recentOrder.merchantOrderId;
+        orderId = recentOrder.phonepeOrderId;
+        console.log("[shop-callback] fallback order found:", merchantOrderId);
+      }
+    }
 
-try{
-
- if (!merchantOrderId && !orderId) {
-      console.log("[phonepe-callback] No orderId/merchantOrderId found");
+    if (!merchantOrderId && !orderId) {
+      console.log("[shop-callback] No orderId/merchantOrderId found");
       return res.redirect("/paymentfailed?reason=Missing+orderId");
     }
 
-const accessToken = await getPhonePeAccessToken();
+    const accessToken = await getPhonePeAccessToken();
+    const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${merchantOrderId || orderId}/status?details=false`;
 
-const statusUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/order/${merchantOrderId || orderId}/status?details=false`;
+    const checkStatus = async () => {
+      const r = await axios.get(statusUrl, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `O-Bearer ${accessToken}`
+        }
+      });
+      return r.data;
+    };
 
-async function checkStatus(){
+    const resolveState = (resp) => {
+      const nested = resp?.paymentDetails?.[0]?.state;
+      const top = resp?.state;
+      if (nested === "SUCCESS" || nested === "COMPLETED") return "SUCCESS";
+      if (top === "SUCCESS" || top === "COMPLETED") return "SUCCESS";
+      if (nested === "PENDING" || top === "PENDING") return "PENDING";
+      return "FAILED";
+    };
 
-const r = await axios.get(statusUrl,{
-headers:{
-"Content-Type":"application/json",
-Authorization:`O-Bearer ${accessToken}`
-}
-});
+    let resp = await checkStatus();
+    let state = resolveState(resp);
 
-return r.data;
+    console.log("[shop-callback] PhonePe response:", resp);
+    console.log("[shop-callback] normalized state:", state);
 
-}
+    // Retry once if pending
+    if (state === "PENDING") {
+      await new Promise(r => setTimeout(r, 2000));
+      resp = await checkStatus();
+      state = resolveState(resp);
+    }
 
-function resolveState(resp){
+    if (state === "SUCCESS") {
+      const order = await OrderCollection.findOneAndUpdate(
+        { merchantOrderId: resp?.merchantOrderId || merchantOrderId },
+        {
+          $set: {
+            paymentStatus: "paid",
+            phonepeOrderId: orderId || resp?.orderId
+          }
+        },
+        { new: true }
+      );
 
-const nested = resp?.paymentDetails?.[0]?.state;
-const top = resp?.state;
+      // ✅ Clear the user's cart after successful payment
+      if (order) {
+        await CartCollection.deleteOne({ userId: order.userId });
+      }
 
-if(nested === "SUCCESS" || nested === "COMPLETED") return "SUCCESS";
-if(top === "SUCCESS" || top === "COMPLETED") return "SUCCESS";
+      console.log("[shop-callback] PAYMENT SUCCESS:", merchantOrderId);
+      return res.redirect("/shop?success=true");
+    }
 
-if(nested === "PENDING" || top === "PENDING") return "PENDING";
+    if (state === "PENDING") {
+      console.log("[shop-callback] PAYMENT PENDING:", merchantOrderId);
+      return res.redirect(`/paymentpending?orderId=${merchantOrderId}`);
+    }
 
-return "FAILED";
+    // FAILED
+    console.log("[shop-callback] PAYMENT FAILED:", merchantOrderId);
+    await OrderCollection.findOneAndUpdate(
+      { merchantOrderId: resp?.merchantOrderId || merchantOrderId },
+      {
+        $set: {
+          paymentStatus: "failed",
+          phonepeOrderId: orderId || resp?.orderId
+        }
+      }
+    );
 
-}
-
-let resp = await checkStatus();
-let state = resolveState(resp);
-
-console.log("[shop-callback] PhonePe response:", resp);
-console.log("[shop-callback] normalized state:", state);
-
-if(state === "PENDING"){
-await new Promise(r=>setTimeout(r,2000));
-resp = await checkStatus();
-state = resolveState(resp);
-}
-
-if(state === "SUCCESS"){
-
-const order = await OrderCollection.findOneAndUpdate(
-{ merchantOrderId: resp?.merchantOrderId || merchantOrderId },
-{
-$set:{
-paymentStatus:"paid",
-phonepeOrderId: orderId || resp?.orderId
-}
-},
-{ new:true }
-);
-
-// clear cart
-if(order){
-await CartCollection.deleteOne({ userId: order.userId });
-}
-
-console.log("[shop-callback] PAYMENT SUCCESS:", merchantOrderId);
-
-return res.redirect("/shop?success=true");
-
-}
-
-if(state === "PENDING"){
-
-console.log("[shop-callback] PAYMENT PENDING:", merchantOrderId);
-
-return res.redirect(`/paymentpending?orderId=${merchantOrderId}`);
-
-}
-
-console.log("[shop-callback] PAYMENT FAILED:", merchantOrderId);
-
-await OrderCollection.findOneAndUpdate(
-{ merchantOrderId: resp?.merchantOrderId || merchantOrderId },
-{
-$set:{
-paymentStatus:"failed",
-phonepeOrderId: orderId || resp?.orderId
-}
-}
-);
-
-return res.redirect("/paymentfailed?reason=Payment+Failed");
-
-}catch(err){
-
-console.error("[shop-callback] Error:", err.response?.data || err.message);
-
-return res.redirect("/paymentfailed?reason=Server+Error");
-
-}
-
+    return res.redirect("/paymentfailed?reason=Payment+Failed");
+  } catch (err) {
+    console.error("[shop-callback] Error:", err.response?.data || err.message);
+    return res.redirect("/paymentfailed?reason=Server+Error");
+  }
 });
 app.post("/api/cart/remove", async (req,res)=>{
 
