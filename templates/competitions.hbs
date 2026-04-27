@@ -351,21 +351,29 @@
 </div>
   <main>
     <h1>Participate in Competitions</h1>
-    <div class="contest-container">
-      {{#each contests}}
-      <div class="contest-card">
-        <h2>{{this.name}}</h2>
-        <img src="{{this.poster}}" alt="{{this.name}}" />
-        <p>Deadline: {{this.deadline}}</p>
-<!--         <p>Winning Price: {{formatPrice this.price "INR"}}</p> -->
-        <p>Type: {{this.type}}</p>
-        <p>Theme: {{this.theme}}</p>
-        <form action="/enroll/{{this.contestId}}" method="get">
-          <button type="submit">Enroll</button>
-        </form>
-      </div>
-      {{/each}}
-    </div>
+  <div>
+  <h2>Active Contests</h2>
+  <div id="active-contests" class="contest-container"></div>
+
+  <h2 style="margin-top:40px;">Previous Contests</h2>
+  <div id="previous-contests" class="contest-container previous-section"></div>
+</div>
+
+<!-- Hidden template -->
+<div id="contest-template" style="display:none;">
+  {{#each contests}}
+  <div class="contest-card" data-deadline="{{this.deadline}}">
+    <h2>{{this.name}}</h2>
+    <img src="{{this.poster}}" alt="{{this.name}}" />
+    <p>Deadline: {{this.deadline}}</p>
+    <p>Type: {{this.type}}</p>
+    <p>Theme: {{this.theme}}</p>
+    <form action="/enroll/{{this.contestId}}" method="get">
+      <button type="submit">Enroll</button>
+    </form>
+  </div>
+  {{/each}}
+</div>
   </main>
   <footer4-wrapper class="footer4-wrapper">
     <!--Footer4 component-->
@@ -420,6 +428,37 @@
 
 
   </script>
+                <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const template = document.getElementById("contest-template");
+  const activeContainer = document.getElementById("active-contests");
+  const previousContainer = document.getElementById("previous-contests");
+
+  const contests = template.querySelectorAll(".contest-card");
+  const now = new Date();
+
+  contests.forEach(card => {
+    const deadlineText = card.getAttribute("data-deadline");
+    const deadline = new Date(deadlineText);
+
+    if (deadline < now) {
+      // Move to previous contests
+      card.classList.add("previous-contest");
+
+      // Disable button
+      const btn = card.querySelector("button");
+      if (btn) {
+        btn.innerText = "Closed";
+        btn.disabled = true;
+      }
+
+      previousContainer.appendChild(card);
+    } else {
+      activeContainer.appendChild(card);
+    }
+  });
+});
+</script>
   <style>
   /* Artistic menu button styles */
  /* Artistic menu button styles */
@@ -498,6 +537,41 @@
  .navbar8-navbar-interactive{
   background:#fff4e6;
   border-bottom:1px solid #eee;
+}
+    /* Previous contests styling */
+.previous-section {
+  opacity: 0.85;
+}
+
+.previous-contest {
+  background: #f5f5f5;
+  border: 1px dashed #ccc;
+  position: relative;
+  transition: 0.3s;
+}
+
+.previous-contest:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Badge */
+.previous-contest::before {
+  content: "Completed";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #999;
+  color: white;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 20px;
+}
+
+/* Disabled button */
+.previous-contest button {
+  background: #ccc !important;
+  cursor: not-allowed;
 }
     .navbar{
 padding:14px 40px;
