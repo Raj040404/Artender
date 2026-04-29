@@ -447,19 +447,30 @@ document.addEventListener("DOMContentLoaded", function () {
     const deadlineText = card.getAttribute("data-deadline");
     const deadline = new Date(deadlineText);
 
+    const reviewBtn = card.querySelector(".view-reviews-btn");
+    const reviewSection = card.querySelector(".reviews-section");
+
     if (deadline < now) {
-      // Move to previous contests
+      // ✅ Previous contest
       card.classList.add("previous-contest");
 
-      // Disable button
-      const btn = card.querySelector("button");
-      if (btn) {
-        btn.innerText = "Closed";
-        btn.disabled = true;
+      // Show review button ONLY for previous contests
+      if (reviewBtn) reviewBtn.style.display = "inline-block";
+
+      // Disable enroll button
+      const enrollBtn = card.querySelector('button[type="submit"]');
+      if (enrollBtn) {
+        enrollBtn.innerText = "Closed";
+        enrollBtn.disabled = true;
       }
 
       previousContainer.appendChild(card);
+
     } else {
+      // ❌ Active contest → hide reviews
+      if (reviewBtn) reviewBtn.style.display = "none";
+      if (reviewSection) reviewSection.style.display = "none";
+
       activeContainer.appendChild(card);
     }
   });
