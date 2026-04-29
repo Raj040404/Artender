@@ -369,6 +369,12 @@
     <p>Type: {{this.type}}</p>
     <p>Theme: {{this.theme}}</p>
     <form action="/enroll/{{this.contestId}}" method="get">
+      <button type="button" class="view-reviews-btn">View Reviews</button>
+
+<div class="reviews-section" style="display:none;">
+  <h4>Reviews</h4>
+  <div class="reviews-list"></div>
+</div>
       <button type="submit">Enroll</button>
     </form>
   </div>
@@ -457,6 +463,52 @@ document.addEventListener("DOMContentLoaded", function () {
       activeContainer.appendChild(card);
     }
   });
+});
+</script>
+                <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  document.querySelectorAll(".view-reviews-btn").forEach(btn => {
+    btn.addEventListener("click", async function () {
+
+      const card = btn.closest(".contest-card");
+      const reviewSection = card.querySelector(".reviews-section");
+      const reviewList = card.querySelector(".reviews-list");
+
+      // Toggle open/close
+      if (reviewSection.style.display === "block") {
+        reviewSection.style.display = "none";
+        return;
+      }
+
+      reviewSection.style.display = "block";
+      reviewList.innerHTML = "Loading reviews...";
+
+      try {
+        const contestId = card.querySelector("form").action.split("/").pop();
+
+        const res = await fetch(`/reviews/${contestId}`);
+        const data = await res.json();
+
+        if (!data.length) {
+          reviewList.innerHTML = "<p>No reviews yet.</p>";
+          return;
+        }
+
+        reviewList.innerHTML = data.map(r => `
+          <div class="review-item">
+            <strong>${r.user}</strong>
+            <span>⭐ ${r.rating}</span>
+            <p>${r.comment}</p>
+          </div>
+        `).join("");
+
+      } catch (err) {
+        reviewList.innerHTML = "<p>Error loading reviews.</p>";
+      }
+    });
+  });
+
 });
 </script>
   <style>
@@ -646,6 +698,31 @@ border-bottom:1px solid rgba(0,0,0,0.05);
     .brush-stroke-3 {
         top: 16px;
     }
+}
+    .view-reviews-btn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #1abc9c;
+  color: white;
+  cursor: pointer;
+}
+
+.reviews-section {
+  margin-top: 10px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.review-item {
+  border-bottom: 1px solid #eee;
+  padding: 6px 0;
+}
+
+.review-item:last-child {
+  border-bottom: none;
 }
 </style>
 </body>
