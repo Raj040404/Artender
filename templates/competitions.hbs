@@ -558,13 +558,13 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
 
-        modalList.innerHTML = data.map(r => `
-          <div class="review-item">
-            <strong>${r.user}</strong>
-            <span> ⭐ ${r.rating || "N/A"}</span>
-            <p>${r.comment}</p>
-          </div>
-        `).join("");
+     modalList.innerHTML = data.map(r => `
+  <div class="review-item">
+    <strong>${r.username || "Anonymous"}</strong>
+    <span> ⭐ ${r.rating ?? "N/A"}</span>
+    <p>${r.review || "No review provided."}</p>
+  </div>
+`).join("");
 
       } catch (err) {
         modalList.innerHTML = "<p>Error loading reviews.</p>";
