@@ -207,6 +207,15 @@ const AddressSchema = new mongoose.Schema({
     }
 
 });
+// Schema for Contest Reviews
+const ReviewSchema = new mongoose.Schema({
+  contestId: { type: String, required: true },
+  username: { type: String, required: true },
+  review: { type: String, required: true },
+  rating: { type: Number, min: 1, max: 5 }, // optional
+}, { timestamps: true });
+
+const ReviewCollection = mongoose.model("ReviewCollection", ReviewSchema);
 
 const CartCollection = mongoose.model("CartCollection", CartSchema);
 
@@ -236,5 +245,6 @@ module.exports = {
   OrderCollection,
   CertificateCollection,
   CartCollection,
-  AddressCollection
+  AddressCollection,
+   ReviewCollection
 };
