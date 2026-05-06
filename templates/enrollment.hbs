@@ -396,7 +396,7 @@
       <p>You are already enrolled in this contest!</p>
     </div>
 
-    <form id="enrollmentForm" enctype="multipart/form-data">
+    <form id="enrollmentForm" action="/api/create-phonepe-order" method="POST" enctype="multipart/form-data">
       <!-- Add a hidden input to carry the contestId -->
       <input type="hidden" name="contestId" value="{{contest.contestId}}"/>
 
@@ -722,54 +722,66 @@ border-bottom:1px solid rgba(0,0,0,0.05);
       }
 
       document.getElementById('enrollButton').onclick = async function (e) {
-    e.preventDefault();
-    if (alreadyEnrolled) return;
+        e.preventDefault();
+        if (alreadyEnrolled) return;
 
-    const phone = document.getElementById('phone').value.trim();
-    if (!/^\d{10}$/.test(phone)) {
-        alert("Please enter a valid 10-digit phone number.");
-        document.getElementById('phone').focus();
-        return;
-    }
+        const contestId = "{{contest.contestId}}";
+        const phone = document.getElementById('phone').value.trim();
 
-    const fileInput = document.getElementById('file');
-    if (!fileInput.files.length) {
-        alert("Please select an artwork file (image or video).");
-        return;
-    }
-
-    const button = document.getElementById('enrollButton');
-    const buttonText = document.getElementById('buttonText');
-    const buttonSpinner = document.getElementById('buttonSpinner');
-    button.disabled = true;
-    buttonText.textContent = 'Processing...';
-    buttonSpinner.style.display = 'inline-block';
-    document.getElementById('loadingOverlay').style.display = 'flex';
-
-    const form = document.getElementById('enrollmentForm');
-    const formData = new FormData(form);
-    formData.set('phone', phone);  // ensure phone is included
-
-    try {
-        const orderRes = await fetch('/api/create-enrollment-order', {
-            method: 'POST',
-            body: formData
-        });
-        const orderData = await orderRes.json();
-
-        if (!orderRes.ok) {
-            throw new Error(orderData.error || 'Server error');
+        // Validate phone number (10 digits)
+        if (!/^\d{10}$/.test(phone)) {
+          alert("Please enter a valid 10-digit phone number.");
+          document.getElementById('phone').focus();
+          return;
         }
 
-        window.location.href = orderData.redirectUrl;
-    } catch (err) {
-        button.disabled = false;
-        buttonText.textContent = 'Pay and enroll';
-        buttonSpinner.style.display = 'none';
-        document.getElementById('loadingOverlay').style.display = 'none';
-        alert('Error: ' + err.message);
-    }
-};
+        // Show loading state on button
+        const button = document.getElementById('enrollButton');
+        const buttonText = document.getElementById('buttonText');
+        const buttonSpinner = document.getElementById('buttonSpinner');
+        
+        button.disabled = true;
+        buttonText.textContent = 'Processing...';
+        buttonSpinner.style.display = 'inline-block';
+
+        // Show loading overlay
+        document.getElementById('loadingOverlay').style.display = 'flex';
+
+        // 1. Create FormData to send file and other details
+        const form = document.getElementById('enrollmentForm');
+        const formData = new FormData(form);
+
+        // Ensure phone and contestId are in formData
+        formData.set('phone', phone);
+        formData.set('contestId', contestId);
+
+        try {
+          // 2. Create PhonePe payment order (which also handles enrollment)
+          const orderRes = await fetch('/api/create-phonepe-order?contestId={{contest.contestId}}', {
+            method: 'POST',
+            body: formData // Send as FormData, not JSON
+          });
+          
+          const orderData = await orderRes.json();
+          console.log("Order data from backend:", orderData);
+
+          if (!orderRes.ok) {
+            throw new Error(orderData.error || 'Unknown error from server.');
+          }
+
+          // Redirect to PhonePe payment page
+          window.location.href = orderData.redirectUrl;
+          
+        } catch (err) {
+          // Hide loading states
+          button.disabled = false;
+          buttonText.textContent = 'Pay and enroll';
+          buttonSpinner.style.display = 'none';
+          document.getElementById('loadingOverlay').style.display = 'none';
+          
+          alert('Error: ' + err.message);
+        }
+      };
     });
   </script>
   <!-- Display uploaded file or video -->
