@@ -2171,111 +2171,90 @@ res.json({success:false});
 
 });
 // ENROLLMENT PAYMENT INITIATION
-app.post("/api/create-enrollment-order", requireLogin, async (req, res) => {
+app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async (req, res) => {
   try {
-    const { contestId, phone } = req.body;
-    const userId = req.session.userId;
+    const contestId = (req.body.contestId || req.query.contestId || "").trim();
+    const phone = req.body.phone;
 
-    // Validate contest
-    const contest = await ContestCollection.findOne({ contestId });
-    if (!contest) {
-      return res.status(404).json({ error: "Contest not found" });
-    }
+    const contest = await ContestCollection.findOne({ contestId }).lean();
+    if (!contest) return res.status(404).json({ error: "Contest not found" });
 
-    // Get user details
-    const user = await LogInCollection.findById(userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+    const user = await LogInCollection.findById(req.session.userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-    // Check if already enrolled and paid
-    const existing = await EnrollmentCollection.findOne({
-      contestId,
-      userName: user.name,
-      paid: true
-    });
-    if (existing) {
-      return res.status(400).json({ error: "Already enrolled in this contest" });
-    }
+    if (!req.file) return res.status(400).json({ error: "No file uploaded." });
+    if (!/^\d{10}$/.test(phone)) return res.status(400).json({ error: "Invalid phone number." });
 
-    // Create or update enrollment record (unpaid)
-    let enrollment = await EnrollmentCollection.findOne({
-      contestId,
-      userName: user.name,
-      paid: false
-    });
+    // Always generate and save merchantOrderId (our ID)
+    const merchantOrderId = `ARTENDER_${contestId}_${user._id}_${Date.now()}`;
+    console.log("[create-phonepe-order] Generated merchantOrderId:", merchantOrderId);
 
-    const merchantOrderId = `ENROLL_${contestId}_${userId}_${Date.now()}`;
-
-    if (enrollment) {
-      // Update existing unpaid record
-      enrollment.merchantOrderId = merchantOrderId;
-      enrollment.mobileNumber = phone || user.phone || "9999999999";
-    } else {
-      // Create new enrollment
-      enrollment = new EnrollmentCollection({
-        contestId,
+    // Save pending enrollment
+    await EnrollmentCollection.findOneAndUpdate(
+      { userName: user.name, contestId },
+      {
         userName: user.name,
-        userId: user._id,
-        contestName: contest.title,
+        email: user.email,
+        contestId,
+        file: req.file.buffer.toString("base64"),
+        fileType: req.file.mimetype,
         paid: false,
-        merchantOrderId,
-        mobileNumber: phone || user.phone || "9999999999",
-        enrollmentDate: new Date()
-      });
-    }
-    await enrollment.save();
-
-    // Get PhonePe access token
-    const accessToken = await getPhonePeAccessToken();
-
-    // Create PhonePe order
-    const response = await axios.post(
-      `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`,
-      {
-        amount: (contest.entryFee || 0) * 100, // Entry fee in paise
-        expireAfter: 1200,
-        metaInfo: {
-          udf1: user.name,
-          udf2: contestId,
-          udf3: enrollment.mobileNumber,
-          udf4: user.email,
-          udf5: "Enrollment"
-        },
-        merchantOrderId,
-        paymentFlow: {
-          type: "PG_CHECKOUT",
-          message: `Enrollment for ${contest.title}`,
-          merchantUrls: {
-            redirectUrl: process.env.ENROLLMENT_PHONEPE_CALLBACK_URL ||
-                         "https://www.artender.in/enroll/phonepe-callback"
-          }
-        }
+        phone,
+        paymentId: merchantOrderId,   // your internal ID
+        merchantOrderId,              // duplicate field for clarity
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `O-Bearer ${accessToken}`
-        }
-      }
+      { upsert: true, new: true }
     );
 
+    const accessToken = await getPhonePeAccessToken();
+    const payUrl = `${process.env.PHONEPE_BASE_URL}/checkout/v2/pay`;
+
+    const requestHeaders = {
+      "Content-Type": "application/json",
+      Authorization: `O-Bearer ${accessToken}`,
+    };
+
+    const requestBody = {
+      amount: Number(contest.price) * 100,
+      expireAfter: 1200,
+      metaInfo: {
+        udf1: user.name,
+        udf2: contestId,
+        udf3: phone,
+        udf4: user.email,
+        udf5: "Artender",
+      },
+      paymentFlow: {
+        type: "PG_CHECKOUT",
+        message: "Payment for contest enrollment",
+        merchantUrls: {
+          redirectUrl: process.env.PHONEPE_CALLBACK_URL || "https://www.artender.in/enroll/phonepe-callback",
+        },
+      },
+      merchantOrderId, // send to PhonePe
+    };
+
+    const response = await axios.post(payUrl, requestBody, { headers: requestHeaders });
     const data = response.data;
 
-    // Save PhonePe order ID
-    enrollment.phonepeOrderId = data?.orderId || null;
-    await enrollment.save();
+    // Save PhonePe orderId (if returned)
+    await EnrollmentCollection.findOneAndUpdate(
+      { merchantOrderId },
+      { $set: { phonepeOrderId: data?.orderId || null, phonepeRedirectUrl: data?.redirectUrl || null } },
+      { new: true }
+    );
 
     if (data?.redirectUrl) {
       return res.json({ redirectUrl: data.redirectUrl, orderId: merchantOrderId });
     } else {
-      return res.status(500).json({ error: "Failed to create PhonePe order" });
+      return res.status(500).json({ error: "Failed to create PhonePe order", details: data });
     }
   } catch (err) {
-    console.error("[create-enrollment-order] Error:", err.response?.data || err.message);
-    res.status(500).json({ error: "Failed to create enrollment order" });
+    console.error("[create-phonepe-order] Error:", err.response?.data || err.message);
+    res.status(500).json({ error: "Failed to create PhonePe order", details: err.response?.data || err.message });
   }
 });
+
 
 // Route to get 4 featured products
 app.get("/api/featured-products", async (req, res) => {
