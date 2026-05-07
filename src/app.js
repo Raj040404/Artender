@@ -4,7 +4,7 @@ const path = require("path");
 const hbs = require("hbs");
 const multer = require("multer");
 const session = require("express-session");
-const { LogInCollection, CompetitionPostCollection, ProfileCollection, ContestCollection, EnrollmentCollection, SellerRegistrationCollection, ProductCollection, OrderCollection, CertificateCollection, CartCollection, AddressCollection } = require("./mongodb");
+const { LogInCollection, CompetitionPostCollection, ProfileCollection, ContestCollection, EnrollmentCollection, SellerRegistrationCollection, ProductCollection, OrderCollection, CertificateCollection, CartCollection, AddressCollection, ReviewCollection } = require("./mongodb");
 const handlebars = require("hbs");
 const MongoStore = require("connect-mongo");
 const nodemailer = require("nodemailer");
@@ -2170,7 +2170,29 @@ res.json({success:false});
 }
 
 });
-// ENROLLMENT PAYMENT INITIATION
+
+// Route to get 4 featured products
+app.get("/api/featured-products", async (req, res) => {
+  try {
+    const products = await ProductCollection.find().limit(4);
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
+});
+app.get("/reviews/:contestId", async (req, res) => {
+  try {
+    const reviews = await ReviewCollection.find({
+      contestId: req.params.contestId
+    }).sort({ createdAt: -1 });
+
+    res.json(reviews);
+  } catch (err) {
+    console.error("Error fetching reviews:", err);
+    res.status(500).json({ error: "Failed to fetch reviews" });
+  }
+});
 app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async (req, res) => {
   try {
     const contestId = (req.body.contestId || req.query.contestId || "").trim();
@@ -2255,15 +2277,58 @@ app.post("/api/create-phonepe-order", requireLogin, upload.single("file"), async
   }
 });
 
-
-// Route to get 4 featured products
-app.get("/api/featured-products", async (req, res) => {
+app.post("/add-review", requireLogin, async (req, res) => {
   try {
-    const products = await ProductCollection.find().limit(4);
-    res.json(products);
+    const { contestId, review, rating } = req.body;
+
+    const user = await LogInCollection.findById(req.session.userId);
+
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
+    // ✅ Check if enrolled
+    const enrolled = await EnrollmentCollection.findOne({
+      contestId,
+      userName: user.name,
+      paid: true
+    });
+
+    if (!enrolled) {
+      return res.status(403).json({ error: "You must participate to review" });
+    }
+
+    // ✅ Check if contest ended
+    const contest = await ContestCollection.findOne({ contestId });
+
+    if (!contest || new Date(contest.deadline) > new Date()) {
+      return res.status(400).json({ error: "Contest not finished yet" });
+    }
+
+    // ✅ Prevent duplicate review
+    const existing = await ReviewCollection.findOne({
+      contestId,
+      username: user.name
+    });
+
+    if (existing) {
+      return res.status(400).json({ error: "You already reviewed this contest" });
+    }
+
+    const newReview = new ReviewCollection({
+      contestId,
+      username: user.name,
+      review,
+      rating
+    });
+
+    await newReview.save();
+
+    res.json({ success: true });
+
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch products" });
+    console.error("Error adding review:", err);
+    res.status(500).json({ error: "Failed to add review" });
   }
 });
 // Start the server
