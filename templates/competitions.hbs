@@ -351,21 +351,35 @@
 </div>
   <main>
     <h1>Participate in Competitions</h1>
-    <div class="contest-container">
-      {{#each contests}}
-      <div class="contest-card">
-        <h2>{{this.name}}</h2>
-        <img src="{{this.poster}}" alt="{{this.name}}" />
-        <p>Deadline: {{this.deadline}}</p>
-<!--         <p>Winning Price: {{formatPrice this.price "INR"}}</p> -->
-        <p>Type: {{this.type}}</p>
-        <p>Theme: {{this.theme}}</p>
-        <form action="/enroll/{{this.contestId}}" method="get">
-          <button type="submit">Enroll</button>
-        </form>
-      </div>
-      {{/each}}
-    </div>
+  <div>
+  <h2>Active Contests</h2>
+  <div id="active-contests" class="contest-container"></div>
+
+  <h2 style="margin-top:40px;">Previous Contests</h2>
+  <div id="previous-contests" class="contest-container previous-section"></div>
+</div>
+
+<!-- Hidden template -->
+<div id="contest-template" style="display:none;">
+  {{#each contests}}
+  <div class="contest-card" data-deadline="{{this.deadline}}">
+    <h2>{{this.name}}</h2>
+    <img src="{{this.poster}}" alt="{{this.name}}" />
+    <p>Deadline: {{this.deadline}}</p>
+    <p>Type: {{this.type}}</p>
+    <p>Theme: {{this.theme}}</p>
+    <form action="/enroll/{{this.contestId}}" method="get">
+      <button type="button" class="view-reviews-btn">View Reviews</button>
+
+<div class="reviews-section" style="display:none;">
+  <h4>Reviews</h4>
+  <div class="reviews-list"></div>
+</div>
+      <button type="submit">Enroll</button>
+    </form>
+  </div>
+  {{/each}}
+</div>
   </main>
   <footer4-wrapper class="footer4-wrapper">
     <!--Footer4 component-->
@@ -391,6 +405,13 @@
 
     </footer>
   </footer4-wrapper>
+                <div id="reviewModal" class="review-modal">
+  <div class="review-modal-content">
+    <span class="close-modal">&times;</span>
+    <h3>Reviews</h3>
+    <div id="modal-review-list">Loading...</div>
+  </div>
+</div>
 
   <script>
     function toggleNavbar() {
@@ -420,6 +441,140 @@
 
 
   </script>
+                <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const template = document.getElementById("contest-template");
+  const activeContainer = document.getElementById("active-contests");
+  const previousContainer = document.getElementById("previous-contests");
+
+  const contests = template.querySelectorAll(".contest-card");
+  const now = new Date();
+
+  contests.forEach(card => {
+    const deadlineText = card.getAttribute("data-deadline");
+    const deadline = new Date(deadlineText);
+
+    const reviewBtn = card.querySelector(".view-reviews-btn");
+    const reviewSection = card.querySelector(".reviews-section");
+
+    if (deadline < now) {
+      // ✅ Previous contest
+      card.classList.add("previous-contest");
+
+      // Show review button ONLY for previous contests
+      if (reviewBtn) reviewBtn.style.display = "inline-block";
+
+      // Disable enroll button
+      const enrollBtn = card.querySelector('button[type="submit"]');
+      if (enrollBtn) {
+        enrollBtn.innerText = "Closed";
+        enrollBtn.disabled = true;
+      }
+
+      previousContainer.appendChild(card);
+
+    } else {
+      // ❌ Active contest → hide reviews
+      if (reviewBtn) reviewBtn.style.display = "none";
+      if (reviewSection) reviewSection.style.display = "none";
+
+      activeContainer.appendChild(card);
+    }
+  });
+});
+</script>
+                <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  document.querySelectorAll(".view-reviews-btn").forEach(btn => {
+    btn.addEventListener("click", async function () {
+
+      const card = btn.closest(".contest-card");
+      const reviewSection = card.querySelector(".reviews-section");
+      const reviewList = card.querySelector(".reviews-list");
+
+      // Toggle open/close
+      if (reviewSection.style.display === "block") {
+        reviewSection.style.display = "none";
+        return;
+      }
+
+      reviewSection.style.display = "block";
+      reviewList.innerHTML = "Loading reviews...";
+
+      try {
+        const contestId = card.querySelector("form").action.split("/").pop();
+
+        const res = await fetch(`/reviews/${contestId}`);
+        const data = await res.json();
+
+        if (!data.length) {
+          reviewList.innerHTML = "<p>No reviews yet.</p>";
+          return;
+        }
+
+        reviewList.innerHTML = data.map(r => `
+          <div class="review-item">
+            <strong>${r.user}</strong>
+            <span>⭐ ${r.rating}</span>
+            <p>${r.comment}</p>
+          </div>
+        `).join("");
+
+      } catch (err) {
+        reviewList.innerHTML = "<p>Error loading reviews.</p>";
+      }
+    });
+  });
+
+});
+document.addEventListener("DOMContentLoaded", function () {
+
+  const modal = document.getElementById("reviewModal");
+  const modalList = document.getElementById("modal-review-list");
+  const closeBtn = document.querySelector(".close-modal");
+
+  closeBtn.onclick = () => modal.style.display = "none";
+
+  window.onclick = function(e) {
+    if (e.target === modal) modal.style.display = "none";
+  };
+
+  document.querySelectorAll(".view-reviews-btn").forEach(btn => {
+    btn.addEventListener("click", async function () {
+
+      modal.style.display = "flex";
+      modalList.innerHTML = "Loading reviews...";
+
+      const card = btn.closest(".contest-card");
+      const contestId = card.querySelector("form").action.split("/").pop();
+
+      try {
+        const res = await fetch(`/reviews/${contestId}`);
+        const data = await res.json();
+
+        if (!data.length) {
+          modalList.innerHTML = "<p>No reviews yet.</p>";
+          return;
+        }
+
+     modalList.innerHTML = data.map(r => `
+  <div class="review-item">
+    <strong>${r.username || "Anonymous"}</strong>
+    <span> ⭐ ${r.rating ?? "N/A"}</span>
+    <p>${r.review || "No review provided."}</p>
+  </div>
+`).join("");
+
+      } catch (err) {
+        modalList.innerHTML = "<p>Error loading reviews.</p>";
+      }
+    });
+  });
+
+});
+                  
+</script>
   <style>
   /* Artistic menu button styles */
  /* Artistic menu button styles */
@@ -499,6 +654,46 @@
   background:#fff4e6;
   border-bottom:1px solid #eee;
 }
+    /* Previous contests styling */
+.previous-section {
+  opacity: 0.85;
+}
+
+.previous-contest {
+  background: #f5f5f5;
+  border: 1px dashed #ccc;
+  position: relative;
+  transition: 0.3s;
+}
+
+.previous-contest:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Badge */
+.previous-contest::before {
+  content: "Completed";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #999;
+  color: white;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 20px;
+}
+
+/* Disabled button */
+.previous-contest button[type="submit"] {
+  background: #ccc !important;
+  cursor: not-allowed;
+}
+    .previous-contest .view-reviews-btn {
+  background: #1abc9c !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+}
     .navbar{
 padding:14px 40px;
 border-bottom:1px solid rgba(0,0,0,0.05);
@@ -572,6 +767,65 @@ border-bottom:1px solid rgba(0,0,0,0.05);
     .brush-stroke-3 {
         top: 16px;
     }
+}
+    .view-reviews-btn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #1abc9c;
+  color: white;
+  cursor: pointer;
+}
+
+.reviews-section {
+  margin-top: 10px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.review-item {
+  border-bottom: 1px solid #eee;
+  padding: 6px 0;
+}
+
+.review-item:last-child {
+  border-bottom: none;
+}
+    .review-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.review-modal-content {
+  background: white;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 12px;
+  animation: fadeIn 0.3s ease;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.close-modal {
+  float: right;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 </style>
 </body>
