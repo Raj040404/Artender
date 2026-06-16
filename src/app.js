@@ -354,6 +354,24 @@ app.get('/cart', requireLogin, async (req,res)=>{
     });
 
 });
+app.get("/api/featured-contests", async (req, res) => {
+  try {
+    const contests = await ContestCollection.find({})
+      .sort({ createdAt: -1 }) // newest first
+      .limit(3);               // show only 3 contests on homepage
+
+    contests.forEach(contest => {
+      if (contest.poster && typeof contest.poster === "string") {
+        contest.poster = contest.poster.replace(/"/g, "");
+      }
+    });
+
+    res.json(contests);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Unable to fetch contests" });
+  }
+});
 app.get("/sellerregistration", requireLogin, async (req, res) => {
   try {
     const existingRegistration = await SellerRegistrationCollection.findOne({
