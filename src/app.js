@@ -374,13 +374,27 @@ app.get("/sellerregistration", requireLogin, async (req, res) => {
 });
 
 app.get("/shop", requireLogin, async (req, res) => {
-  try {
-    const products = await ProductCollection.find({}).lean();
-    res.render("shop", { products });
-  } catch (err) {
-    console.error("Error fetching products:", err);
-    res.status(500).send("Error loading shop.");
-  }
+    try {
+
+        const { type } = req.query;
+
+        let filter = {};
+
+        if (type && type !== "All") {
+            filter.type = type;
+        }
+
+        const products = await ProductCollection.find(filter).lean();
+
+        res.render("shop", {
+            products,
+            selectedType: type || "All"
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error loading shop.");
+    }
 });
 
 app.get("/paymentfailed", (req, res) => {
