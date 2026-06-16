@@ -102,6 +102,21 @@ const ProductSchema = new mongoose.Schema({
   reviewsCount: { type: Number, default: 0 },
   imageUrl: { type: String, required: true },
   isNewItem: { type: Boolean, default: false },
+
+  // New field
+  type: {
+    type: String,
+    required: true,
+    enum: [
+      "Resin Art",
+      "Paintings",
+      "Home Decor",
+      "Jewelry",
+      "Accessories",
+      "Craft Supplies",
+      "Others"
+    ]
+  }
 });
 
 // Schema for Orders (Purchased Items)
