@@ -376,19 +376,22 @@ app.get("/sellerregistration", requireLogin, async (req, res) => {
 app.get("/shop", requireLogin, async (req, res) => {
     try {
 
-        const { type } = req.query;
+        const type = req.query.type || "All";
 
-        let filter = {};
-
-        if (type && type !== "All") {
-            filter.type = type;
-        }
+        const filter = type === "All"
+            ? {}
+            : { type };
 
         const products = await ProductCollection.find(filter).lean();
 
         res.render("shop", {
             products,
-            selectedType: type || "All"
+            isAll: type === "All",
+            isPaintings: type === "Paintings",
+            isResinArt: type === "Resin Art",
+            isHomeDecor: type === "Home Decor",
+            isJewelry: type === "Jewelry",
+            isAccessories: type === "Accessories"
         });
 
     } catch (err) {
