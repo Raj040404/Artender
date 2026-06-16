@@ -971,35 +971,40 @@ border-bottom:1px solid rgba(0,0,0,0.05);
   object-fit: cover;
   border-radius: 12px;
 }
-    .featured-contests{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    flex-wrap:wrap;
-    margin:30px 0;
+.featured-contests{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:25px;
+    max-width:1200px;
+    margin:30px auto;
 }
 
 .contest-card{
-    width:250px;
-    background:#fff;
-    border-radius:16px;
-    overflow:hidden;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.3s;
+    background: white;
+    border-radius: 16px;
+    padding: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transition: 0.3s ease;
+
+    width: 100%;
+    max-width: 270px;   /* Same visual size as product cards */
+    display: flex;
+    flex-direction: column;
 }
 
 .contest-card:hover{
-    transform:translateY(-8px);
+    transform: translateY(-8px);
 }
 
 .contest-card img{
-    width:100%;
-    height:180px;
-    object-fit:cover;
+    width: 100%;
+    height: 200px;      /* Same as product cards */
+    object-fit: cover;
+    border-radius: 12px;
 }
 
 .contest-content{
-    padding:15px;
+    padding-top: 15px;
 }
 
 .contest-title{
@@ -1018,6 +1023,17 @@ border-bottom:1px solid rgba(0,0,0,0.05);
     margin-top:8px;
     color:#666;
     font-size:14px;
+}
+@media (max-width:900px){
+    .featured-contests{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width:600px){
+    .featured-contests{
+        grid-template-columns: 1fr;
+    }
 }
 
 @media(max-width:768px){
