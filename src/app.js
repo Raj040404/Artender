@@ -355,25 +355,29 @@ app.get('/cart', requireLogin, async (req,res)=>{
 
 });
 app.get("/api/featured-contests", async (req, res) => {
-  try {
-    const now = new Date();
+    try {
 
-    const activeContests = await ContestCollection.find({
-      deadline: { $gte: now }
-    }).sort({ deadline: 1 }); // nearest deadline first
+        const contests = await ContestCollection.find().sort({ deadline: 1 });
 
-    activeContests.forEach(contest => {
-      if (contest.poster && typeof contest.poster === "string") {
-        contest.poster = contest.poster.replace(/"/g, "");
-      }
-    });
+        console.log("Total contests:", contests.length);
 
-    res.json(activeContests);
+        contests.forEach(c => {
+            console.log(c.name, c.deadline);
+        });
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Unable to fetch contests" });
-  }
+        // Clean poster path if needed
+        contests.forEach(contest => {
+            if (contest.poster && typeof contest.poster === "string") {
+                contest.poster = contest.poster.replace(/"/g, "");
+            }
+        });
+
+        res.json(contests);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Unable to fetch contests" });
+    }
 });
 app.get("/sellerregistration", requireLogin, async (req, res) => {
   try {
