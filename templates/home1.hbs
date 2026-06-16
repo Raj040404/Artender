@@ -584,27 +584,9 @@
         <a href="/competitions" class="view-all-btn">View All</a>
     </div>
 
-    <div class="contest-container">
+    <div id="featured-contests" class="contest-container">
 
-        {{#each contests}}
-        <div class="contest-card">
-
-            <img src="{{this.poster}}" alt="{{this.name}}">
-
-            <div class="contest-content">
-                <h3>{{this.name}}</h3>
-
-                <p><strong>Theme:</strong> {{this.theme}}</p>
-                <p><strong>Type:</strong> {{this.type}}</p>
-                <p><strong>Deadline:</strong> {{this.deadline}}</p>
-
-                <a href="/enroll/{{this.contestId}}" class="enroll-btn">
-                    Enroll
-                </a>
-            </div>
-
-        </div>
-        {{/each}}
+     
 
     </div>
 
@@ -1353,38 +1335,46 @@ async function loadFeaturedContests() {
         const container = document.getElementById("featured-contests");
         container.innerHTML = "";
 
+        if (contests.length === 0) {
+            container.innerHTML = `
+                <p style="grid-column:1/-1;text-align:center;">
+                    No active competitions available.
+                </p>
+            `;
+            return;
+        }
+
         contests.forEach(contest => {
+
             const card = document.createElement("div");
             card.className = "contest-card";
 
             card.innerHTML = `
-                <img src="${contest.poster}" alt="${contest.title}">
+                <img src="${contest.poster}" alt="${contest.name}">
+
                 <div class="contest-content">
-                    <div class="contest-title">${contest.title}</div>
+                    <h3>${contest.name}</h3>
 
-                    ${
-                        contest.entryFee
-                        ? `<div class="contest-fee">Entry Fee: ₹${contest.entryFee}</div>`
-                        : ""
-                    }
+                    <p><strong>Theme:</strong> ${contest.theme || "N/A"}</p>
 
-                    ${
-                        contest.endDate
-                        ? `<div class="contest-date">Ends: ${new Date(contest.endDate).toLocaleDateString()}</div>`
-                        : ""
-                    }
+                    <p><strong>Type:</strong> ${contest.type || "N/A"}</p>
+
+                    <p>
+                        <strong>Deadline:</strong>
+                        ${new Date(contest.deadline).toLocaleDateString()}
+                    </p>
+
+                    <a href="/login" class="enroll-btn">
+                        Enroll
+                    </a>
                 </div>
             `;
-            card.style.cursor = "pointer";
-            card.onclick = () => {
-                window.location.href = "/login";
-            };
 
             container.appendChild(card);
         });
 
-    } catch(err){
-        console.error(err);
+    } catch (err) {
+        console.error("Error loading contests:", err);
     }
 }
 
