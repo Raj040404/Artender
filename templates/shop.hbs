@@ -279,6 +279,39 @@
             🛒 Cart
         </a>
     </div>
+    <div class="shop-category-bar">
+
+    <a href="/shop"
+       class="category-btn {{#if (eq selectedType 'All')}}active{{/if}}">
+       All
+    </a>
+
+    <a href="/shop?type=Paintings"
+       class="category-btn">
+       Paintings
+    </a>
+
+    <a href="/shop?type=Resin Art"
+       class="category-btn">
+       Resin Art
+    </a>
+
+    <a href="/shop?type=Home Decor"
+       class="category-btn">
+       Home Decor
+    </a>
+
+    <a href="/shop?type=Jewelry"
+       class="category-btn">
+       Jewelry
+    </a>
+
+    <a href="/shop?type=Accessories"
+       class="category-btn">
+       Accessories
+    </a>
+
+</div>
 
     <div class="shop-product-grid">
 
@@ -1198,6 +1231,51 @@ body {
 
 .navbar-menu.open ~ .navbar-toggle .brush-stroke-3 {
     transform: rotate(-45deg) translate(6px, -6px);
+}
+        .shop-category-bar{
+
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+
+    margin:25px 0;
+
+}
+
+.category-btn{
+
+    padding:10px 22px;
+
+    background:white;
+
+    border:2px solid #f97316;
+
+    color:#f97316;
+
+    border-radius:30px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.category-btn:hover{
+
+    background:#f97316;
+
+    color:white;
+
+}
+
+.category-btn.active{
+
+    background:#f97316;
+
+    color:white;
+
 }
     </style>
 </body>
