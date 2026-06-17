@@ -606,6 +606,17 @@
       <section class="pricing-announcement thq-section-padding">
         <h2 class="pricing-announcement-title">Envision. Create. Accomplish.</h2>
         <p class="pricing-announcement-price">Participate now.</p>
+        <section class="home-competitions">
+
+    <div class="section-header">
+        <h2>Competitions</h2>
+    </div>
+
+    <div id="featured-contests" class="contest-container">
+        <!-- Featured competitions will load here -->
+    </div>
+
+</section>
         <div class="pricing-announcement-buttons" style="position: relative; z-index: 10;">
         <a href="/competitions" 
    class="thq-button-animated thq-button-filled"
@@ -1101,6 +1112,87 @@ border-bottom:1px solid rgba(0,0,0,0.05);
   cursor: pointer;
   text-decoration: none;
 }
+    .home-competitions{
+    width:90%;
+    max-width:1400px;
+    margin:70px auto;
+}
+
+.section-header{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.section-header h2{
+    font-size:34px;
+    font-family:'Playfair Display',serif;
+    color:#8b4513;
+}
+
+.contest-container{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:30px;
+    max-width:1200px;
+    margin:30px auto;
+}
+
+.contest-card{
+    flex:0 0 320px;
+    max-width:320px;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.contest-card:hover{
+    transform:translateY(-8px);
+}
+
+.contest-card img{
+    width:100%;
+    height:320px;
+    object-fit:contain;
+    background:#fff;
+    padding:10px;
+}
+
+.contest-content{
+    padding:20px;
+}
+
+.contest-content h3{
+    font-size:24px;
+    margin-bottom:12px;
+    color:#8b4513;
+}
+
+.contest-content p{
+    margin-bottom:8px;
+    color:#555;
+}
+
+.enroll-btn{
+    display:inline-block;
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    text-align:center;
+    border-radius:10px;
+    background:linear-gradient(135deg,#ff7a18,#8e44ad);
+    color:#fff;
+    font-weight:600;
+    transition:.3s;
+}
+
+.enroll-btn:hover{
+    transform:translateY(-2px);
+}
   </style>
               <script>
 async function loadProducts() {
@@ -1129,6 +1221,81 @@ async function loadProducts() {
 }
 
 loadProducts();
+</script>
+              <script>
+async function loadFeaturedContests() {
+    try {
+
+        const res = await fetch("/api/featured-contests");
+        const contests = await res.json();
+
+        const container = document.getElementById("featured-contests");
+        container.innerHTML = "";
+
+        const today = new Date();
+        today.setHours(0,0,0,0);
+
+        const activeContests = contests.filter(contest => {
+
+            if (!contest.deadline) return false;
+
+            const deadline = new Date(contest.deadline);
+            deadline.setHours(0,0,0,0);
+
+            return deadline >= today;
+        });
+
+        if(activeContests.length === 0){
+
+            container.innerHTML = `
+                <p style="grid-column:1/-1;text-align:center;">
+                    No active competitions available.
+                </p>
+            `;
+
+            return;
+        }
+
+        activeContests.forEach(contest => {
+
+            const card = document.createElement("div");
+            card.className = "contest-card";
+
+            card.innerHTML = `
+                <img src="${contest.poster}" alt="${contest.name}">
+
+                <div class="contest-content">
+
+                    <h3>${contest.name}</h3>
+
+                    <p><strong>Theme:</strong> ${contest.theme || "N/A"}</p>
+
+                    <p><strong>Type:</strong> ${contest.type || "N/A"}</p>
+
+                    <p>
+                        <strong>Deadline:</strong>
+                        ${new Date(contest.deadline).toLocaleDateString()}
+                    </p>
+
+                    <a href="/competitions" class="enroll-btn">
+    Participate
+</a>
+
+                </div>
+            `;
+
+            container.appendChild(card);
+
+        });
+
+    } catch(err){
+
+        console.error(err);
+
+    }
+}
+
+loadFeaturedContests();
 </script>
               
 </body>
