@@ -1337,7 +1337,21 @@ async function loadFeaturedContests() {
         const container = document.getElementById("featured-contests");
         container.innerHTML = "";
 
-        if (contests.length === 0) {
+        // Today's date
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Filter expired competitions
+        const activeContests = contests.filter(contest => {
+            if (!contest.deadline) return false;
+
+            const deadline = new Date(contest.deadline);
+            deadline.setHours(0, 0, 0, 0);
+
+            return deadline >= today;
+        });
+
+        if (activeContests.length === 0) {
             container.innerHTML = `
                 <p style="grid-column:1/-1;text-align:center;">
                     No active competitions available.
@@ -1346,7 +1360,7 @@ async function loadFeaturedContests() {
             return;
         }
 
-        contests.forEach(contest => {
+        activeContests.forEach(contest => {
 
             const card = document.createElement("div");
             card.className = "contest-card";
