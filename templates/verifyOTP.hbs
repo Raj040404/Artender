@@ -218,7 +218,11 @@
         </div>
         {{/if}}
 
-        <p>We have sent an OTP to <strong>{{email}}</strong>. Please enter it below to complete your signup.</p>
+        
+<p>We have sent an OTP to <strong>{{email}}</strong>. Please enter it below to complete your sign-up.</p>
+<p>(If you do not see the email in your inbox, please check your spam or junk folder, as it may have been filtered there.)</p>
+
+
 
         <form id="otpForm" class="login-form" action="/verify-otp" method="post">
             <input type="hidden" name="email" value="{{email}}" />
