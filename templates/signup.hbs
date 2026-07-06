@@ -431,7 +431,7 @@
                     return;
                 }
 
-                // --- c. Lock the button (UI feedback) ---
+           
                 isSubmitting   = true;
                 isButtonLocked = true;
                 submitBtn.disabled = true;
@@ -439,15 +439,14 @@
                 submitBtn.style.opacity = '0.7';
                 submitBtn.style.cursor = 'not-allowed';
 
-                // --- d. Get the site key from the server-injected Handlebars variable ---
-                // This is the actual key from your .env, not hardcoded.
+             
                 const SITE_KEY = '{{RECAPTCHA_SITE_KEY}}';
 
-                // --- e. Execute reCAPTCHA v3 ---
+              
                 grecaptcha.ready(function () {
                     grecaptcha.execute(SITE_KEY, { action: 'signup' })
                         .then(function (token) {
-                            // --- f. Add hidden input with the token ---
+                           
                             let hiddenInput = document.querySelector('input[name="g-recaptcha-response"]');
                             if (!hiddenInput) {
                                 hiddenInput = document.createElement('input');
@@ -457,16 +456,16 @@
                             }
                             hiddenInput.value = token;
 
-                            // --- g. Re-enable button (it will be locked again after submit) ---
+                          
                             submitBtn.disabled = false;
                             submitBtn.value = 'Sign Up';
                             submitBtn.style.opacity = '1';
                             submitBtn.style.cursor = 'pointer';
 
-                            // --- h. Submit the form ---
+                        
                             signupForm.submit();
 
-                            // --- i. 12‑second cooldown starts after submission ---
+                           
                             setTimeout(function () {
                                 isButtonLocked = false;
                                 isSubmitting   = false;
@@ -479,7 +478,7 @@
                         .catch(function (err) {
                             console.error('reCAPTCHA error:', err);
                             alert('Security verification failed. Please refresh and try again.');
-                            // Reset button
+                          
                             isSubmitting   = false;
                             isButtonLocked = false;
                             submitBtn.disabled = false;
