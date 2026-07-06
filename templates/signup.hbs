@@ -348,22 +348,11 @@
         <button type="button" onclick="closeTermsModal()">Close</button>
     </div>
 
-    <!-- ============================================================ -->
-    <!--  GOOGLE reCAPTCHA v3 – Site key injected from server via env   -->
-    <!--  {{RECAPTCHA_SITE_KEY}} is replaced by your actual key at render -->
-    <!-- ============================================================ -->
+ 
     <script src="https://www.google.com/recaptcha/api.js?render={{RECAPTCHA_SITE_KEY}}"></script>
 
     <script>
-        /**
-         * signup.hbs – Consolidated JavaScript
-         * - Password strength indicator
-         * - Terms & Conditions modal
-         * - Show/hide submit button based on terms checkbox
-         * - 12-second cooldown after submission
-         * - reCAPTCHA v3 silent verification (token added as hidden input)
-         * - All duplicate scripts removed
-         */
+
         document.addEventListener('DOMContentLoaded', function () {
             // --- DOM references ---
             const passwordInput    = document.getElementById('password');
