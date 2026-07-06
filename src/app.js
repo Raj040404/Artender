@@ -13,6 +13,41 @@ const axios = require("axios");
 const rateLimit = require('express-rate-limit');
 const crypto = require("crypto"); // Add this for hashing
 
+// ===== reCAPTCHA v3 Verification =====
+async function verifyRecaptcha(token) {
+  if (!token) {
+    console.log("[reCAPTCHA] No token provided");
+    return false;
+  }
+  try {
+    const response = await axios.post(
+      'https://www.google.com/recaptcha/api/siteverify',
+      null,
+      {
+        params: {
+          secret: process.env.RECAPTCHA_SECRET_KEY,
+          response: token,
+        },
+        timeout: 5000,
+      }
+    );
+    const data = response.data;
+    console.log(`[reCAPTCHA] Score: ${data.score}, Success: ${data.success}`);
+    // Score >= 0.5 is considered human. Adjust threshold as needed.
+    return data.success && data.score >= 0.5;
+  } catch (err) {
+    console.error("[reCAPTCHA] Verification error:", err.message);
+    return false;
+  }
+}
+const signupLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5, // Max 5 signup attempts per IP per hour
+  message: "Too many signup attempts from this IP. Please try again later.",
+  keyGenerator: (req) => req.ip,
+  skipSuccessfulRequests: true,
+});
+
 // ✅ Register the "json" helper in hbs
 hbs.registerHelper("json", function (context) {
   return JSON.stringify(context);
@@ -138,9 +173,9 @@ app.get("/home1", (req, res) => {
   res.render("home1");
 });
 app.get("/signup", (req, res) => {
-    res.render("signup", {
-        RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY
-    });
+  res.render("signup", {
+    RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY  // 🔑 Pass the key!
+  });
 });
 app.get("/login", (req, res) => {
   res.render("login");
@@ -163,12 +198,25 @@ const transporter = nodemailer.createTransport({
 // Store OTPs temporarily
 const otpStorage = {};
 
-app.post("/signup", async (req, res) => {
+app.post("/signup", signupLimiter, async (req, res) => {
   const { name, email, password } = req.body;
+  const recaptchaToken = req.body['g-recaptcha-response']; // Token from frontend
+
+  // ===== SERVER-SIDE reCAPTCHA VERIFICATION =====
+  const isHuman = await verifyRecaptcha(recaptchaToken);
+  if (!isHuman) {
+    console.log(`[signup] Blocked bot attempt for email: ${email}`);
+    return res.render("signup", {
+      error: "Security verification failed. Please try again.",
+      RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY, // Keep the key for the view
+    });
+  }
+  // =============================================
 
   if (password.length < 8) {
     return res.render("signup", {
       error: "Password must be at least 8 characters long.",
+      RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
     });
   }
 
@@ -179,10 +227,16 @@ app.post("/signup", async (req, res) => {
 
     if (existingUser) {
       if (existingUser.email === email) {
-        return res.render("signup", { error: "Email is already registered." });
+        return res.render("signup", {
+          error: "Email is already registered.",
+          RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
+        });
       }
       if (existingUser.name === name) {
-        return res.render("signup", { error: "Username is already taken." });
+        return res.render("signup", {
+          error: "Username is already taken.",
+          RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
+        });
       }
     }
 
@@ -204,7 +258,10 @@ app.post("/signup", async (req, res) => {
     return res.render("verifyOTP", { email });
   } catch (err) {
     console.error(err);
-    res.status(500).render("signup", { error: "Error signing up. Please try again later." });
+    res.status(500).render("signup", {
+      error: "Error signing up. Please try again later.",
+      RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
+    });
   }
 });
 
