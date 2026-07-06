@@ -138,7 +138,9 @@ app.get("/home1", (req, res) => {
   res.render("home1");
 });
 app.get("/signup", (req, res) => {
-  res.render("signup");
+    res.render("signup", {
+        RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY
+    });
 });
 app.get("/login", (req, res) => {
   res.render("login");
