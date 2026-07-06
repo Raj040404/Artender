@@ -2,9 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <!-- Character Set & Viewport -->
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Web App Capabilities -->
@@ -236,7 +234,7 @@
         @media (max-width: 480px) {
             body { padding: 0.5rem; }
             .login-container { padding: 1.5rem; }
-            .form-group input { font-size: 16px; } /* Prevents zoom on iOS */
+            .form-group input { font-size: 16px; }
             .terms-modal { padding: 1.5rem; width: 95%; }
         }
 
@@ -350,623 +348,161 @@
         <button type="button" onclick="closeTermsModal()">Close</button>
     </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const passwordInput = document.getElementById('password');
-        const passwordStrength = document.getElementById('passwordStrength');
-        const errorBox = document.getElementById('errorBox');
-        const acceptTerms = document.getElementById('acceptTerms');
-        const submitBtn = document.getElementById('submitBtn');
-        const viewTerms = document.getElementById('viewTerms');
-        const termsModal = document.getElementById('termsModal');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const signupForm = document.getElementById('signupForm');
-        
-        // Flag to track if button is locked
-        let isButtonLocked = false;
+    <!-- ============================================================ -->
+    <!--  GOOGLE reCAPTCHA v3 – Site key injected from server via env   -->
+    <!--  {{RECAPTCHA_SITE_KEY}} is replaced by your actual key at render -->
+    <!-- ============================================================ -->
+    <script src="https://www.google.com/recaptcha/api.js?render={{RECAPTCHA_SITE_KEY}}"></script>
 
-        // Hide error message after 3 seconds
-        if (errorBox) {
-            setTimeout(() => {
-                errorBox.style.opacity = "0";
-                setTimeout(() => errorBox.style.display = "none", 500);
-            }, 3000);
-        }
+    <script>
+        /**
+         * signup.hbs – Consolidated JavaScript
+         * - Password strength indicator
+         * - Terms & Conditions modal
+         * - Show/hide submit button based on terms checkbox
+         * - 12-second cooldown after submission
+         * - reCAPTCHA v3 silent verification (token added as hidden input)
+         * - All duplicate scripts removed
+         */
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- DOM references ---
+            const passwordInput    = document.getElementById('password');
+            const passwordStrength = document.getElementById('passwordStrength');
+            const errorBox         = document.getElementById('errorBox');
+            const acceptTerms      = document.getElementById('acceptTerms');
+            const submitBtn        = document.getElementById('submitBtn');
+            const viewTerms        = document.getElementById('viewTerms');
+            const termsModal       = document.getElementById('termsModal');
+            const modalOverlay     = document.getElementById('modalOverlay');
+            const signupForm       = document.getElementById('signupForm');
 
-        // Password strength checker
-        passwordInput.addEventListener('input', function () {
-            const password = passwordInput.value;
-            if (password.length < 8) {
-                passwordStrength.textContent = "Weak Password ❌";
-                passwordStrength.style.color = "red";
-            } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-                passwordStrength.textContent = "Strong Password ✅";
-                passwordStrength.style.color = "green";
-            } else {
-                passwordStrength.textContent = "Medium Strength Password ⚠️";
-                passwordStrength.style.color = "orange";
+            // --- State flags ---
+            let isButtonLocked = false;   // 12-second cooldown
+            let isSubmitting   = false;   // prevent double submit
+
+            // --- 1. Hide error message after 3 seconds ---
+            if (errorBox) {
+                setTimeout(() => {
+                    errorBox.style.opacity = '0';
+                    setTimeout(() => {
+                        errorBox.style.display = 'none';
+                    }, 500);
+                }, 3000);
             }
-        });
 
-        viewTerms.addEventListener('click', function (e) {
-            e.preventDefault();
-            termsModal.style.display = "block";
-            modalOverlay.style.display = "block";
-        });
+            // --- 2. Password strength indicator ---
+            passwordInput.addEventListener('input', function () {
+                const pwd = passwordInput.value;
+                if (pwd.length < 8) {
+                    passwordStrength.textContent = 'Weak Password ❌';
+                    passwordStrength.style.color = 'red';
+                } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(pwd)) {
+                    passwordStrength.textContent = 'Strong Password ✅';
+                    passwordStrength.style.color = 'green';
+                } else {
+                    passwordStrength.textContent = 'Medium Strength Password ⚠️';
+                    passwordStrength.style.color = 'orange';
+                }
+            });
 
-        window.closeTermsModal = function () {
-            termsModal.style.display = "none";
-            modalOverlay.style.display = "none";
-        };
-
-        // Show/hide submit button based on checkbox
-        acceptTerms.addEventListener('change', function () {
-            submitBtn.style.display = this.checked ? "inline-block" : "none";
-        });
-
-        // Lock signup button for 12 seconds after click
-        signupForm.addEventListener('submit', function (e) {
-            // Check if terms are accepted
-            if (!acceptTerms.checked) {
+            // --- 3. Terms modal ---
+            viewTerms.addEventListener('click', function (e) {
                 e.preventDefault();
-                alert("Please accept the Terms and Conditions first.");
-                return;
-            }
-            
-            // Check if button is already locked
-            if (isButtonLocked) {
+                termsModal.style.display   = 'block';
+                modalOverlay.style.display = 'block';
+            });
+
+            window.closeTermsModal = function () {
+                termsModal.style.display   = 'none';
+                modalOverlay.style.display = 'none';
+            };
+
+            modalOverlay.addEventListener('click', function () {
+                closeTermsModal();
+            });
+
+            // --- 4. Show/hide submit button based on checkbox ---
+            acceptTerms.addEventListener('change', function () {
+                submitBtn.style.display = this.checked ? 'inline-block' : 'none';
+            });
+
+            // --- 5. Form submission with reCAPTCHA + cooldown ---
+            signupForm.addEventListener('submit', function (e) {
+                // Prevent default; we control the flow
                 e.preventDefault();
-                return;
-            }
-            
-            // Lock the button
-            isButtonLocked = true;
-            submitBtn.disabled = true;
-            submitBtn.value = "Submitting...";
-            submitBtn.style.opacity = "0.7";
-            submitBtn.style.cursor = "not-allowed";
-            
-            // Allow form to submit normally
-            
-            // After 12 seconds, re-enable the button
-            setTimeout(() => {
-                isButtonLocked = false;
-                submitBtn.disabled = false;
-                submitBtn.value = "Sign Up";
-                submitBtn.style.opacity = "1";
-                submitBtn.style.cursor = "pointer";
-            }, 12000);
+
+                // --- a. Terms check ---
+                if (!acceptTerms.checked) {
+                    alert('Please accept the Terms and Conditions first.');
+                    return;
+                }
+
+                // --- b. Prevent double submission ---
+                if (isSubmitting || isButtonLocked) {
+                    return;
+                }
+
+                // --- c. Lock the button (UI feedback) ---
+                isSubmitting   = true;
+                isButtonLocked = true;
+                submitBtn.disabled = true;
+                submitBtn.value = 'Verifying...';
+                submitBtn.style.opacity = '0.7';
+                submitBtn.style.cursor = 'not-allowed';
+
+                // --- d. Get the site key from the server-injected Handlebars variable ---
+                // This is the actual key from your .env, not hardcoded.
+                const SITE_KEY = '{{RECAPTCHA_SITE_KEY}}';
+
+                // --- e. Execute reCAPTCHA v3 ---
+                grecaptcha.ready(function () {
+                    grecaptcha.execute(SITE_KEY, { action: 'signup' })
+                        .then(function (token) {
+                            // --- f. Add hidden input with the token ---
+                            let hiddenInput = document.querySelector('input[name="g-recaptcha-response"]');
+                            if (!hiddenInput) {
+                                hiddenInput = document.createElement('input');
+                                hiddenInput.type = 'hidden';
+                                hiddenInput.name = 'g-recaptcha-response';
+                                signupForm.appendChild(hiddenInput);
+                            }
+                            hiddenInput.value = token;
+
+                            // --- g. Re-enable button (it will be locked again after submit) ---
+                            submitBtn.disabled = false;
+                            submitBtn.value = 'Sign Up';
+                            submitBtn.style.opacity = '1';
+                            submitBtn.style.cursor = 'pointer';
+
+                            // --- h. Submit the form ---
+                            signupForm.submit();
+
+                            // --- i. 12‑second cooldown starts after submission ---
+                            setTimeout(function () {
+                                isButtonLocked = false;
+                                isSubmitting   = false;
+                                submitBtn.disabled = false;
+                                submitBtn.value = 'Sign Up';
+                                submitBtn.style.opacity = '1';
+                                submitBtn.style.cursor = 'pointer';
+                            }, 12000);
+                        })
+                        .catch(function (err) {
+                            console.error('reCAPTCHA error:', err);
+                            alert('Security verification failed. Please refresh and try again.');
+                            // Reset button
+                            isSubmitting   = false;
+                            isButtonLocked = false;
+                            submitBtn.disabled = false;
+                            submitBtn.value = 'Sign Up';
+                            submitBtn.style.opacity = '1';
+                            submitBtn.style.cursor = 'pointer';
+                        });
+                });
+            });
         });
-    });
-</script><script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const passwordInput = document.getElementById('password');
-        const passwordStrength = document.getElementById('passwordStrength');
-        const errorBox = document.getElementById('errorBox');
-        const acceptTerms = document.getElementById('acceptTerms');
-        const submitBtn = document.getElementById('submitBtn');
-        const viewTerms = document.getElementById('viewTerms');
-        const termsModal = document.getElementById('termsModal');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const signupForm = document.getElementById('signupForm');
-        
-        // Flag to track if button is locked
-        let isButtonLocked = false;
+    </script>
 
-        // Hide error message after 3 seconds
-        if (errorBox) {
-            setTimeout(() => {
-                errorBox.style.opacity = "0";
-                setTimeout(() => errorBox.style.display = "none", 500);
-            }, 3000);
-        }
-
-        // Password strength checker
-        passwordInput.addEventListener('input', function () {
-            const password = passwordInput.value;
-            if (password.length < 8) {
-                passwordStrength.textContent = "Weak Password ❌";
-                passwordStrength.style.color = "red";
-            } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-                passwordStrength.textContent = "Strong Password ✅";
-                passwordStrength.style.color = "green";
-            } else {
-                passwordStrength.textContent = "Medium Strength Password ⚠️";
-                passwordStrength.style.color = "orange";
-            }
-        });
-
-        viewTerms.addEventListener('click', function (e) {
-            e.preventDefault();
-            termsModal.style.display = "block";
-            modalOverlay.style.display = "block";
-        });
-
-        window.closeTermsModal = function () {
-            termsModal.style.display = "none";
-            modalOverlay.style.display = "none";
-        };
-
-        // Show/hide submit button based on checkbox
-        acceptTerms.addEventListener('change', function () {
-            submitBtn.style.display = this.checked ? "inline-block" : "none";
-        });
-
-        // Lock signup button for 12 seconds after click
-        signupForm.addEventListener('submit', function (e) {
-            // Check if terms are accepted
-            if (!acceptTerms.checked) {
-                e.preventDefault();
-                alert("Please accept the Terms and Conditions first.");
-                return;
-            }
-            
-            // Check if button is already locked
-            if (isButtonLocked) {
-                e.preventDefault();
-                return;
-            }
-            
-            // Lock the button
-            isButtonLocked = true;
-            submitBtn.disabled = true;
-            submitBtn.value = "Submitting...";
-            submitBtn.style.opacity = "0.7";
-            submitBtn.style.cursor = "not-allowed";
-            
-            // Allow form to submit normally
-            
-            // After 12 seconds, re-enable the button
-            setTimeout(() => {
-                isButtonLocked = false;
-                submitBtn.disabled = false;
-                submitBtn.value = "Sign Up";
-                submitBtn.style.opacity = "1";
-                submitBtn.style.cursor = "pointer";
-            }, 12000);
-        });
-    });
-</script><script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const passwordInput = document.getElementById('password');
-        const passwordStrength = document.getElementById('passwordStrength');
-        const errorBox = document.getElementById('errorBox');
-        const acceptTerms = document.getElementById('acceptTerms');
-        const submitBtn = document.getElementById('submitBtn');
-        const viewTerms = document.getElementById('viewTerms');
-        const termsModal = document.getElementById('termsModal');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const signupForm = document.getElementById('signupForm');
-        
-        // Flag to track if button is locked
-        let isButtonLocked = false;
-
-        // Hide error message after 3 seconds
-        if (errorBox) {
-            setTimeout(() => {
-                errorBox.style.opacity = "0";
-                setTimeout(() => errorBox.style.display = "none", 500);
-            }, 3000);
-        }
-
-        // Password strength checker
-        passwordInput.addEventListener('input', function () {
-            const password = passwordInput.value;
-            if (password.length < 8) {
-                passwordStrength.textContent = "Weak Password ❌";
-                passwordStrength.style.color = "red";
-            } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-                passwordStrength.textContent = "Strong Password ✅";
-                passwordStrength.style.color = "green";
-            } else {
-                passwordStrength.textContent = "Medium Strength Password ⚠️";
-                passwordStrength.style.color = "orange";
-            }
-        });
-
-        viewTerms.addEventListener('click', function (e) {
-            e.preventDefault();
-            termsModal.style.display = "block";
-            modalOverlay.style.display = "block";
-        });
-
-        window.closeTermsModal = function () {
-            termsModal.style.display = "none";
-            modalOverlay.style.display = "none";
-        };
-
-        // Show/hide submit button based on checkbox
-        acceptTerms.addEventListener('change', function () {
-            submitBtn.style.display = this.checked ? "inline-block" : "none";
-        });
-
-        // Lock signup button for 12 seconds after click
-        signupForm.addEventListener('submit', function (e) {
-            // Check if terms are accepted
-            if (!acceptTerms.checked) {
-                e.preventDefault();
-                alert("Please accept the Terms and Conditions first.");
-                return;
-            }
-            
-            // Check if button is already locked
-            if (isButtonLocked) {
-                e.preventDefault();
-                return;
-            }
-            
-            // Lock the button
-            isButtonLocked = true;
-            submitBtn.disabled = true;
-            submitBtn.value = "Submitting...";
-            submitBtn.style.opacity = "0.7";
-            submitBtn.style.cursor = "not-allowed";
-            
-            // Allow form to submit normally
-            
-            // After 12 seconds, re-enable the button
-            setTimeout(() => {
-                isButtonLocked = false;
-                submitBtn.disabled = false;
-                submitBtn.value = "Sign Up";
-                submitBtn.style.opacity = "1";
-                submitBtn.style.cursor = "pointer";
-            }, 12000);
-        });
-    });
-</script><script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const passwordInput = document.getElementById('password');
-        const passwordStrength = document.getElementById('passwordStrength');
-        const errorBox = document.getElementById('errorBox');
-        const acceptTerms = document.getElementById('acceptTerms');
-        const submitBtn = document.getElementById('submitBtn');
-        const viewTerms = document.getElementById('viewTerms');
-        const termsModal = document.getElementById('termsModal');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const signupForm = document.getElementById('signupForm');
-        
-        // Flag to track if button is locked
-        let isButtonLocked = false;
-
-        // Hide error message after 3 seconds
-        if (errorBox) {
-            setTimeout(() => {
-                errorBox.style.opacity = "0";
-                setTimeout(() => errorBox.style.display = "none", 500);
-            }, 3000);
-        }
-
-        // Password strength checker
-        passwordInput.addEventListener('input', function () {
-            const password = passwordInput.value;
-            if (password.length < 8) {
-                passwordStrength.textContent = "Weak Password ❌";
-                passwordStrength.style.color = "red";
-            } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-                passwordStrength.textContent = "Strong Password ✅";
-                passwordStrength.style.color = "green";
-            } else {
-                passwordStrength.textContent = "Medium Strength Password ⚠️";
-                passwordStrength.style.color = "orange";
-            }
-        });
-
-        viewTerms.addEventListener('click', function (e) {
-            e.preventDefault();
-            termsModal.style.display = "block";
-            modalOverlay.style.display = "block";
-        });
-
-        window.closeTermsModal = function () {
-            termsModal.style.display = "none";
-            modalOverlay.style.display = "none";
-        };
-
-        // Show/hide submit button based on checkbox
-        acceptTerms.addEventListener('change', function () {
-            submitBtn.style.display = this.checked ? "inline-block" : "none";
-        });
-
-        // Lock signup button for 12 seconds after click
-        signupForm.addEventListener('submit', function (e) {
-            // Check if terms are accepted
-            if (!acceptTerms.checked) {
-                e.preventDefault();
-                alert("Please accept the Terms and Conditions first.");
-                return;
-            }
-            
-            // Check if button is already locked
-            if (isButtonLocked) {
-                e.preventDefault();
-                return;
-            }
-            
-            // Lock the button
-            isButtonLocked = true;
-            submitBtn.disabled = true;
-            submitBtn.value = "Submitting...";
-            submitBtn.style.opacity = "0.7";
-            submitBtn.style.cursor = "not-allowed";
-            
-            // Allow form to submit normally
-            
-            // After 12 seconds, re-enable the button
-            setTimeout(() => {
-                isButtonLocked = false;
-                submitBtn.disabled = false;
-                submitBtn.value = "Sign Up";
-                submitBtn.style.opacity = "1";
-                submitBtn.style.cursor = "pointer";
-            }, 12000);
-        });
-    });
-</script><script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const passwordInput = document.getElementById('password');
-        const passwordStrength = document.getElementById('passwordStrength');
-        const errorBox = document.getElementById('errorBox');
-        const acceptTerms = document.getElementById('acceptTerms');
-        const submitBtn = document.getElementById('submitBtn');
-        const viewTerms = document.getElementById('viewTerms');
-        const termsModal = document.getElementById('termsModal');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const signupForm = document.getElementById('signupForm');
-        
-        // Flag to track if button is locked
-        let isButtonLocked = false;
-
-        // Hide error message after 3 seconds
-        if (errorBox) {
-            setTimeout(() => {
-                errorBox.style.opacity = "0";
-                setTimeout(() => errorBox.style.display = "none", 500);
-            }, 3000);
-        }
-
-        // Password strength checker
-        passwordInput.addEventListener('input', function () {
-            const password = passwordInput.value;
-            if (password.length < 8) {
-                passwordStrength.textContent = "Weak Password ❌";
-                passwordStrength.style.color = "red";
-            } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-                passwordStrength.textContent = "Strong Password ✅";
-                passwordStrength.style.color = "green";
-            } else {
-                passwordStrength.textContent = "Medium Strength Password ⚠️";
-                passwordStrength.style.color = "orange";
-            }
-        });
-
-        viewTerms.addEventListener('click', function (e) {
-            e.preventDefault();
-            termsModal.style.display = "block";
-            modalOverlay.style.display = "block";
-        });
-
-        window.closeTermsModal = function () {
-            termsModal.style.display = "none";
-            modalOverlay.style.display = "none";
-        };
-
-        // Show/hide submit button based on checkbox
-        acceptTerms.addEventListener('change', function () {
-            submitBtn.style.display = this.checked ? "inline-block" : "none";
-        });
-
-        // Lock signup button for 12 seconds after click
-        signupForm.addEventListener('submit', function (e) {
-            // Check if terms are accepted
-            if (!acceptTerms.checked) {
-                e.preventDefault();
-                alert("Please accept the Terms and Conditions first.");
-                return;
-            }
-            
-            // Check if button is already locked
-            if (isButtonLocked) {
-                e.preventDefault();
-                return;
-            }
-            
-            // Lock the button
-            isButtonLocked = true;
-            submitBtn.disabled = true;
-            submitBtn.value = "Submitting...";
-            submitBtn.style.opacity = "0.7";
-            submitBtn.style.cursor = "not-allowed";
-            
-            // Allow form to submit normally
-            
-            // After 12 seconds, re-enable the button
-            setTimeout(() => {
-                isButtonLocked = false;
-                submitBtn.disabled = false;
-                submitBtn.value = "Sign Up";
-                submitBtn.style.opacity = "1";
-                submitBtn.style.cursor = "pointer";
-            }, 12000);
-        });
-    });
-</script><script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const passwordInput = document.getElementById('password');
-        const passwordStrength = document.getElementById('passwordStrength');
-        const errorBox = document.getElementById('errorBox');
-        const acceptTerms = document.getElementById('acceptTerms');
-        const submitBtn = document.getElementById('submitBtn');
-        const viewTerms = document.getElementById('viewTerms');
-        const termsModal = document.getElementById('termsModal');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const signupForm = document.getElementById('signupForm');
-        
-        // Flag to track if button is locked
-        let isButtonLocked = false;
-
-        // Hide error message after 3 seconds
-        if (errorBox) {
-            setTimeout(() => {
-                errorBox.style.opacity = "0";
-                setTimeout(() => errorBox.style.display = "none", 500);
-            }, 3000);
-        }
-
-        // Password strength checker
-        passwordInput.addEventListener('input', function () {
-            const password = passwordInput.value;
-            if (password.length < 8) {
-                passwordStrength.textContent = "Weak Password ❌";
-                passwordStrength.style.color = "red";
-            } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-                passwordStrength.textContent = "Strong Password ✅";
-                passwordStrength.style.color = "green";
-            } else {
-                passwordStrength.textContent = "Medium Strength Password ⚠️";
-                passwordStrength.style.color = "orange";
-            }
-        });
-
-        viewTerms.addEventListener('click', function (e) {
-            e.preventDefault();
-            termsModal.style.display = "block";
-            modalOverlay.style.display = "block";
-        });
-
-        window.closeTermsModal = function () {
-            termsModal.style.display = "none";
-            modalOverlay.style.display = "none";
-        };
-
-        // Show/hide submit button based on checkbox
-        acceptTerms.addEventListener('change', function () {
-            submitBtn.style.display = this.checked ? "inline-block" : "none";
-        });
-
-        // Lock signup button for 12 seconds after click
-        signupForm.addEventListener('submit', function (e) {
-            // Check if terms are accepted
-            if (!acceptTerms.checked) {
-                e.preventDefault();
-                alert("Please accept the Terms and Conditions first.");
-                return;
-            }
-            
-            // Check if button is already locked
-            if (isButtonLocked) {
-                e.preventDefault();
-                return;
-            }
-            
-            // Lock the button
-            isButtonLocked = true;
-            submitBtn.disabled = true;
-            submitBtn.value = "Submitting...";
-            submitBtn.style.opacity = "0.7";
-            submitBtn.style.cursor = "not-allowed";
-            
-            // Allow form to submit normally
-            
-            // After 12 seconds, re-enable the button
-            setTimeout(() => {
-                isButtonLocked = false;
-                submitBtn.disabled = false;
-                submitBtn.value = "Sign Up";
-                submitBtn.style.opacity = "1";
-                submitBtn.style.cursor = "pointer";
-            }, 12000);
-        });
-    });
-</script><script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const passwordInput = document.getElementById('password');
-        const passwordStrength = document.getElementById('passwordStrength');
-        const errorBox = document.getElementById('errorBox');
-        const acceptTerms = document.getElementById('acceptTerms');
-        const submitBtn = document.getElementById('submitBtn');
-        const viewTerms = document.getElementById('viewTerms');
-        const termsModal = document.getElementById('termsModal');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const signupForm = document.getElementById('signupForm');
-        
-        // Flag to track if button is locked
-        let isButtonLocked = false;
-
-        // Hide error message after 3 seconds
-        if (errorBox) {
-            setTimeout(() => {
-                errorBox.style.opacity = "0";
-                setTimeout(() => errorBox.style.display = "none", 500);
-            }, 3000);
-        }
-
-        // Password strength checker
-        passwordInput.addEventListener('input', function () {
-            const password = passwordInput.value;
-            if (password.length < 8) {
-                passwordStrength.textContent = "Weak Password ❌";
-                passwordStrength.style.color = "red";
-            } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
-                passwordStrength.textContent = "Strong Password ✅";
-                passwordStrength.style.color = "green";
-            } else {
-                passwordStrength.textContent = "Medium Strength Password ⚠️";
-                passwordStrength.style.color = "orange";
-            }
-        });
-
-        viewTerms.addEventListener('click', function (e) {
-            e.preventDefault();
-            termsModal.style.display = "block";
-            modalOverlay.style.display = "block";
-        });
-
-        window.closeTermsModal = function () {
-            termsModal.style.display = "none";
-            modalOverlay.style.display = "none";
-        };
-
-        // Show/hide submit button based on checkbox
-        acceptTerms.addEventListener('change', function () {
-            submitBtn.style.display = this.checked ? "inline-block" : "none";
-        });
-
-        // Lock signup button for 12 seconds after click
-        signupForm.addEventListener('submit', function (e) {
-            // Check if terms are accepted
-            if (!acceptTerms.checked) {
-                e.preventDefault();
-                alert("Please accept the Terms and Conditions first.");
-                return;
-            }
-            
-            // Check if button is already locked
-            if (isButtonLocked) {
-                e.preventDefault();
-                return;
-            }
-            
-            // Lock the button
-            isButtonLocked = true;
-            submitBtn.disabled = true;
-            submitBtn.value = "Submitting...";
-            submitBtn.style.opacity = "0.7";
-            submitBtn.style.cursor = "not-allowed";
-            
-            // Allow form to submit normally
-            
-            // After 12 seconds, re-enable the button
-            setTimeout(() => {
-                isButtonLocked = false;
-                submitBtn.disabled = false;
-                submitBtn.value = "Sign Up";
-                submitBtn.style.opacity = "1";
-                submitBtn.style.cursor = "pointer";
-            }, 12000);
-        });
-    });
-</script>
 </body>
 
 </html>
