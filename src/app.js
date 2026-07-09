@@ -1200,16 +1200,14 @@ app.get("/profile", requireLogin, async (req, res) => {
       contestId: { $in: contestIds }
     });
 
-    // ✅ FETCH USER ORDERS
- // ✅ FETCH USER ORDERS (only successful payments)
+ 
 const orders = await OrderCollection.find({
   userId: user._id,
   paymentStatus: "paid"   // ✅ Filter by successful payment
 })
 .populate("items.productId")
 .sort({ createdAt: -1 });
-      .populate("items.productId")
-      .sort({ createdAt: -1 });
+     
 
     // ✅ Render profile page
     res.render("profile", {
