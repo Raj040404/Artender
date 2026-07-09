@@ -1201,9 +1201,13 @@ app.get("/profile", requireLogin, async (req, res) => {
     });
 
     // ✅ FETCH USER ORDERS
-    const orders = await OrderCollection.find({
-      userId: user._id
-    })
+ // ✅ FETCH USER ORDERS (only successful payments)
+const orders = await OrderCollection.find({
+  userId: user._id,
+  paymentStatus: "success"   // ✅ Filter by successful payment
+})
+.populate("items.productId")
+.sort({ createdAt: -1 });
       .populate("items.productId")
       .sort({ createdAt: -1 });
 
